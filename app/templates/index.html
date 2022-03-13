@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+    <form action="#" method="post">
+      <label for="coords">North:</label>
+      <input type="text" name="north"/>
+      <label for="coords">South:</label>
+      <input type="text" name="south"/>
+      <label for="coords">West:</label>
+      <input type="text" name="west"/>
+      <label for="coords">East:</label>
+      <input type="text" name="east"/>
+      <input type="submit" value="Submit">
+    </form>
+  {% include "map.html" %}
+{% endblock %}
