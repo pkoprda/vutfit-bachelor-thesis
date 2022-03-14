@@ -4,16 +4,28 @@
 {% endblock %}
 
 {% block body %}
+  <div class="heatmap">
+    {% include "map.html" %}
+  </div>
+  <div class="form-sliders">
     <form action="#" method="post">
-      <label for="coords">North:</label>
-      <input type="text" name="north"/>
-      <label for="coords">South:</label>
-      <input type="text" name="south"/>
-      <label for="coords">West:</label>
-      <input type="text" name="west"/>
-      <label for="coords">East:</label>
-      <input type="text" name="east"/>
-      <input type="submit" value="Submit">
+      <div class="slider">
+        <label for="coords">North:</label>
+        <input type="range" id="north" name="north" min="-90" max="90" step=0.0001>
+      </div>
+      <div class="slider">
+        <label for="coords">South:</label>
+        <input type="range" id="south" name="south" min="-90" max="90" step=0.0001>
+      </div>
+      <div class="slider">
+        <label for="coords">East:</label>
+        <input type="range" id="east" name="east" min="-180" max="80" step=0.0001>
+      </div>
+      <div class="slider">
+        <label for="coords">West:</label>
+        <input type="range" id="west" name="west" min="-180" max="80" step=0.0001>
+      </div>
+      <input type="submit" class="btn btn-primary" value="Submit">
     </form>
-  {% include "map.html" %}
+  </div>
 {% endblock %}
