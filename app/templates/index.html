@@ -11,21 +11,25 @@
     <form action="#" method="post">
       <div class="slider">
         <label for="coords">North:</label>
-        <input type="range" id="north" name="north" min="-90" max="90" step=0.0001>
+        <input type="range" name="north_range" min="-90" max="90" step=0.00001 value="{{ request.form['north'] }}" onchange="updateNorthCoord(this.value)" oninput="north.value=north_range.value">
+        <input type="number" oninput="north_range.value=north.value" id="north" name="north" value="{{ request.form['north'] }}" min="-90" max="90" step=0.00001 oninput="north.value=north_range.value" required>
       </div>
       <div class="slider">
         <label for="coords">South:</label>
-        <input type="range" id="south" name="south" min="-90" max="90" step=0.0001>
+        <input type="range" name="south_range" min="-90" max="90" step=0.00001 value="{{ request.form['south'] }}" onchange="updateSouthCoord(this.value)" oninput="south.value=south_range.value">
+        <input type="number" oninput="south_range.value=south.value" id="south" name="south" value="{{ request.form['south'] }}" min="-90" max="90" step=0.00001 oninput="south.value=south_range.value" required>
       </div>
       <div class="slider">
         <label for="coords">East:</label>
-        <input type="range" id="east" name="east" min="-180" max="80" step=0.0001>
+        <input type="range" name="east_range" min="-180" max="80" step=0.00001 value="{{ request.form['east'] }}" onchange="updateEastCoord(this.value)" oninput="east.value=east_range.value">
+        <input type="number" oninput="east_range.value=east.value" id="east" name="east" value="{{ request.form['east'] }}" min="-180" max="80" step=0.00001 oninput="east.value=east_range.value" required>
       </div>
       <div class="slider">
         <label for="coords">West:</label>
-        <input type="range" id="west" name="west" min="-180" max="80" step=0.0001>
+        <input type="range" name="west_range" min="-180" max="80" step=0.00001 value="{{ request.form['west'] }}" onchange="updateWestCoord(this.value)" oninput="west.value=west_range.value">
+        <input type="number" oninput="west_range.value=west.value" id="west" name="west" value="{{ request.form['west'] }}" min="-180" max="80" step=0.00001 oninput="west.value=west_range.value" required>
       </div>
-      <input type="submit" class="btn btn-primary" value="Submit">
+      <input type="submit" class="btn btn-primary btn-lg" value="Submit" onclick="validateCoords();">
     </form>
   </div>
 {% endblock %}
