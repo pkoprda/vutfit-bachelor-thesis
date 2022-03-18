@@ -31,24 +31,23 @@ def get_coords(gdf):
             coords.append(list(zip(xcoords, ycoords)))
     return coords
 
-def check_longitude(east, west):
-    if east <= west:
-        raise Exception("East coordinate must be larger than west coordinate") 
-
-def check_latitude(north, south):
-    if north <= south:
-        raise Exception("North coordinate must be larger than south coordinate")
+def valid_coords(first_coord, second_coord):
+    if first_coord <= second_coord:
+        return False
+    return True
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         north = float(request.form['north'])
         south = float(request.form['south'])
-        check_latitude(north, south)
+        if not valid_coords(north, south):
+            return render_template('index.html', error_statement="North coordinate must be larger than south coordinate")
 
         east = float(request.form['east'])
         west = float(request.form['west'])
-        check_longitude(east, west)
+        if not valid_coords(east, west):
+            return render_template('index.html', error_statement="East coordinate must be larger than west coordinate")
 
         app.logger.info("Creating a Map...")
         center_lat = (north + south) / 2
@@ -58,8 +57,12 @@ def index():
         app.logger.info("Creating a GeoDataFrame of OSM entities within a N, S, E, W bounding box...")
         gdf = get_geodataframe(north, south, east, west, tags={"highway": True})
 
-        app.logger.info("Creating list of coordinates...")
-        coords = list(chain(*get_coords(gdf)))
+        try:
+            app.logger.info("Creating list of coordinates...")
+            coords = list(chain(*get_coords(gdf)))
+        except KeyError:
+            app.logger.info("Could not create list of coordinates. Try different values...")
+            return render_template('index.html', error_statement="Could not create heatmap")
         longs, lats = list(zip(*coords))
         data = {"lats": lats, "longs": longs}
         df = pd.DataFrame(data)
