@@ -9,26 +9,41 @@
   </div>
   <div class="form-sliders">
     <form action="#" method="post">
-      <div class="slider">
-        <label for="coords">North:</label>
-        <input type="range" name="north_range" min="-90" max="90" step=0.00001 value="{{ request.form['north'] }}" onchange="updateNorthCoord(this.value)" oninput="north.value=north_range.value">
-        <input type="number" oninput="north_range.value=north.value" id="north" name="north" value="{{ request.form['north'] }}" min="-90" max="90" step=0.00001 oninput="north.value=north_range.value" required>
-      </div>
-      <div class="slider">
-        <label for="coords">South:</label>
-        <input type="range" name="south_range" min="-90" max="90" step=0.00001 value="{{ request.form['south'] }}" onchange="updateSouthCoord(this.value)" oninput="south.value=south_range.value">
-        <input type="number" oninput="south_range.value=south.value" id="south" name="south" value="{{ request.form['south'] }}" min="-90" max="90" step=0.00001 oninput="south.value=south_range.value" required>
-      </div>
-      <div class="slider">
-        <label for="coords">East:</label>
-        <input type="range" name="east_range" min="-180" max="80" step=0.00001 value="{{ request.form['east'] }}" onchange="updateEastCoord(this.value)" oninput="east.value=east_range.value">
-        <input type="number" oninput="east_range.value=east.value" id="east" name="east" value="{{ request.form['east'] }}" min="-180" max="80" step=0.00001 oninput="east.value=east_range.value" required>
-      </div>
-      <div class="slider">
-        <label for="coords">West:</label>
-        <input type="range" name="west_range" min="-180" max="80" step=0.00001 value="{{ request.form['west'] }}" onchange="updateWestCoord(this.value)" oninput="west.value=west_range.value">
-        <input type="number" oninput="west_range.value=west.value" id="west" name="west" value="{{ request.form['west'] }}" min="-180" max="80" step=0.00001 oninput="west.value=west_range.value" required>
-      </div>
+      {% if borders %}
+        <div>
+          <label for="coords">North:</label>
+          <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="{{ borders['north'] }}" required>
+        </div>
+        <div>
+          <label for="coords">South:</label>
+          <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="{{ borders['south'] }}" required>
+        </div>
+        <div>
+          <label for="coords">East:</label>
+          <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="{{ borders['east'] }}" required>
+        </div>
+        <div>
+          <label for="coords">West:</label>
+          <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="{{ borders['west'] }}" required>
+        </div>
+      {% else %}
+        <div>
+          <label for="coords">North:</label>
+          <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="" required>
+        </div>
+        <div>
+          <label for="coords">South:</label>
+          <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="" required>
+        </div>
+        <div>
+          <label for="coords">East:</label>
+          <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="" required>
+        </div>
+        <div>
+          <label for="coords">West:</label>
+          <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="" required>
+        </div>
+      {% endif %}
       {% if error_statement %}
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
           <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -42,7 +57,7 @@
           </div>
         </div>
       {% endif %}
-      <input type="submit" class="btn btn-primary btn-lg" value="Submit">
+      <input type="submit" name="submit" class="btn btn-primary btn-lg" value="Submit">
     </form>
   </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 import numpy as np
 from shapely.ops import unary_union
 from folium import Map as FoliumMap
-from folium.plugins import MousePosition
+from folium.plugins import MousePosition, Draw
 from leafmap import osm_gdf_from_bbox
 
 # FOR DEBUG: pd.options.display.max_colwidth = 300
@@ -10,7 +10,12 @@ from leafmap import osm_gdf_from_bbox
 def create_map(latituge, longitude, zoom_start=2):
     m = FoliumMap(
         [latituge, longitude], zoom_start=zoom_start, min_zoom=2,
-        max_zoom=19, width='75%', height='75%')
+        max_zoom=19, width='75%', height='75%', control_scale=True)
+    # FIXME: Edit option 'allowIntersection' does not work
+    Draw(draw_options={
+        'polyline': False, 'polygon': False, 'circle': False,
+        'marker': False, 'circlemarker': False},
+        edit_options={"rectangle": {"allowIntersection": False}}).add_to(m) 
     formatter = "function(num) {return L.Util.formatNum(num, 4) + ' º ';};"
     MousePosition(
         position='topright', separator=' | ', empty_string='',
@@ -38,6 +43,4 @@ def get_coords(gdf):
 
 
 def valid_coords(first_coord, second_coord):
-    if first_coord <= second_coord:
-        return False
-    return True
+    return first_coord > second_coord
