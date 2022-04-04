@@ -10,12 +10,10 @@ from leafmap import osm_gdf_from_bbox
 def create_map(latituge, longitude, zoom_start=2):
     m = FoliumMap(
         [latituge, longitude], zoom_start=zoom_start, min_zoom=2,
-        max_zoom=19, width='75%', height='75%', control_scale=True)
-    # FIXME: Edit option 'allowIntersection' does not work
+        max_zoom=19, width='100%', height='100%', control_scale=True)
     Draw(draw_options={
         'polyline': False, 'polygon': False, 'circle': False,
-        'marker': False, 'circlemarker': False},
-        edit_options={"rectangle": {"allowIntersection": False}}).add_to(m) 
+        'marker': False, 'circlemarker': False}).add_to(m)
     formatter = "function(num) {return L.Util.formatNum(num, 4) + ' º ';};"
     MousePosition(
         position='topright', separator=' | ', empty_string='',

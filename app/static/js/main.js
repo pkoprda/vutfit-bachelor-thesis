@@ -1,13 +1,17 @@
-function updateCoords(points){
-    let lats = [points[0][0]["lat"], points[0][1]["lat"], points[0][2]["lat"], points[0][3]["lat"]]
-    let longs = [points[0][0]["lng"], points[0][1]["lng"], points[0][2]["lng"], points[0][3]["lng"]]
+function updateCoords(points, delete_inputs = false){
+    if(delete_inputs){
+        document.getElementById("borders_form").reset();
+        return;
+    }
+    let lats = [points[0][0]["lat"], points[0][1]["lat"], points[0][2]["lat"], points[0][3]["lat"]];
+    let longs = [points[0][0]["lng"], points[0][1]["lng"], points[0][2]["lng"], points[0][3]["lng"]];
     let borders = {
         "north": Math.max(...lats),
         "south": Math.min(...lats),
         "east": Math.max(...longs),
         "west": Math.min(...longs)
-    } 
-    
+    }
+
     $.ajax({
         type: 'POST',
         url: '/',
@@ -39,6 +43,8 @@ folium_map.on('draw:edited', function (e) {
 folium_map.on('draw:deleted', function (e) {
     let layers = e.layers;
     layers.eachLayer(function () {
+        let points = layer._latlngs;
         $('.leaflet-draw-draw-rectangle').parent().show();
+        updateCoords(points, true)
     });
 });

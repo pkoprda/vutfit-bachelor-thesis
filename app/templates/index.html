@@ -7,57 +7,47 @@
   <div class="heatmap">
     {% include "map.html" %}
   </div>
-  <div class="form-sliders">
-    <form action="#" method="post">
-      {% if borders %}
-        <div>
-          <label for="coords">North:</label>
-          <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="{{ borders['north'] }}" required>
-        </div>
-        <div>
-          <label for="coords">South:</label>
-          <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="{{ borders['south'] }}" required>
-        </div>
-        <div>
-          <label for="coords">East:</label>
-          <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="{{ borders['east'] }}" required>
-        </div>
-        <div>
-          <label for="coords">West:</label>
-          <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="{{ borders['west'] }}" required>
-        </div>
-      {% else %}
-        <div>
-          <label for="coords">North:</label>
-          <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="" required>
-        </div>
-        <div>
-          <label for="coords">South:</label>
-          <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="" required>
-        </div>
-        <div>
-          <label for="coords">East:</label>
-          <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="" required>
-        </div>
-        <div>
-          <label for="coords">West:</label>
-          <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="" required>
-        </div>
-      {% endif %}
-      {% if error_statement %}
-        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-          <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-          </symbol>
-        </svg>
-        <div class="alert alert-danger d-flex align-items-center alert-message" role="alert">
-          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-          <div>
-            {{ error_statement }}
+  <div id="mySidepanel" class="sidepanel">
+    <form id="borders_form" action="#" method="post">
+      <div class="coords_boxy">
+        {% if borders %}
+          <div class="latitude_input"">
+            <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="{{ borders['north'] }}" autocomplete="off" class="coord_bound" required>
           </div>
-        </div>
-      {% endif %}
-      <input type="submit" name="submit" class="btn btn-primary btn-lg" value="Submit">
+          <div class="longitude_input">
+            <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="{{ borders['west'] }}" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="{{ borders['east'] }}" autocomplete="off" class="coord_bound" required>
+          </div>
+          <div class="latitude_input">
+            <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="{{ borders['south'] }}" autocomplete="off" class="coord_bound" required>
+          </div>
+        {% else %}
+          <div class="latitude_input"">
+            <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+          </div>
+          <div class="longitude_input">
+            <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+          </div>
+          <div class="latitude_input">
+            <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+          </div>
+        {% endif %}
+        {% if error_statement %}
+          <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </symbol>
+          </svg>
+          <div class="alert alert-danger d-flex align-items-center alert-message" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+              {{ error_statement }}
+            </div>
+          </div>  
+        {% endif %}
+        <input type="submit" name="submit" class="btn btn-success btn-lg btn-heatmap" value="Create HeatMap">
+      </div>
     </form>
   </div>
 {% endblock %}
