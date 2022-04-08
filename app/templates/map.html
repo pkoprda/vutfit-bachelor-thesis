@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+    <script>
+        L_NO_TOUCH = false;
+        L_DISABLE_3D = false;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>    
+    <div class="folium-map" id="folium_map" ></div>
+</body>
+
+<script>
+    var folium_map = L.map("folium_map", {
+        center: [0.0, 0.0],
+        crs: L.CRS.EPSG3857,
+        zoom: 2,
+        zoomControl: true,
+        preferCanvas: false,
+    });
+    L.control.scale().addTo(folium_map);
+
+    var tile_layer_id = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 2, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+    ).addTo(folium_map);
+
+    var options = {
+        position: "topleft",
+        draw: {"circle": false, "circlemarker": false, "marker": false, "polygon": false, "polyline": false},
+        edit: {},
+    }
+    // FeatureGroup is to store editable layers.
+    var drawnItems = new L.featureGroup().addTo(
+        folium_map
+    );
+    options.edit.featureGroup = drawnItems;
+    var draw_control = new L.Control.Draw(
+        options
+    ).addTo(folium_map);
+    folium_map.on(L.Draw.Event.CREATED, function(e) {
+        var layer = e.layer, 
+            type = e.layerType;
+        drawnItems.addLayer(layer);
+    });
+
+    var mouse_position_id = new L.Control.MousePosition(
+        {"emptyString": "", "lngFirst": true, "numDigits": 20, "position": "topright", "prefix": "Coordinates:", "separator": " | "}
+    );
+    mouse_position_id.options["latFormatter"] = function(num) {return L.Util.formatNum(num, 4) + ' º ';};;
+    mouse_position_id.options["lngFormatter"] = function(num) {return L.Util.formatNum(num, 4) + ' º ';};;
+    folium_map.addControl(mouse_position_id);
+
+    function updateCoords(points, delete_inputs = false){
+        if(delete_inputs){
+            document.getElementById("borders_form").reset();
+            return;
+        }
+        let lats = [points[0][0]["lat"], points[0][1]["lat"], points[0][2]["lat"], points[0][3]["lat"]];
+        let longs = [points[0][0]["lng"], points[0][1]["lng"], points[0][2]["lng"], points[0][3]["lng"]];
+        let borders = {
+            "north": Math.max(...lats),
+            "south": Math.min(...lats),
+            "east": Math.max(...longs),
+            "west": Math.min(...longs)
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/',
+            data: borders,
+        })
+        .done(function(data) {
+            $("#north_id").val(data['borders']['north']);
+            $("#south_id").val(data['borders']['south']);
+            $("#east_id").val(data['borders']['east']);
+            $("#west_id").val(data['borders']['west']);
+        });
+    }
+
+    folium_map.on('draw:created', function (e) {
+        layer = e.layer;
+        drawnItems.addLayer(layer);
+        let points = layer._latlngs;
+        updateCoords(points);
+        $('.leaflet-draw-draw-rectangle').parent().hide()
+    });
+
+    folium_map.on('draw:edited', function (e) {
+        let layers = e.layers;
+        layers.eachLayer(function (layer) {
+            let points = layer._latlngs;
+            updateCoords(points);
+        });
+    });
+
+    folium_map.on('draw:deleted', function (e) {
+        let layers = e.layers;
+        layers.eachLayer(function () {
+            let points = layer._latlngs;
+            $('.leaflet-draw-draw-rectangle').parent().show();
+            updateCoords(points, true)
+        });
+    });
+</script>

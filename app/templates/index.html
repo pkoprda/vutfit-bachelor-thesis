@@ -5,7 +5,7 @@
 
 {% block body %}
   <div class="heatmap">
-    {% include "map.html" %}
+    {% include "heatmap.html" %}
   </div>
   <div id="mySidepanel" class="sidepanel">
     <form id="borders_form" action="#" method="post">
@@ -46,7 +46,12 @@
             </div>
           </div>  
         {% endif %}
-        <input type="submit" name="submit" class="btn btn-success btn-lg btn-heatmap" value="Create HeatMap">
+        <div class="custom-area">
+          <a href="javascript:void(0);" onclick="document.querySelector('.leaflet-draw-draw-rectangle').click();">Create custom area</a>
+        </div>
+        <div>
+          <input type="submit" name="submit" class="btn btn-success btn-lg btn-heatmap" value="Create HeatMap">
+        </div>
       </div>
     </form>
   </div>

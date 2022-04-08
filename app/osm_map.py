@@ -1,25 +1,25 @@
+from itertools import chain
 import numpy as np
 from shapely.ops import unary_union
-from folium import Map as FoliumMap
-from folium.plugins import MousePosition, Draw
 from leafmap import osm_gdf_from_bbox
 
 # FOR DEBUG: pd.options.display.max_colwidth = 300
 
 
-def create_map(latituge, longitude, zoom_start=2):
-    m = FoliumMap(
-        [latituge, longitude], zoom_start=zoom_start, min_zoom=2,
-        max_zoom=19, width='100%', height='100%', control_scale=True)
-    Draw(draw_options={
-        'polyline': False, 'polygon': False, 'circle': False,
-        'marker': False, 'circlemarker': False}).add_to(m)
-    formatter = "function(num) {return L.Util.formatNum(num, 4) + ' º ';};"
-    MousePosition(
-        position='topright', separator=' | ', empty_string='',
-        lng_first=True, num_digits=20, prefix='Coordinates:',
-        lat_formatter=formatter, lng_formatter=formatter).add_to(m)
-    return m
+def create_map(center_lat, center_long, zoom_start=2, create_heatmap=False):
+    config_map = f"""\tvar folium_map = L.map("folium_map", {{
+    \tcenter: [{center_lat}, {center_long}],
+    \tcrs: L.CRS.EPSG3857,
+    \tzoom: {zoom_start},
+    \tzoomControl: true,
+    \tpreferCanvas: false}});
+    L.control.scale().addTo(folium_map);\n"""
+    with open('app/templates/map.html', 'r') as shandle:
+        with open('app/templates/heatmap.html', 'w') as thandle:
+            lines = shandle.readlines()[:-1] if create_heatmap else shandle.readlines()
+            lines = list(chain(lines[:30], config_map, lines[38:]))
+            for line in lines:
+                thandle.write(line)
 
 
 def get_geodataframe(north, south, east, west, tags):
@@ -40,5 +40,5 @@ def get_coords(gdf):
     return coords
 
 
-def valid_coords(first_coord, second_coord):
-    return first_coord > second_coord
+def invalid_coords(first_coord, second_coord):
+    return first_coord < second_coord
