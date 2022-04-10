@@ -3,11 +3,11 @@
 % 2021/2022
 
 
-\chapter{Úvod}
+% \chapter{Úvod}
 
-\todo{TODO: Napísať úvod}
+% \todo{TODO: Napísať úvod}
 
-\blindtext[3]
+% \blindtext[3]
 
 \chapter{Mapové dáta} 
 \label{map-data}
@@ -20,28 +20,118 @@ Projekt OpenStreetMap má svoj začiatok v auguste v roku 2004, kedy britský pr
 
 V začiatkoch bol dátový model príliš simplistický, pretože obsahoval iba jednoduché čiary nakreslené cez informácie Landsat od NASA. V marci v roku 2006 bola vytvorená prvá editovacia aplikácia pre OpenStreetMap \--- JOSM\footnote{\url{https://josm.openstreetmap.de/}}. Po chvíli bola v tomto roku vytvorená prvá plnofarebná mapa mesta Weybridge. V máji toho roku sa usporiadala prvá spoločná akcia, na ktorej bolo úlohou zmapovať ostrov Wight. Bolo to prvýkrát, kedy sa stretlo viacero mapovačov a znamenalo to pre nich prelomový bod projektu, pretože bola vytvorená detailná mapa. Takéto akcie OpenStreetMap komunity sa začali konať častejšie a boli usporadúvané po celom svete.
 
-V auguste v roku 2006 bola vytvorená nadácia \textit{OpenStreetMap Foundation}, ktorou úlohu je podporovať, ale nie kontrolovať OpenStreetMap projekt. Venuje sa podpore rastu, rozvoja a distribúcii voľne dostupných geografických dát a poskytovaniu geografických údajov komukoľvek na používanie a zdieľanie.
+V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, ktorou úlohu je podporovať, ale nie kontrolovať OpenStreetMap projekt. Venuje sa podpore rastu, rozvoja a distribúcii voľne dostupných geografických dát a poskytovaniu geografických údajov komukoľvek na používanie a zdieľanie.
 
-Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org/}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných $25000$ užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo $100000$ užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
+Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org/}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
 
 \subsection{Dátový model OpenStreetMap}
 Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu OpenStreetMap slúžiace k popisu reálneho sveta. Medzi základné prvky OpenStreetMap projektu patria uzol, cesta a relácia. Tieto prvky je možné popísať značkami.
 
 \textbf{Uzol\footnote{\url{https://wiki.openstreetmap.org/wiki/Node}}} (anglicky node) označuje konkrétny bod na povrchu Zeme, je určený svojou zemepisnou šírkou a dĺžkou. Skladá sa minimálne z dvojice súradníc a svojho jednoznačného identifikačného čísla (id).
 
-\textbf{Cesta\footnote{\url{https://wiki.openstreetmap.org/wiki/Way}}} (anglicky way) je usporiadaný zoznam 2 až 2000 uzlov, ktoré definujú lomenú čiaru. Cesta má aspoň jednu značku alebo je vložená do relácie.
+\textbf{Cesta\footnote{\url{https://wiki.openstreetmap.org/wiki/Way}}} (anglicky way) je usporiadaný zoznam 2 až \numprint{2000} uzlov, ktoré definujú lomenú čiaru. Cesta má aspoň jednu značku alebo je vložená do relácie.
 
 \textbf{Relácia\footnote{\url{https://wiki.openstreetmap.org/wiki/Relation}}} (anglicky relation) sa skladá z jednej alebo viacerých značiek a usporiadaného zoznamu jedného alebo viacerých uzlov alebo ciest. Každý prvok relácie je tzv. člen (anglicky member). Používa sa k popisu závislosti medzi rôznymi prvkami. Každý člen relácie môže voliteľne mať nejakú rolu, ktorá popisuje jeho význam v rámci relácie.
 
-\textbf{Značka\footnote{\url{https://wiki.openstreetmap.org/wiki/Tags}}} (anglicky tag) sa skladá z kľúča a hodnoty. Každá značka popisuje určitú vlastnosť dátových prvkov (uzlov, ciest a relácií) alebo sadu zmien. Kľúč popisuje tému, kategóriu alebo typ mapového prvku (napr. cesta \--- \textit{highway} alebo názvy \--- \textit{name}). Hodnota konkretizuje vlastnosť, ktorú všeobecne popisuje kľúč. Napríklad značka \texttt{highway=residential} predstavuje cestu, ktorá vedie obytnou oblasťou.
+\textbf{Značka\footnote{\url{https://wiki.openstreetmap.org/wiki/Tags}}} (anglicky tag) sa skladá z kľúča a hodnoty. Každá značka popisuje určitú vlastnosť dátových prvkov (uzlov, ciest a relácií) alebo sadu zmien. Kľúč popisuje tému, kategóriu alebo typ mapového prvku (napr. cesta \--- \emph{highway} alebo názvy \--- \emph{name}). Hodnota konkretizuje vlastnosť, ktorú všeobecne popisuje kľúč. Napríklad značka \texttt{highway=residential} predstavuje cestu, ktorá vedie obytnou oblasťou.
 
 
 \section{GIS}
-Geografický informačný systém (GIS) je informačný systém, ktorý sa využíva na získavanie, analyzovanie, vizualizáciu a manažment dát s priestorovým alebo mapovým vyjadrením. GIS spracováva geografické údaje v digitálnej podobe. Časť takýchto údajov vzniká napr. pomocou satelitných údajov, meraním pomocou polohového systému GPS alebo inými meracími prístrojmi. Údaje v papierovej podobe je nutné digitalizovať. Súčasťou GIS je hardvér (počítače, servery, zariadenia na zber dát,...), softvér (špecializované programy pre prácu s priestorovými dátami), dáta (priestorové údaje) a používatelia (spracovatelia dát, administrátori GIS a prijímatelia priestorových informácií)~\cite{introductiontogis}. Používatelia systému môžu využívať rôzne metódy spracovania geografických údajov, ktoré umožňujú údaje prehľadávať, triediť, reklasifikovať, transformovať a modelovať~\cite{hofierka2003gis}.
+Geografický informačný systém (GIS) je informačný systém, ktorý sa využíva na získavanie, analyzovanie, vizualizáciu a manažment dát s~priestorovým alebo mapovým vyjadrením. GIS spracováva geografické údaje v~digitálnej podobe. Časť takýchto údajov vzniká napr. pomocou satelitných údajov, meraním pomocou polohového systému GPS alebo inými meracími prístrojmi. Údaje v~papierovej podobe je nutné digitalizovať. Súčasťou GIS je hardvér (počítače, servery, zariadenia na zber dát,...), softvér (špecializované programy pre prácu s~priestorovými dátami), dáta (priestorové údaje) a~používatelia (spracovatelia dát, administrátori GIS a~prijímatelia priestorových informácií)~\cite{introductiontogis}. Používatelia systému môžu využívať rôzne metódy spracovania geografických údajov, ktoré umožňujú údaje prehľadávať, triediť, reklasifikovať, transformovať a~modelovať~\cite{hofierka2003gis}.
 
 \subsection{ArcGIS}
-V súčasnosti existujú rôznorodé softvéry pre GIS. ArcGIS~\cite{arcgis} je systém GIS od spoločnosti Esri, ktorý umožňuje vytvárať interaktívne mapy. Je dostupný v troch úrovniach licencií. 
+V súčasnosti existujú rôznorodé softvéry pre GIS. Medzi najznámejšie patrí ArcGIS od~spoločnosti Esri, ktorý slúži na mapovanie a priestorovú analýzu navrhnutý tak, aby podporoval poslanie a obchodné ciele organizácií. Tento systém poskytuje tri úrovne licencií. Typ zvolenej licencie rozhoduje o tom, ako sú uložené dáta a ako je možné ich editovať. 
 
+Medzi najznámejšie aplikácie systému ArcGIS patrí ArcMap (použiteľná na priestorové analýzy, editáciu dát a tvorbu kartografických výstupov), ArcCatalog (pomáha organizovať a spravovať všetky dáta), ArcGIS Explorer (volne dostupný prehliadač priestorových dát), ArcGIS for~Server (serverové riešenie pre GIS, umožňuje jednoduchú konfiguráciu webových aplikácií a poskytuje kompletné vývojárske prostredie pre \emph{.NET} a \emph{Java}).
+
+\subsection{ArcČR 500}
+ArcČR 500~\cite{arcgis} je digitálna vektorová geografická databáza Českej republiky, spracovaná na úrovni podrobnosti 1 : \numprint{500000}. Obsahom databázy sú prehľadné geografické informácie o~ČR. Zdrojom dát pre geografické dáta ArcČR 500 v 3.3 je databáza Data200, čo je národná vektorová geografická databáza Zeměměřického úřadu (ZÚ) odpovedajúca presnosťou a~stupňom generalizácie 1 : \numprint{200000}. Vstupné dáta z Data200 majú deklarovanú absolútnu presnosť do 100 m. Absolútna polohová odchýlka ArcČR 500 v 3.3 je odhadovaná do 200~m.
+
+Dáta sú uchovávané iba v GIS formátoch firmy ESRI a to vo formáte súborovej databázy. ArcČR 500 je zložená z dvoch geodatabází \--- geografické prvky a administratívne členenie.
+
+\subsubsection*{Geografické prvky}
+Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy súborovej databázy \texttt{ArcCR500\_v33.gdb} ako aj ich popis a typ prvkov je možné vidieť v tabuľke~\ref{tab:arccr500}.
+
+\begin{table}[H]
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{vrstva}        & \textbf{popis}                                 & \textbf{typ prvku} \\ \hline
+    Letiste                & Letisko                                        & bod                \\
+    SidlaBody              & Sídla nad 500 obyvateľov                       & bod                \\
+    VyskoveKoty            & Výškové kóty (vrcholy kopcov)                  & bod                \\
+    ZeleznicniStanice      & Železničná stanica                             & bod                \\
+    Hranice                & Štátna, krajská a okresná hranica              & línia              \\
+    Silnice                & Cesta                                          & línia              \\
+    VodniToky              & Vodné toky                                     & línia              \\
+    Vrstevnice             & Vrstevnice po 25 m                             & línia              \\
+    Zeleznice              & Železnice                                      & línia              \\
+    BazinyARaseliniste     & Močiar a rašelinisko väčšie ako 30 ha          & polygón            \\
+    Lesy                   & Lesné plochy väčšie ako 30 ha                  & polygón            \\
+    SidlaPlochy            & Sídla nad \numprint{5000} obyvateľov           & polygón            \\
+    VodniPlochy            & Vodné plochy väčšie ako 15 ha                  & polygón            \\
+    ChranenaUzemi          & Národné parky a chránené krajinné oblasti      & polygón            \\
+    KladyZakladnichMap     & Klady základných máp ČR                        & polygón            \\
+    KladyTopografickychMap & Klady vojenských topografických máp            & polygón            \\
+    SouradnicovaSitJTSK    & Súradnicová sieť systému JTSK v intervale 1 km & línia              \\
+    ZemepisnaSitETRS89     & Zemepisná sieť v systéme ETR89                 & línia              \\
+    ZemepisnaSitWGS84      & Zemepisná sieť v systéme WGS84                 & línia              \\
+    DigitalniModelReliefu  & Raster digitálneho modelu reliéfu              & raster             \\
+    StinovanyRelief        & Raster tieňovaného modelu reliéfu              & raster             \\ \hline
+\end{tabular}
+\caption{Súborová databáza ArcCR500\_v33.gdb. Prevzaté z~\cite{arcgis} a upravené.}
+\label{tab:arccr500}
+\end{table}
+
+Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, ktoré sú pre danú vrstvu zadefinované. V tejto práci sú uvedené pre ilustráciu iba vrstvy Letisko (tabuľka~\ref{tab:letisko}) a Hranica (tabuľka~\ref{tab:hranica}). V tabuľke \ref{tab:letisko} je možné vidieť, že atribút \texttt{TYP} môže nadobúdať tri hodnoty \--- t.j.~letisko je buď civilné alebo vojenské, alebo civilné a vojenské. Táto vrstva je zobrazená na mape ako bod. Na druhú stranu vrstva \emph{Hranica}, ktorá sa zobrazuje na mape ako línia, nemá takú variabilitu atribútov ako vrstva \emph{Letisko}. V tabuľke~\ref{tab:hranica} je možné vidieť, že daná vrstva má iba jeden zadefinovaný atribút, ktorý ale môže nadobúdať 3 hodnoty \--- t.j. hranica môže byť štátna, krajská alebo okresná.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{meno atribútu}         & \textbf{popis}      & \textbf{nadobúdané hodnoty}   \\ \hline
+    \textbf{TYP}          & Typ letiska         & \begin{tabular}[c]{@{}l@{}}1 - civilné\\ 2 - vojenské\\ 3 - civilné a vojenské\end{tabular} \\
+    \textbf{NAZEV}        & Meno                & \textit{konkrétne meno}       \\
+    \textbf{NAZEV\_ASCII} & Meno (ASCII formát) & \textit{konkrétne meno}       \\
+    \textbf{ICAO}         & Kód ICAO            & \textit{konkrétny kód}        \\
+    \textbf{STATUT}       & Statut letiska      & \begin{tabular}[c]{@{}l@{}}1 - medzinárodné\\ 2 - vnútroštátne\end{tabular}                 \\ \hline
+    \end{tabular}
+\caption{Vrstva Letisko (Letiste). Prevzaté z~\cite{arcgis} a upravené.}
+\label{tab:letisko}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{meno atribútu} & \textbf{popis} & \textbf{nadobúdané hodnoty}  \\ \hline
+        \textbf{TYP}  & Typ hranice    & \begin{tabular}[c]{@{}l@{}}1 - štátna\\ 2 - krajská\\ 3 - okresná\end{tabular} \\ \hline
+    \end{tabular}
+    \caption{Vrstva Hranica (Hranice). Prevzaté z~\cite{arcgis} a upravené.}
+    \label{tab:hranica}
+\end{table}
+
+\subsubsection*{Administratívne členenie}
+Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj ich popis sa nachádza v tabuľke~\ref{tab:administrativne-clenenie}.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|lll|}
+    \hline
+    \textbf{názov}  & \textbf{popis}                 & \textbf{typ prvku} \\ \hline
+    \textbf{ZSJ}    & Základné sídelné jednotky      & bod/polygón        \\
+    \textbf{UTJ}    & Územné technické jednotky      & bod/polygón        \\
+    \textbf{KU}     & Katastrálne územie             & bod/polygón        \\
+    \textbf{MOaMC}  & Mestské obvody a mestské časti & bod/polygón        \\
+    \textbf{COB}    & Časti obce                     & bod/polygón        \\
+    \textbf{OBCE}   & Obce a vojenské újazdy         & bod/polygón        \\
+    \textbf{POU}    & Obce s povereným úradom        & bod/polygón        \\
+    \textbf{ORP}    & Obce s rozšírenou pôsobnosťou  & bod/polygón        \\
+    \textbf{OKRESY} & Okresy                         & bod/polygón        \\
+    \textbf{KRAJE}  & Kraje                          & bod/polygón        \\
+    \textbf{STAT}   & Štát                           & bod/polygón        \\ \hline
+    \end{tabular}
+    \caption{Súborová databáza AdministrativniCleneni\_v13.gdb. Prevzaté z~\cite{arcgis} a upravené.}
+    \label{tab:administrativne-clenenie}
+\end{table}
 
 \chapter{Návrh}
 \label{navrh}
