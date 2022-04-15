@@ -44,21 +44,14 @@
     var options = {
         position: "topleft",
         draw: {"circle": false, "circlemarker": false, "marker": false, "polygon": false, "polyline": false},
-        edit: {},
+        edit: {"featureGroup": drawnItems, "remove": false},
     }
     // FeatureGroup is to store editable layers.
-    var drawnItems = new L.featureGroup().addTo(
-        folium_map
-    );
+    var drawnItems = new L.featureGroup().addTo(folium_map);
     options.edit.featureGroup = drawnItems;
     var draw_control = new L.Control.Draw(
         options
     ).addTo(folium_map);
-    folium_map.on(L.Draw.Event.CREATED, function(e) {
-        var layer = e.layer, 
-            type = e.layerType;
-        drawnItems.addLayer(layer);
-    });
 
     var mouse_position_id = new L.Control.MousePosition(
         {"emptyString": "", "lngFirst": true, "numDigits": 20, "position": "topright", "prefix": "Coordinates:", "separator": " | "}
@@ -67,18 +60,26 @@
     mouse_position_id.options["lngFormatter"] = function(num) {return L.Util.formatNum(num, 4) + ' º ';};;
     folium_map.addControl(mouse_position_id);
 
-    function updateCoords(points, delete_inputs = false){
-        if(delete_inputs){
-            document.getElementById("borders_form").reset();
-            return;
+    function updateCoords(points, custom_area = false){
+        let borders = {};
+
+        if(custom_area){            
+            let lats = [points[0][0]["lat"], points[0][1]["lat"], points[0][2]["lat"], points[0][3]["lat"]];
+            let longs = [points[0][0]["lng"], points[0][1]["lng"], points[0][2]["lng"], points[0][3]["lng"]];
+            borders = {
+                "north": Math.max(...lats),
+                "south": Math.min(...lats),
+                "east": Math.max(...longs),
+                "west": Math.min(...longs)
+            }
         }
-        let lats = [points[0][0]["lat"], points[0][1]["lat"], points[0][2]["lat"], points[0][3]["lat"]];
-        let longs = [points[0][0]["lng"], points[0][1]["lng"], points[0][2]["lng"], points[0][3]["lng"]];
-        let borders = {
-            "north": Math.max(...lats),
-            "south": Math.min(...lats),
-            "east": Math.max(...longs),
-            "west": Math.min(...longs)
+        else{
+            borders = {
+                "north": points['_northEast']['lat'],
+                "south": points['_southWest']['lat'],
+                "east": points['_northEast']['lng'],
+                "west": points['_southWest']['lng']
+            }
         }
 
         $.ajax({
@@ -94,28 +95,33 @@
         });
     }
 
-    folium_map.on('draw:created', function (e) {
-        layer = e.layer;
-        drawnItems.addLayer(layer);
-        let points = layer._latlngs;
-        updateCoords(points);
-        $('.leaflet-draw-draw-rectangle').parent().hide()
+    folium_map.on(L.Draw.Event.CREATED, function (e){
+        drawnItems.addLayer(e.layer);
+        let points = Object.values(drawnItems._layers)[0]._latlngs;
+        updateCoords(points, true);
+        $('.leaflet-draw-draw-rectangle').parent().hide();
+        $('.custom-area-create-tag').hide();
+        $('.custom-area-delete-tag').show();
     });
 
-    folium_map.on('draw:edited', function (e) {
-        let layers = e.layers;
-        layers.eachLayer(function (layer) {
-            let points = layer._latlngs;
-            updateCoords(points);
-        });
+    folium_map.on(L.Draw.Event.EDITED, function (){
+        let points = Object.values(drawnItems._layers)[0]._latlngs;
+        updateCoords(points, true);
     });
 
-    folium_map.on('draw:deleted', function (e) {
-        let layers = e.layers;
-        layers.eachLayer(function () {
-            let points = layer._latlngs;
-            $('.leaflet-draw-draw-rectangle').parent().show();
-            updateCoords(points, true)
-        });
+    folium_map.on('moveend zoom', function(){
+        let layer = Object.values(drawnItems._layers)[0];
+        if(!folium_map.hasLayer(layer)){
+            updateCoords(folium_map.getBounds());
+        }
     });
+
+    function remove_layer(){
+        let layer = Object.values(drawnItems._layers)[0];
+        folium_map.removeLayer(layer);
+        $('.custom-area-create-tag').show();
+        $('.custom-area-delete-tag').hide();
+        drawnItems._layers = {};
+        updateCoords(folium_map.getBounds());
+    };
 </script>

@@ -47,7 +47,12 @@
           </div>  
         {% endif %}
         <div class="custom-area">
-          <a href="javascript:void(0);" onclick="document.querySelector('.leaflet-draw-draw-rectangle').click();">Create custom area</a>
+          <div>
+            <a class="custom-area-create-tag" href="javascript:void(0);" onclick="document.querySelector('.leaflet-draw-draw-rectangle').click();">Create custom area</a>
+          </div>
+          <div>
+            <a class="custom-area-delete-tag" href="javascript:void(0);" onclick="remove_layer();">Delete custom area</a>
+          </div>
         </div>
         <div>
           <input type="submit" name="submit" class="btn btn-success btn-lg btn-heatmap" value="Create HeatMap">

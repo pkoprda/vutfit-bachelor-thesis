@@ -29,9 +29,9 @@ html, body {
 }
 
 .alert-message {
-    width: 400px;
-    padding-right: 50px;
-    right: 90%;
+    width: 270px;
+    margin-top: 40px;
+    margin-left: 35px;
 }
 
 .coords_boxy {
@@ -78,6 +78,14 @@ html, body {
 .custom-area {
     margin-top: 25px;
     font-size: 17px;
+}
+ 
+.leaflet-draw-section {
+    display: none;
+} 
+
+.custom-area-delete-tag {
+    display: none;
 }
 
 .btn-heatmap {
