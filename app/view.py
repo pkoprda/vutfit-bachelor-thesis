@@ -26,19 +26,25 @@ def index():
             return render_template('index.html', border=borders, error_statement="East coordinate must be larger than west coordinate")
 
         if 'submit' in request.form:
-            app.logger.info("Creating a Map...")
-            create_map(center_lat, center_long, zoom_start=15, create_heatmap=True)
             tags_highway = {"highway": True}
-
-            app.logger.info("Creating a GeoDataFrame of OSM entities within a N, S, E, W bounding box...")
-            gdf = get_geodataframe(borders['north'], borders['south'], borders['east'], borders['west'], tags_highway)
+            try:
+                app.logger.info("Creating a GeoDataFrame of OSM entities within a N, S, E, W bounding box...")
+                gdf = get_geodataframe(borders['north'], borders['south'], borders['east'], borders['west'], tags_highway)
+            except:
+                app.logger.info("Could not get GeoDataFrame from that area. Try different values...")
+                create_map(center_lat, center_long, zoom_start=15, create_heatmap=False)
+                return render_template('index.html', borders=borders, error_statement="Could not create heatmap")
 
             try:
                 app.logger.info("Creating list of coordinates...")
                 coords = list(chain(*get_coords(gdf)))
             except KeyError:
                 app.logger.info("Could not create list of coordinates. Try different values...")
-                return render_template('index.html', error_statement="Could not create heatmap")
+                create_map(center_lat, center_long, zoom_start=15, create_heatmap=False)
+                return render_template('index.html', borders=borders, error_statement="Could not create heatmap")
+
+            app.logger.info("Creating a Map...")
+            create_map(center_lat, center_long, zoom_start=15, create_heatmap=True)
 
             longs, lats = list(zip(*coords))
             data = {"lats": lats, "longs": longs}

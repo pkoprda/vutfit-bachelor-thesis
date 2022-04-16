@@ -12,25 +12,25 @@
       <div class="coords_boxy">
         {% if borders %}
           <div class="latitude_input"">
-            <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="{{ borders['north'] }}" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="north_id" name="north" step=0.00001 value="{{ borders['north'] }}" autocomplete="off" class="coord_bound" required>
           </div>
           <div class="longitude_input">
-            <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="{{ borders['west'] }}" autocomplete="off" class="coord_bound" required>
-            <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="{{ borders['east'] }}" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="west_id" name="west" step=0.00001 value="{{ borders['west'] }}" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="east_id" name="east" step=0.00001 value="{{ borders['east'] }}" autocomplete="off" class="coord_bound" required>
           </div>
           <div class="latitude_input">
-            <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="{{ borders['south'] }}" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="south_id" name="south" step=0.00001 value="{{ borders['south'] }}" autocomplete="off" class="coord_bound" required>
           </div>
         {% else %}
           <div class="latitude_input"">
-            <input type="number" id="north_id" name="north" min="-90" max="90" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="north_id" name="north" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="90.0" required>
           </div>
           <div class="longitude_input">
-            <input type="number" id="west_id" name="west" min="-180" max="80" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
-            <input type="number" id="east_id" name="east" min="-180" max="80" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="west_id" name="west" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="-180.0" required>
+            <input type="number" id="east_id" name="east" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="180.0" required>
           </div>
           <div class="latitude_input">
-            <input type="number" id="south_id" name="south" min="-90" max="90" step=0.00001 value="" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="south_id" name="south" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="-90.0" required>
           </div>
         {% endif %}
         {% if error_statement %}

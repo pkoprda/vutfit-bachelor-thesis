@@ -38,13 +38,13 @@
     L.control.scale().addTo(folium_map);
 
     var tile_layer_id = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 2, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+        {"attribution": "Map data \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e contributors, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 2, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
     ).addTo(folium_map);
 
     var options = {
         position: "topleft",
         draw: {"circle": false, "circlemarker": false, "marker": false, "polygon": false, "polyline": false},
-        edit: {"featureGroup": drawnItems, "remove": false},
+        edit: {"featureGroup": drawnItems, "edit": false, "remove": false},
     }
     // FeatureGroup is to store editable layers.
     var drawnItems = new L.featureGroup().addTo(folium_map);
@@ -99,14 +99,20 @@
         drawnItems.addLayer(e.layer);
         let points = Object.values(drawnItems._layers)[0]._latlngs;
         updateCoords(points, true);
-        $('.leaflet-draw-draw-rectangle').parent().hide();
         $('.custom-area-create-tag').hide();
+        folium_map.fire(L.Draw.Event.EDITSTART);
         $('.custom-area-delete-tag').show();
     });
 
-    folium_map.on(L.Draw.Event.EDITED, function (){
+    folium_map.on(L.Draw.Event.EDITSTART, function(){
+        let layer = Object.values(drawnItems._layers)[0];
+        layer.editing.enable();
+    });
+
+    folium_map.on(`${L.Draw.Event.EDITMOVE} ${L.Draw.Event.EDITRESIZE}`, function(){
         let points = Object.values(drawnItems._layers)[0]._latlngs;
         updateCoords(points, true);
+        folium_map.fire(L.Draw.Event.EDITSTOP);
     });
 
     folium_map.on('moveend zoom', function(){
