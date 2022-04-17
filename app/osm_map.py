@@ -1,4 +1,3 @@
-from itertools import chain
 import numpy as np
 from shapely.ops import unary_union
 from leafmap import osm_gdf_from_bbox
@@ -7,19 +6,12 @@ from leafmap import osm_gdf_from_bbox
 
 
 def create_map(center_lat, center_long, zoom_start=2, create_heatmap=False):
-    config_map = f"""\tvar folium_map = L.map("folium_map", {{
-    \tcenter: [{center_lat}, {center_long}],
-    \tcrs: L.CRS.EPSG3857,
-    \tzoom: {zoom_start},
-    \tzoomControl: true,
-    \tpreferCanvas: false}});
-    L.control.scale().addTo(folium_map);\n"""
-    with open('app/templates/map.html', 'r') as shandle:
-        with open('app/templates/heatmap.html', 'w') as thandle:
-            lines = shandle.readlines()[:-1] if create_heatmap else shandle.readlines()
-            lines = list(chain(lines[:30], config_map, lines[38:]))
-            for line in lines:
-                thandle.write(line)
+    with open('app/static/js/config_map.js', 'r') as f:
+        data = f.readlines()
+    data[1] = f"\tcenter: [{center_lat}, {center_long}], zoom: {zoom_start},\n"
+
+    with open('app/static/js/config_map.js', 'w') as f:
+        f.writelines(data)
 
 
 def get_geodataframe(north, south, east, west, tags):
