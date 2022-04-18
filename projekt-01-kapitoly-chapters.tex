@@ -9,7 +9,7 @@
 
 % \blindtext[3]
 
-\chapter{Mapové dáta} 
+\chapter{Mapové dáta}
 \label{map-data}
 
 \section{OpenStreetMap}
@@ -39,8 +39,100 @@ Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu
 \section{GIS}
 Geografický informačný systém (GIS) je informačný systém, ktorý sa využíva na získavanie, analyzovanie, vizualizáciu a manažment dát s~priestorovým alebo mapovým vyjadrením. GIS spracováva geografické údaje v~digitálnej podobe. Časť takýchto údajov vzniká napr. pomocou satelitných údajov, meraním pomocou polohového systému GPS alebo inými meracími prístrojmi. Údaje v~papierovej podobe je nutné digitalizovať. Súčasťou GIS je hardvér (počítače, servery, zariadenia na zber dát,...), softvér (špecializované programy pre prácu s~priestorovými dátami), dáta (priestorové údaje) a~používatelia (spracovatelia dát, administrátori GIS a~prijímatelia priestorových informácií)~\cite{introductiontogis}. Používatelia systému môžu využívať rôzne metódy spracovania geografických údajov, ktoré umožňujú údaje prehľadávať, triediť, reklasifikovať, transformovať a~modelovať~\cite{hofierka2003gis}.
 
+Geografické dáta v GIS môžu byť organizované dvomi základnými modelmi \--- vektorovým a rastrovým modelom~\cite{holman2014priestorovedata}.
+
+\subsection{Vektorový model}
+Vektorový model je nazývaný podľa spôsobu vyjadrenia jeho jednotlivých častí \--- úseky kriviek s definovanou veľkosťou a smerom \--- \emph{vektorom}. Vektorový model pracuje s~tromi variantami objektov:
+\begin{itemize}
+    \item \textbf{Bod} (point) \--- reprezentuje jednotlivý pár súradníc X, Y. Takýto objekt má príliš malú plochu na to, aby sa dal zobraziť ako plocha (napr. vodopád, vysielač).
+    \item \textbf{Línia} (line) \--- reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú pospájané do línie. U~takýchto geometrických útvarov je možné vypočítať dĺžku, ale nie je možné zistiť obsah plochy (napr. cesta, rieka).
+    \item \textbf{Polygón} (polygon) \--- reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú navzájom pospájané líniami do uzatvorenej plochy. U~týchto geometrických útvarov je možné vypočítať obvod a~veľkosť plochy (napr. vodná plocha, lúka).
+\end{itemize}
+
+%\begin{figure}[h]
+%    \centering
+%    \includegraphics{obrazky-figures/placeholder.pdf}
+%    \caption{Vektorový model}
+%    \label{fig:vectordata}
+%\end{figure}
+
+Existujú rôzne modely dát pomocou ktorých je možné reprezentovať geografické objekty s~využitím vektorovej grafiky:
+\begin{itemize}
+    \item \textbf{Špagetový model} \--- vychádza z postupov využívaných pri digitalizácií máp. Každý objekt na mape je reprezentovaný jedným záznamom a je uložený ako reťazec X, Y súradníc. Z tohto modelu nie je možné získať žiadne informácie o vzťahoch medzi jednotlivými subjektami aj keď sa jedná o priestorové dáta.
+    \item \textbf{Topologický model} \--- každá línia tohto modelu začína a končí v uzlu. Všetky informácie tohto modelu sú ukladané do tzv. \emph{topologických tabuliek} \--- tabuľka spojov, súradníc a polygónov. Model vďaka tomu uchováva priestorové vzťahy medzi objektami.
+    \item \textbf{Hierarchický model} \--- ukladá zvlášť informáciu o bodoch, líniách a plochách v~hierarchickej štruktúre pre jednoduchšie vyhľadávanie v dátach. V modeli sú takisto zahrnuté aj odkazy medzi jednotlivými druhmi objektov a obsahuje topologickú informáciu. Tento model je pre manipuláciu a vyhľadávanie v dátach najvhodnejší.
+\end{itemize}
+
+\subsubsection{Vektorové formáty dát}
+Medzi najznámejšie vektorové formáty dát patrí formát \emph{shapefile} vytvorený spoločnosťou ESRI. Tento formát sa ukladá do zariadenia ako skupina aspoň troch súborov, ktoré síce majú rovnaký názov, ale majú rôznu príponu:
+\begin{itemize}
+    \item hlavný súbor \texttt{*.shp} \--- obsahuje popis geometrie každého záznamu
+    \item indexový súbor \texttt{*.shx} \--- prepája prvok v hlavnom súbore so záznamom v atribútovej tabuľke
+    \item databázový súbor \texttt{*.dbf} \--- databázový súbor, obsahuje dáta atribútov pre každý záznam
+\end{itemize}
+
+Okrem hore zmienených súboroch môže mať \emph{shapefile} aj iné súbory, ktoré obsahujú ďalšie informácie o dátach:
+\begin{itemize}
+    \item projekčný súbor \texttt{*.prj} \--- ukladá informácie o súradnicovom systéme
+    \item priestorové indexy \texttt{*.gix}, \texttt{*.sbn}, \texttt{*.sbx} \--- umožňujú rýchlejšie vyhľadávanie prvkov
+    \item atribútové indexy \texttt{*.atx} \--- urýchľujú vyhľadávanie v atribútovej tabuľke
+    \item metadátový súbor \texttt{*.shp.xml} \--- metadáta o zvolenom prvku
+    \item kódovací súbor \texttt{*.cpg} \--- súbor pre správnu identifikáciu znakov
+\end{itemize}
+
+Existuje veľa iných vektorových formátov dát, ktoré sa používajú v GIS ako napr. \emph{KML}, \emph{KMZ}, \emph{GPX} a \emph{GeoJSON}
+
+\textbf{KML} (Keyhole Markup Language) je dátový formát vyvinutý pre aplikáciu Google Earth. Okrem ukladania informácii o geometrii obsahuje možnosti konfigurácie pre Google Earth mapy.
+
+\textbf{KMZ} (Keyhole Markup Zipped) je dátový formát, ktorý sa takisto používa v aplikáciách Google. Tento formát je rozšírením KML formátu, pretože obsahuje okrem textového popisu aj obrázky tvoriace 3D vizualizácie prvku.
+
+\textbf{GPX} (GPS Exchange Format) je formát údajov GPS pre ukladanie bodov, trás a ich atribútov. Ukladá informácie pomocou textu, podobne ako súbory typu KML.
+
+\textbf{GeoJSON}~\cite{rfc7946} je formát založený na formáte JSON (Javascript Object Notation\footnote{\url{https://www.json.org}}). Tento formát je navrhnutý pre reprezentáciu jednoduchých priestorových geografických dát a ich atribútov. Vo výpise~\ref{lst:geojson} je možné vidieť, ako je reprezentovaný bod vo formáte GeoJSON.
+
+\lstset{
+    caption={\texttt{FeatureCollection} obsahuje vo vlastnosti \texttt{features} objekt typu \texttt{Feature}, ktorý v \texttt{properties} obsahuje informácie viazané na objekt \texttt{geometry}.},
+    label={lst:geojson},
+    basicstyle=\ttfamily\footnotesize\bfseries,
+    xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
+}
+\begin{lstlisting}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "kraj": "Moravsko-sliezsky",
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.60100156068802,
+          49.196293610455584
+        ]
+      }
+    }
+  ]
+}
+\end{lstlisting}
+
+\subsection{Rastrový model}
+Rastrová reprezentácia mapových dát sa na rozdiel od vektorovej zameriava na zemský povrch. Používa sa skôr na javy ako je napr. úhrn zrážok či nadmorská výška.
+
+Základným princípom tohto formátu je pokrytie zemského povrchu pravidelnou alebo nepravidelnou sieťou, pričom jednotka tieto siete je \emph{bunka} (pixel, cell). Nepravidelná sieť má výhodu oproti nepravidelnej siete takú, že pomocou nepravidelnej siete je možné jednoduchšie reprezentovať rôzne prechody z roviny na terénnu hranu. Na druhú stranu použitie nepravidelnej siete je výpočtovo a aj algoritmicky náročnejšie. Keďže v tomto modeli neexistujú objekty známe z vektorového modelu GIS, bunky definujú vlastnú hodnotu sledovaného javu v konkrétnej časti priestoru. Hodnota v jednej bunke odpovedá bodu, rada spojených buniek s rovnakou hodnotou odpovedá línii a skupina navzájom susediacich buniek odpovedá ploche.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{obrazky-figures/vector-and-raster-data.png}
+    \caption{\textbf{Vektorový a rastrový dátový model}\protect\footnotemark.}
+    \label{fig:vectorandraster}
+\end{figure}
+
+\footnotetext{Prevzaté z~\cite{jukil2017mapdata}}
+
 \subsection{ArcGIS}
-V súčasnosti existujú rôznorodé softvéry pre GIS. Medzi najznámejšie patrí ArcGIS od~spoločnosti Esri, ktorý slúži na mapovanie a priestorovú analýzu navrhnutý tak, aby podporoval poslanie a obchodné ciele organizácií. Tento systém poskytuje tri úrovne licencií. Typ zvolenej licencie rozhoduje o tom, ako sú uložené dáta a ako je možné ich editovať. 
+V súčasnosti existujú rôznorodé softvéry pre GIS. Medzi najznámejšie patrí ArcGIS od~spoločnosti ESRI, ktorý slúži na mapovanie a priestorovú analýzu navrhnutý tak, aby podporoval poslanie a obchodné ciele organizácií. Tento systém poskytuje tri úrovne licencií. Typ zvolenej licencie rozhoduje o tom, ako sú uložené dáta a ako je možné ich editovať. 
 
 Medzi najznámejšie aplikácie systému ArcGIS patrí ArcMap (použiteľná na priestorové analýzy, editáciu dát a tvorbu kartografických výstupov), ArcCatalog (pomáha organizovať a spravovať všetky dáta), ArcGIS Explorer (volne dostupný prehliadač priestorových dát), ArcGIS for~Server (serverové riešenie pre GIS, umožňuje jednoduchú konfiguráciu webových aplikácií a poskytuje kompletné vývojárske prostredie pre \emph{.NET} a \emph{Java}).
 
@@ -111,7 +203,7 @@ Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, kto
 \end{table}
 
 \subsubsection*{Administratívne členenie}
-Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj ich popis sa nachádza v tabuľke~\ref{tab:administrativne-clenenie}.
+Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát administratívneho členenia. Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj ich popis sa nachádza v tabuľke~\ref{tab:administrativne-clenenie}.
 \begin{table}[H]
     \centering
     \begin{tabular}{|lll|}
@@ -133,33 +225,56 @@ Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj i
     \label{tab:administrativne-clenenie}
 \end{table}
 
-\chapter{Návrh}
-\label{navrh}
-\todo{TODO}
-\blindtext[2]
+\section{Kataster}
+Kataster predstavuje register resp. zoznam a používa sa vo viacerých významoch:
+\begin{itemize}
+    \item súpis nehnuteľného majetku, ktorý bol vytvorený pre daňové a úradné účely
+    \item kataster nehnuteľností, katastrálna kniha
+    \item katastrálne územie
+\end{itemize}
 
-\Blindtext
+\subsection{Kataster nehnuteľností}
+Súčasný kataster nehnuteľností~\cite{baudys-katastranemovitosti} na území Českej republiky mal ekvivalent medzi svojimi právnymi predchodcami \--- tzv.~pozemkovú knihu, ktorá slúžila na majetkoprávne účely. Okrem pozemkovej knihy sa používal aj pozemkový kataster, ktorý slúžil na~daňové účely. Pozemkový kataster sa používal približne do roku 1957 a zapisovanie do~pozemkovej knihy bol ukončený v~roku 1964, pretože nevypovedala o~skutočných a~aktuálnych právnych vzťahoch k~nehnuteľnostiam. Preto bola vytvorená nová pozemková evidencia nehnuteľností, ktorej hlavným účelom bolo zaistiť podklady pre plánovanie národného hospodárstva. Táto evidencia bola vedená až do roku 1992, kedy si spoločenské zmeny vyžiadali založenie dnešného katastru nehnuteľností.
+
+Dnešný kataster nehnuteľností plní úlohu pozemkovej knihy aj pozemkového katastru a slúži aj ako podklad pre geografické informačné systémy. Kataster nehnuteľností je definovaný ako súbor údajov o nehnuteľností v Českej republike. Okrem súpisu a popisu nehnuteľností zahŕňa ich geometrické a polohové určenie pre jednu katastrálnu obec alebo katastrálne územie. Aj keď v českom katastri sú zapísané všetky pozemky, zo stavieb sú zapísané v katastri len tie budovy, ktoré stanovuje katastrálny zákon. Ide o budovy s popisným či evidenčným číslom alebo hlavnú budovu v rámci areálu nehnuteľností. Na obrázku~\ref{fig:katastrmapa} je možné vidieť ako vyzerá katastrálna mapa mestskej časti Brno-Královo Pole. Obrázok je exportovaný zo stránky Českého katastru nemovitostí\footnote{\url{https://nahlizenidokn.cuzk.cz/VyberKatastrMapa.aspx}}, ktorý okrem faktických a právnych informácií o nehnuteľnostiach obsahuje katastrálne mapy a informácie o vlastníkoch nehnuteľností.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{obrazky-figures/katastr-ortofo-kralovopole.jpg}
+    \caption{Katastrálna mapa s ortofotomapou mestskej časti Brno-Královo Pole. Ružová farba predstavuje budovy, budovy so zelenou farbou sú nehnuteľnosti s~cenovými údajmi k~jednotke (byty alebo nebytové priestory), vyšrafované budovy sú nehnuteľnosti s~cenovými údajmi k~parcele.}
+    \label{fig:katastrmapa}
+\end{figure}
+
+\subsection{Územný plán}
+Vlastníci katastrov nehnuteľností si musia byť istý, že na danom území existuje poriadok, ktorý by mal zaručovať, že ich práva nebudú ohrozované náhodnými a~meniacimi sa rozhodnutiami. Územným plánovaním sa predchádza nekoncepčnému a zložitému rozvoja obce. Zaoberá sa všetkými aspektmi nášho prostredia. Ide prevažne o~stavbu sídiel, dopravnú a~ technickú infraštruktúru, ale aj o prvky, ktoré vytvárajú prírodné zložky životného prostredia~\cite{uzemnyplan}.
+
+% \chapter{Návrh}
+% \label{navrh}
+% \todo{TODO}
+% \blindtext[2]
+
+% \Blindtext
 
 
-\chapter{Implementácia}
-\label{implementacia}
-\todo{TODO}
+% \chapter{Implementácia}
+% \label{implementacia}
+% \todo{TODO}
 
-\blindtext[13]
-
-
-\chapter{Testovanie}
-\label{testovanie}
-\todo{TODO}
-
-\blindtext[1]
-
-\blindtext[10]
+% \blindtext[13]
 
 
+% \chapter{Testovanie}
+% \label{testovanie}
+% \todo{TODO}
 
-\chapter{Záver}
-\label{zaver}
-\todo{TODO}
+% \blindtext[1]
 
-\blindtext[3]
+% \blindtext[10]
+
+
+
+% \chapter{Záver}
+% \label{zaver}
+% \todo{TODO}
+
+% \blindtext[3]
