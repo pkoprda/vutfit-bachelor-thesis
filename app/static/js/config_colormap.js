@@ -19,11 +19,12 @@ color_map.xAxis = d3.svg.axis()
 color_map.svg = d3.select('.legend.leaflet-control').append('svg')
     .attr('id', 'legend')
     .attr('width', 450)
-    .attr('height', 100);
+    .attr('height', 150);
 
-color_map.g = color_map.svg.append("g")
-    .attr("class", "key")
-    .attr("transform", "translate(25,35)");
+color_map.g = color_map.svg.append('g')
+    .attr('class', 'key')
+    .attr('transform', 'translate(25,35)')
+    .style('font-size', '11px');
 
 color_map.g.selectAll('rect')
     .data(color_map.color.range().map(function(d, i) {
@@ -34,12 +35,13 @@ color_map.g.selectAll('rect')
         };
     }))
     .enter().append('rect')
-        .attr("height", 10)
-        .attr("x", function(d) { return d.x0; })
-        .attr("width", function(d) { return d.x1 - d.x0; })
-        .style("fill", function(d) { return d.z; });
+        .attr('height', 10)
+        .attr('x', function(d) { return d.x0; })
+        .attr('width', function(d) { return d.x1 - d.x0; })
+        .style('fill', function(d) { return d.z; });
 
 color_map.g.call(color_map.xAxis).append('text')
-    .attr("class", "caption")
-    .attr("y", 21)
+    .attr('class', 'caption')
+    .attr('y', 21)
+    .attr('font-size', 11)
     .text('Probability');

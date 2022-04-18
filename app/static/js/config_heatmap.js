@@ -55,7 +55,9 @@ folium_map.on(`${L.Draw.Event.EDITMOVE} ${L.Draw.Event.EDITRESIZE}`, function(){
 
 folium_map.on('moveend zoom', function(){
     let layer = Object.values(drawnItems._layers)[0];
-    if(!folium_map.hasLayer(layer)){
+    try {
+        folium_map.hasLayer(layer);
+    } catch (error) {
         updateCoords(folium_map.getBounds());
     }
 });

@@ -80,3 +80,7 @@ html, body {
     border-color: #28a745;
     margin-top: 15px;
 }
+
+.leaflet-control-scale, .leaflet-control {
+    font-size: 11px;
+}
