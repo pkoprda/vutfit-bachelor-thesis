@@ -1,4 +1,5 @@
 app/static/js/heatmap.js
+app/static/js/config_map.js
 cache/
 tmp/
 __pycache__/
