@@ -1,11 +1,4 @@
-var folium_map = L.map("folium_map", {
-	center: [0.0, 0.0], zoom: 2,
-    crs: L.CRS.EPSG3857,
-    zoomControl: true,
-    preferCanvas: false,
-});
 L.control.scale().addTo(folium_map);
-
 var tile_layer_id = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {"attribution": "Map data \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e contributors, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 2, "opacity": 1}
 ).addTo(folium_map);

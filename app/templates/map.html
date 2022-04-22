@@ -19,23 +19,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css"/>
-    <script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js"></script>
 </head>
 <body>    
     <div class="folium-map" id="folium_map" ></div>
 </body>
+<script>
+    var folium_map = L.map("folium_map", {
+		center: [0.0, 0.0], zoom: 2,
+        crs: L.CRS.EPSG3857,
+        zoomControl: true,
+        preferCanvas: false
+    });
+</script>
 <script src="../static/js/config_map.js" type="text/javascript"></script>
 <script src="../static/js/config_heatmap.js" type="text/javascript"></script>
-<script src="../static/js/heatmap.js" type="text/javascript"></script>
-<script>
-    if(typeof heatmap !== 'undefined'){
-        let head = document.getElementsByTagName('head')[0];
-        let script = document.createElement('script');
-        script.src = '../static/js/config_colormap.js';
-        script.type = 'text/javascript';
-        head.appendChild(script);
-    }
-</script>
+<script src="../static/js/config_colormap.js" type="text/javascript"></script>
+<script type="text/javascript"></script>

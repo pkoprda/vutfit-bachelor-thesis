@@ -1,3 +1,4 @@
+import fileinput
 from json import load as json_load
 from itertools import chain
 from numpy import linspace
@@ -10,13 +11,33 @@ from app import app
 # FOR DEBUG: pd.options.display.max_colwidth = 300
 
 
-def create_map(center_lat, center_long, zoom_start=2):
-    with open('app/static/js/config_map.js', 'r') as f:
-        data = f.readlines()
-    data[1] = f"\tcenter: [{center_lat}, {center_long}], zoom: {zoom_start},\n"
+def create_map(center_lat, center_long, zoom_start=2, clean_map=True):
+    new_line = f"\t\tcenter: [{center_lat}, {center_long}], zoom: {zoom_start},\n"
+    
+    with fileinput.input(files='app/templates/map.html', inplace=True) as f:
+        for line in f:
+            if line.strip().startswith("center:"):
+                line = line.replace(line, new_line)
+            print(line, end='')
 
-    with open('app/static/js/config_map.js', 'w') as f:
-        f.writelines(data)
+    if clean_map:
+        new_line = '<script type="text/javascript"></script>\n'
+        with fileinput.input(files='app/templates/map.html', inplace=True) as f:
+            for line in f:
+                if line.strip().startswith('<script type="text/javascript">'):
+                    line = line.replace(line, new_line)
+                    print(line, end='')
+                    break
+                print(line, end='')
+
+
+def create_heatmap(heatmap_layers):
+    data = f"""<script type="text/javascript">\n\t{heatmap_layers}</script>\n"""
+    with fileinput.input(files='app/templates/map.html', inplace=True) as f:
+        for line in f:
+            if line.strip().startswith('<script type="text/javascript">'):
+                line = line.replace(line, data)
+            print(line, end='')
 
 
 def get_geodataframe(north, south, east, west, tags):
@@ -79,7 +100,7 @@ def create_heatlayers(borders, gradient):
         tags = json_load(tags_file)
 
     error_message = ''
-    heatmap_layers = 'var heatmap = true;\n'
+    heatmap_layers = ''
     counter = 0
     all = count_keys(tags)
 
@@ -98,6 +119,7 @@ def create_heatlayers(borders, gradient):
             continue
 
         if isinstance(tags[key], bool):
+            counter += 1
             gdf = get_coords(gdf)
             df, error_message = create_dataframe(gdf, error_message, key)
             if not df.empty:
@@ -125,6 +147,6 @@ def create_heatlayers(borders, gradient):
                 if not df.empty:
                     app.logger.info(f"{counter}/{all}: Creating a Heatlayer for '{key}={value}'")
                     heatmap_layers = update_list_layers(df, heatmap_layers, gradient)
-                    
 
-    return heatmap_layers, error_message
+    create_heatmap(heatmap_layers)
+    return error_message
