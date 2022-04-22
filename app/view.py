@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import redirect, render_template, request, jsonify
 from app import app
 from app.osm_map import create_map, invalid_coords, create_heatlayers
 
@@ -38,3 +38,7 @@ def index():
 
     create_map(0.0, 0.0)
     return render_template('index.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect('/')
