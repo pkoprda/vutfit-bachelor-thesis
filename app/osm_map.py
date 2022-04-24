@@ -21,23 +21,7 @@ def create_map(center_lat, center_long, zoom_start=2, clean_map=True):
             print(line, end='')
 
     if clean_map:
-        new_line = '<script type="text/javascript"></script>\n'
-        with fileinput.input(files='app/templates/map.html', inplace=True) as f:
-            for line in f:
-                if line.strip().startswith('<script type="text/javascript">'):
-                    line = line.replace(line, new_line)
-                    print(line, end='')
-                    break
-                print(line, end='')
-
-
-def create_heatmap(heatmap_layers):
-    data = f"""<script type="text/javascript">\n\t{heatmap_layers}</script>\n"""
-    with fileinput.input(files='app/templates/map.html', inplace=True) as f:
-        for line in f:
-            if line.strip().startswith('<script type="text/javascript">'):
-                line = line.replace(line, data)
-            print(line, end='')
+        with open('app/templates/heatlayers.html', 'w') as _: pass
 
 
 def get_geodataframe(north, south, east, west, tags):
@@ -47,25 +31,20 @@ def get_geodataframe(north, south, east, west, tags):
 def get_coords(gdf):
     coords = []
 
-    # Polygon
-    if 'way' in gdf.index and gdf.loc[['way']].geometry.geom_type[0] == 'Polygon':
-        center_points = gdf.loc[['way']].geometry.centroid
-        xcoords, ycoords = list(zip(*[(p.x, p.y) for p in center_points]))
-        coords.append(list(zip(xcoords, ycoords)))
-        return coords
-
-    # LineString
     if 'way' in gdf.index:
         for geom_obj in gdf.loc[['way']].geometry:
-            distances = linspace(0, geom_obj.length, 30)
-            points = [geom_obj.interpolate(distance) for distance in distances]
-            multipoint = unary_union(points)
-            xcoords, ycoords = list(zip(*[(p.x, p.y) for p in multipoint]))
-            coords.append(list(zip(xcoords, ycoords)))
-        return coords
+            if geom_obj.geom_type == 'LineString':
+                distances = linspace(0, geom_obj.length, 30)
+                points = [geom_obj.interpolate(distance) for distance in distances]
+                center_points = unary_union(points)
+            else:
+                center_points = gdf.to_crs(epsg=3857).loc[['way']].geometry.centroid.to_crs(epsg=4326)
 
-    # Point
-    coords = [[(x, y) for x,y in zip(gdf.geometry.x , gdf.geometry.y)]]
+            xcoords, ycoords = list(zip(*[(p.x, p.y) for p in center_points]))
+            coords.append(list(zip(xcoords, ycoords)))
+    elif 'node' in gdf.index:
+        coords.append([(x, y) for x,y in zip(gdf.geometry.x , gdf.geometry.y)])
+
     return coords
 
 
@@ -73,80 +52,71 @@ def invalid_coords(first_coord, second_coord):
     return first_coord < second_coord
 
 
-def create_dataframe(gdf, error_message, key, value='all', probability=1.0):
+def create_dataframe(gdf, probability):
     try:
         coords = list(chain(*gdf))
     except:
-        error_message += f"{key}: {value}"
-        return DataFrame(), error_message
+        return DataFrame()
 
     longs, lats = list(zip(*coords))
     data = {'lats': lats, 'longs': longs, 'weight': probability}
-    return DataFrame(data), error_message
+    return DataFrame(data)
 
 
-def update_list_layers(df, heatmap_layers, gradient):
+def create_heatmap_layer(df):
+    gradient = {"0.0": "#00008b", "0.05": "#0000a8", "0.1": "#0000c5", "0.15": "#0000e2", "0.2": "#0000ff", "0.25": "#003fff", "0.3": "#007fff", "0.35": "#00bfff", "0.4": "#00ffff", "0.45": "#3fffbf", "0.5": "#7fff7f", "0.55": "#bfff3f", "0.6": "#ffff00", "0.65": "#ffe900", "0.7": "#ffd200", "0.75": "#ffbc00", "0.8": "#ffa500", "0.85": "#ff7c00", "0.9": "#ff5200", "0.95": "#ff2900"}
     heatmap_data = HeatMap(df, name="HeatMap", min_opacity=0.2, radius=30, blur=50, max_zoom=1).data
-    heatmap_layers += f"""L.heatLayer({heatmap_data}, {{'blur': 50, 'gradient': {gradient}, 'maxZoom': 1, 'minOpacity': 0.2, 'radius': 30}}).addTo(folium_map)\n"""
-    return heatmap_layers
+    heatmap_layer = f"""L.heatLayer({heatmap_data}, {{'blur': 50, 'gradient': {gradient}, 'maxZoom': 1, 'minOpacity': 0.2, 'radius': 30}}).addTo(folium_map)\n"""
+    with open('app/templates/heatlayers.html', 'a') as file_heatlayers:
+        file_heatlayers.write(heatmap_layer)
 
 
 def count_keys(data):
     return sum([count_keys(v) if isinstance(v, dict) else 1 for v in data.values()])
 
 
-def create_heatlayers(borders, gradient):
+def strip_dict(data):
+    new_data = {}
+    for k, v in data.items():
+        if isinstance(v, dict):
+            v = strip_dict(v)
+        if v:
+            new_data[k] = v
+    return new_data
+
+
+def create_heatlayers(borders):
     with open('app/data/tags.json', 'r') as tags_file:
         tags = json_load(tags_file)
 
     error_message = ''
-    heatmap_layers = ''
-    counter = 0
-    all = count_keys(tags)
+    with open('app/templates/heatlayers.html', 'w') as file_heatlayers:
+        file_heatlayers.write('<script type="text/javascript">\n')
+
+    # Get all possible probabilities
+    probabilities = sorted([*set(chain(*set(tags[key].values() for key in tags.keys()))), ], reverse=True)  
+    dict_tags = dict((p, dict((key, []) for key in tags.keys())) for p in probabilities)
 
     for key in tags.keys():
-        # Exclude tags that are not in box
+        for value, p in tags[key].items():
+            if p in probabilities:
+                dict_tags[p][key].append(value)
+
+    dict_tags = strip_dict(dict_tags)
+
+    for probability, tags in dict_tags.items():
         try:
-            if isinstance(tags[key], bool):
-                app.logger.info(f"{counter}/{all}: Creating a GeoDataFrame for '{key}'")
-            gdf = get_geodataframe(borders['north'], borders['south'], borders['east'], borders['west'], {key: True})
+            gdf = get_geodataframe(borders['north'], borders['south'], borders['east'], borders['west'], tags)
         except:
-            pass
+            error_message = f"Could not get GeoDataFrame for tags with probability '{probability}'"
+            app.logger.info(error_message)
 
-        if gdf.empty:
-            counter += 1 if isinstance(tags[key], bool) else len(tags[key].keys())
-            app.logger.info(f"{counter}/{all}: No tag with key '{key}' found in this area")
-            continue
-
-        if isinstance(tags[key], bool):
-            counter += 1
-            gdf = get_coords(gdf)
-            df, error_message = create_dataframe(gdf, error_message, key)
+        if not gdf.empty:
+            df = create_dataframe(get_coords(gdf), probability)
             if not df.empty:
-                app.logger.info(f"{counter}/{all}: Creating a Heatlayer for '{key}'")
-                heatmap_layers = update_list_layers(df, heatmap_layers, gradient)
-
-        else:
-            for value, probability in tags[key].items():
-                tag = {key: value}
-                counter += 1
-                try:
-                    app.logger.info(f"{counter}/{all}: Creating a GeoDataFrame for '{key}={value}'")
-                    gdf = get_geodataframe(borders['north'], borders['south'], borders['east'], borders['west'], tag)
-                except:
-                    app.logger.info(f"{counter}/{all}: Could not get GeoDataFrame for tag '{key}={value}'")
-                    error_message += f"{key}: {value}"
-                    continue
-
-                if gdf.empty:
-                    app.logger.info(f"{counter}/{all}: No tag with value '{key}={value}' found in this area")
-                    continue
-                gdf = get_coords(gdf)
-
-                df, error_message = create_dataframe(gdf, error_message, key, value, probability)
-                if not df.empty:
-                    app.logger.info(f"{counter}/{all}: Creating a Heatlayer for '{key}={value}'")
-                    heatmap_layers = update_list_layers(df, heatmap_layers, gradient)
-
-    create_heatmap(heatmap_layers)
+                app.logger.info(f"Creating a Heatlayer for tags with probability '{probability}'")
+                create_heatmap_layer(df)
+    
+    with open('app/templates/heatlayers.html', 'a') as file_heatlayers:
+        file_heatlayers.write('</script>\n')
     return error_message

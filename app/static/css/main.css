@@ -84,3 +84,15 @@ html, body {
 .leaflet-control-scale, .leaflet-control {
     font-size: 11px;
 }
+
+/* .tooltip {
+    position: fixed;
+    opacity: 0;
+    display: none;
+    background: #fff;
+    color: #000;
+    font-size: 2.5em;
+    font-weight: 700;
+    padding: 5px 20px;
+    box-shadow: 0 8px 10px rgba(0,0,0.1)
+} */
