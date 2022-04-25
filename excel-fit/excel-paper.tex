@@ -10,7 +10,7 @@
 
 %   LEAVE this line commented out for the REVIEW VERSIONS
 %   UNCOMMENT this line to get the FINAL VERSION
-%\ExcelFinalCopy
+\ExcelFinalCopy
 
 
 %--------------------------------------------------------
@@ -55,13 +55,14 @@
 
 \Abstract{
 Cieľom práce je vytvoriť aplikáciu, ktorá na základe získaných mapových dát vytvorí odhady pravdepodobnosti výskytu osôb v určitej oblasti.
-Odhad pravdepodobnosti výskytu osôb je zobrazený pomocou tzv. heat mapy. Heat mapa sa vytvára pomocou definovaných značiek (rôzne typy, napr.~poľná cesta, detské ihrisko), ktoré určujú, aký počet ľudí sa v danej oblasti nachádza. Každý typ značky má vlastný rádius a predstavuje jednu vrstvu výslednej heat mapy. Výsledná heat mapa zobrazuje odhad pravdepodobnosti výskytu osôb v danej oblasti, ktorá nie vždy odráža realitu, pretože v niektorých menej významnejších oblastiach ani nedochádza k výskytu osôb z~dôvodu nízkej populácie.
-Výsledkom práce je systém, ktorý môže slúžiť ako nástroj pri výstavbe elektroenergetických zariadení a elektrického vedenia u ktorých môže dochádzať k ohrozeniu života, ak sa v~ich blízkosti nachádza osoba alebo osoby.
+Odhad pravdepodobnosti výskytu osôb je zobrazený pomocou tzv. heat mapy. Heat mapa sa vytvára pomocou definovaných značiek (rôzne typy, napr.~poľná cesta, detské ihrisko), ktoré určujú, aký počet ľudí sa v danej oblasti nachádza. Každý typ značky má priradenú určitú pravdepodobnosť a podľa hodnôt pravdepodobností z~viacerých značiek je možné vytvoriť heat mapu. Výsledná heat mapa zobrazuje odhad pravdepodobnosti výskytu osôb v danej oblasti, ktorá nie vždy odráža realitu, pretože v niektorých menej významnejších oblastiach ani nedochádza k výskytu osôb z~dôvodu nízkej populácie.
+Výsledkom práce je systém, ktorý môže slúžiť ako nástroj pri výstavbe elektroenergetických zariadení a elektrického vedenia u~ktorých môže dochádzať k ohrozeniu života, ak sa v~ich blízkosti nachádza osoba alebo osoby.
 }
 
 \Teaser{
-	\TeaserImage{map.png}
-	\TeaserImage{arrow-heatmap.png}
+    \TeaserImage{openstreetmap-logo.pdf}
+    \TeaserImage{arrow.pdf}
+    \TeaserImage{nahlad.png}
 }
 
 
@@ -87,7 +88,7 @@ Výsledkom práce je systém, ktorý môže slúžiť ako nástroj pri výstavbe
 \section{Úvod}
 Poruchy na \textit{elektroenergetických zariadeniach} - zariadenia, ktoré slúžia na výrobu, pripojenie, prenos, distribúciu alebo dodávku elektriny - nie sú ani v~dnešnej dobe nijako nezvyčajné. V~momente, keď sa stane porucha a v~blízkosti takéhoto zariadenia sa nachádza osoba, môže dôjsť k ohrozeniu života danej osoby. Pri poruche môže dôjsť ku zvýšeniu elektrického potenciálu na neživých častiach elektrického zariadenia a teda telom človeka začne prechádzať elektrický prúd~\cite{Vycital-Zemnisoustavy}. Aby sa predišlo zbytočným ohrozeniam života, je potrebné pomocou tzv. \emph{značiek} vytvoriť \emph{heat mapu}, ktorá sa používa na získanie hustoty domov, trestných činov apod.\cite{DeBoer-Heatmap}. Táto mapa by mala najvhodnejšie využitie mimo zastavaného územia, pretože v takomto území sa stavajú elektrické stožiare, ktoré majú najväčšiu pravdepodobnosť ohrozenia ľudského života. Na druhú stranu treba zohľadniť pri výstavbe elektroenergetických zariadení aj územné plány obcí, pretože iba pomocou mapových dát nie je možné zistiť, či z danej oblasti nebude v budúcnosti zastavaná plocha.
 
-V dnešnej dobe zatiaľ neexistuje riešenie, ktoré by sa zaoberalo iba touto problematikou. Na získanie geografických dát je možné použiť otvorený projekt \emph{OpenStreetMap}~\cite{Openstreet}, z ktorých sa dá získať polohu elektroenergetických zariadení, ale neumožňuje pridávanie mapovej vrstvy s heat mapou. Takisto existujú územné plány obcí, ktoré iba pomáhajú odhadnúť, na ktorých miestach sa nachádza väčší počet ľudí a~na ktorých menší počet ľudí. Z~územných plánov je možné získať informácie, kde sa nachádzajú resp. kde sa budú nachádzať zastavané územia (ako je možné vidieť na obrázku \ref{fig:moravany}), avšak z~tohto územného plánu nie je možné získať informácie o~typoch ciest mimo zastavaného územia.
+V dnešnej dobe zatiaľ neexistuje riešenie, ktoré by sa zaoberalo iba touto problematikou. Na získanie geografických dát je možné použiť otvorený projekt \emph{OpenStreetMap}~\cite{Openstreet}, z ktorých sa dá získať polohu elektroenergetických zariadení, ale neumožňuje pridávanie mapovej vrstvy s heat mapou. Kataster nehnuteľností, definovaný ako súbor údajov o nehnuteľnostiach, ktorý nám iba pomáha odhadnúť, na ktorých miestach sa nachádza väčší počet ľudí a~na ktorých menší počet ľudí. Z~územných plánov je možné získať informácie, kde sa nachádzajú resp.~kde sa budú nachádzať zastavané územia (ako je možné vidieť na obrázku \ref{fig:moravany}), avšak z~tohto územného plánu nie je možné získať informácie o~typoch ciest mimo zastavaného územia.
 
 \begin{figure}[ht]
     \centering
@@ -100,7 +101,7 @@ Okrem OpenStreetMap a územných plánov obcí existujú GIS (Geografický Infor
 
 Riešením problému je vytvorenie heat mapy, ktorá zobrazuje pravdepodobnosť výskytu osôb v~určitej oblasti. Zdrojom pre vytvorenie heat mapy sú značky na mape, ktoré značia, aký objekt na mape sa nachádza: poľná cesta, detské ihrisko, autobusová stanica apod. Každá značka je zobrazovaná bodom resp. bodmi, ak značka predstavuje určitú cestu. Každý bod má svoj rádius, pričom v najbližšej vzdialenosti od daného bodu je pravdepodobnosť danej značky najvyššia a~so zvyšujúcou sa vzdialenosťou od daného bodu sa pravdepodobnosť lineárne zmenšuje. Druhým zdrojom pre riešenie tejto práce je použitie dát z územných plánov obcí.
 
-Táto práca môže slúžiť pri výstavbe stožiarov na elektrické vedenie, ale aj na zhodnotenie rizík pri už postavených stožiaroch. Takisto predstavuje niektoré nové zdroje informácií, ktoré sa dajú získať pomocou mapových dát. V neposlednom rade môže táto práca slúžiť ako zdroj inšpirácie pre ostatných vývojárov a to nielen z~OpenStreetMap komunity.
+Táto práca môže slúžiť pri výstavbe stožiarov na elektrické vedenie, ale aj na zhodnotenie rizík pri už postavených stožiaroch. Takisto predstavuje niektoré nové zdroje informácií, ktoré sa dajú získať pomocou mapových dát. V neposlednom rade môže táto práca slúžiť ako zdroj inšpirácie pre ostatných vývojárov a~to nielen z~OpenStreetMap komunity.
 
 
 %--------------------------------------------------------
@@ -109,7 +110,7 @@ Táto práca môže slúžiť pri výstavbe stožiarov na elektrické vedenie, a
 %--------------------------------------------------------
 \section{Získavanie mapových dát}
 \label{sec:ZiskavanieMapData}
-Na získavanie mapových dát je možné použiť OpenStreetMap~\cite{Openstreet}, čo je medzinárodný projekt vytvárajúci voľnú digitálnu mapu sveta. Tento projekt umožňuje pridávanie rôznych mapových vrstiev (napr. cyklomapa, dopravná mapa, humanitárna mapa), ale neumožňuje pridávanie vrstvy s heat mapou. Na to je vhodné použiť nástroje, ktoré takéto pridávanie vrstvy s heat mapou podporujú. Medzi používané nástroje nielen na~pridávanie vrstvy s~heat mapou, ale aj na vytváranie interaktívnej mapy a získavanie mapových dát patrí knižnica \texttt{folium}\footnote{\url{https://python-visualization.github.io/folium/}}. Získané dáta sú vo formáte objektu typu \emph{GeoDataFrame}~\cite{Geopandas} \--- dvoj-dimenzionálna dátová štruktúra, podobná tabuľke s riadkami a stĺpcami. Táto dátová štruktúra je podtrieda \emph{pandas.DataFrame}\footnote{\url{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html}} s pridaným stĺpcom \texttt{geometry}. Najdôležitejšou vlastnosťou tejto dátovej štruktúry je to, že vždy má jeden \emph{GeoSeries} stĺpec, nazývaný ako \texttt{geometry} stĺpec. Tento stĺpec obsahuje geometrické objekty, pričom \emph{geopandas} má tri základné triedy geometrických objektov:
+Na získavanie mapových dát je možné použiť projekt OpenStreetMap~\cite{Openstreet}, čo je medzinárodný projekt vytvárajúci voľnú digitálnu mapu sveta. Tento projekt umožňuje pridávanie rôznych mapových vrstiev (napr. cyklomapa, dopravná mapa, humanitárna mapa), ale neumožňuje pridávanie vrstvy s heat mapou. Na to je vhodné použiť nástroje, ktoré takéto pridávanie vrstvy s heat mapou podporujú. Na získavanie mapových dát je možné použiť balíček nástrojov \texttt{OSMnx}\footnote{\url{https://osmnx.readthedocs.io}} z~jazyka Python, ktorý umožňuje sťahovanie geografických dát z~OpenStreetMap. Získané dáta sú vo formáte objektu typu \emph{GeoDataFrame}~\cite{Geopandas} \--- dvoj-dimenzionálna dátová štruktúra, podobná tabuľke s~riadkami a~stĺpcami. Táto dátová štruktúra je podtrieda \emph{pandas.DataFrame}\footnote{\url{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html}} s~pridaným stĺpcom \texttt{geometry}. Najdôležitejšou vlastnosťou tejto dátovej štruktúry je to, že vždy má jeden \emph{GeoSeries} stĺpec, nazývaný ako \texttt{geometry} stĺpec. Tento stĺpec obsahuje geometrické objekty, pričom \emph{geopandas} má tri základné triedy geometrických objektov:
 \begin{enumerate}
     \item Points / Multi-Points
     \item Lines / Multi-Lines
@@ -130,7 +131,7 @@ Na získavanie mapových dát je možné použiť OpenStreetMap~\cite{Openstreet
 %--------------------------------------------------------
 \section{Vykresľovanie heat mapy}
 \label{sec:VykreslovanieHeatmapy}
-Heat mapa zobrazuje hustotu bodov v oblasti ako raster. Hustota bodových objektov je vypočítaná okolo každej výstupnej bunky rastru. Hodnota povrchu predstavuje pravdepodobnosť výskytu osoby pri danom bode. Pravdepodobnosť je najvyššia v mieste daného bodu a zmenšuje sa zväčšujúcou sa vzdialenosťou od tohto miesta až k nulovej hodnote, ktorá je stanovená veľkosťou zvoleného polomeru. Pri prieniku viacerých bodov dochádza ku zvýšeniu hodnoty pravdepodobnosti v danom prieniku bodov, ako je možné vidieť na~obrázku~\ref{fig:HeatMapPoints}.
+Heat mapa zobrazuje hustotu bodov v oblasti ako raster. Hustota bodových objektov je vypočítaná okolo každej výstupnej bunky rastru. Hodnota povrchu predstavuje pravdepodobnosť výskytu osoby pri danom bode. Pravdepodobnosť je najvyššia v mieste daného bodu a zmenšuje sa zväčšujúcou sa vzdialenosťou od~tohto miesta až k nulovej hodnote, ktorá je stanovená veľkosťou zvoleného polomeru. Pri prieniku viacerých bodov dochádza ku zvýšeniu hodnoty pravdepodobnosti v danom prieniku bodov, ako je možné vidieť na~obrázku~\ref{fig:HeatMapPoints}.
 
 \begin{figure}[ht]
 	\centering
@@ -141,7 +142,7 @@ Heat mapa zobrazuje hustotu bodov v oblasti ako raster. Hustota bodových objekt
 
  Na to, aby bolo možné body na mapu vykresliť, je potrebné, aby každý bod mal definovanú svoju \emph{zemepisnú dĺžku} a~\emph{zemepisnú šírku} a aby mal definovaný polomer. Preto je potrebné, aby z geometrických objektov typu \emph{Line} a~\emph{Polygon} boli vytvorené geometrické objekty typu \emph{Point}, pretože tieto geometrické objekty majú definované iba hraničné body. 
  
- Cesta (typ Line), ktorá nemá zákruty, by sa bez úpravy vykreslil bod jedného konca cesty a bod druhého konca cesty. Takéto riešenie by nebolo vhodné, preto je potrebné použiť interpoláciu úsečky. Na interpoláciu úsečky je použitá rovnica odvodená z obrázka \ref{fig:Interpolation}:
+ Cesta (typ Line), ktorá nemá zákruty, by sa bez úpravy vykreslil bod jedného konca cesty a bod druhého konca cesty. Takéto riešenie by nebolo vhodné, preto je potrebné použiť interpoláciu úsečky. Na interpoláciu úsečky je použitá rovnica \ref{eq:interpolate} odvodená z obrázka \ref{fig:Interpolation}:
 \begin{linenomath}
     \begin{equation}
         y = y_1 + \frac{(x - x_1)(y_2 − y_1)}{x_2 − x_1},
@@ -151,7 +152,7 @@ Heat mapa zobrazuje hustotu bodov v oblasti ako raster. Hustota bodových objekt
 kde $x_1$ a $y_1$ sú prvé súradnice, $x_2$ a $y_2$ sú druhé súradnice, $x$ je stredná hodnota hodnôt $x_1$ a $x_2$, a $y$ je hľadaná interpolovaná hodnota. Úsečku interpolujeme až dovtedy, dokým vzdialenosť medzi dvoma bodmi je väčšia ako zvolená hodnota $d$. Bez takejto interpolácie úsečiek by cesty nemali súvislú vrstvu heat mapy, t.j. iba časť cesty by bola pokrytá vrstvou heat mapy.
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\linewidth]{images/linear-interpolation.png}
+	\includegraphics[width=0.75\linewidth]{images/linear-interpolation.pdf}
 	\caption{Interpolácia úsečky}
 	\label{fig:Interpolation}
 \end{figure}
@@ -165,7 +166,7 @@ Budovy (typ Polygon) majú vyznačené iba okrajové body, vnútro tohto geometr
 	\label{fig:Polygon}
 \end{figure}
 
-Na vykresľovanie heat mapy je použitá knižnica \texttt{folium}, ktorá používa na pozadí knižnicu \texttt{Leaflet}\footnote{\url{https://leafletjs.com/}} z~jazyka JavaScript. Táto knižnica obsahuje triedu \texttt{HeatMap}, ktorá umožňuje vytvárať heat map vrstvu pre zadané vstupné parametre (zoznam dvojíc \--- zemepisná dĺžka a zemepisná šírka alebo zoznam trojíc \--- zemepisná dĺžka, zemepisná šírka a váha). Okrem vstupných parametrov je možné pre tieto vstupné parametre zadefinovať vlastné argumenty, ktoré môžu byť:
+Na vykresľovanie heat mapy je použitá knižnica \texttt{folium}, ktorá používa na pozadí knižnicu \texttt{Leaflet}\footnote{\url{https://leafletjs.com/}} z~jazyka JavaScript. Táto knižnica obsahuje triedu \texttt{HeatMap}, ktorá umožňuje vytvárať heat map vrstvu pre zadané vstupné parametre. Vstupnými parametrami by mal byť zoznam dvojíc \--- zemepisná dĺžka a zemepisná šírka alebo zoznam trojíc \--- zemepisná dĺžka, zemepisná šírka a váha. Váhe je priradená hodnota pravdepodobnosti, ktorú má daná značka. Okrem vstupných parametrov je možné pre tieto parametre zadefinovať vlastné argumenty, ktoré môžu byť:
 \begin{itemize}
     \item \emph{min\_opacity} \--- minimálna nepriehľadnosť
     \item \emph{max\_zoom} \--- úroveň priblíženia, kedy body dosiahnu maximálnu intenzitu
@@ -185,35 +186,53 @@ Každý objekt na mape môže mať rôznu pravdepodobnosť výskytu osôb. Preto
 
 \begin{table}[h]
     \vskip6pt
+    \caption{Tabuľka zoradená podľa hodnôt pravdepodobností}
     \centering
     \begin{tabular}{|c|c|c|c|}
         \hline
         \textbf{Kľúč} & \textbf{Hodnota} & \textbf{Popis} & {\textbf{P}} \\ \hline
-        highway & track & Lesná alebo poľná cesta & 0.1 \\ \hline
-        tourism & camp\_site & Kemp & 0.5 \\ \hline
-        leisure & playground & Detské ihrisko & 0.75 \\ \hline
-        amenity & bus\_station & Autobusová stanica & 0.8 \\ \hline
-        landuse & retail & Obchodná zóna & 0.99 \\ \hline
+        natural & volcano & Sopka & 0.1 \\ \hline
+        highway & track & Lesná alebo poľná cesta & 0.3 \\ \hline
+        building & tree\_house & Dom na strome & 0.6 \\ \hline
+        amenity & bench & Lavička & 0.9 \\ \hline
+        leisure & playground & Detské ihrisko & 1.0 \\ \hline
     \end{tabular}
-    \caption{Tabuľka zoradená podľa hodnôt pravdepodobností}
     \label{tab:Kluce}
 \end{table}
 
-Táto tabuľka slúži ako podklad pre vytvorenie škály pre heat mapu ako aj podklad pre vytvorenie samotnej heat mapy. Kľúče s hodnotami s~najväčšou pravdepodobnosťou používajú teplé farby a~na~druhú stranu kľúče s~hodnotami s~najmenšou pravdepodobnosťou používajú studené farby.
+Táto tabuľka slúži ako podklad pre vytvorenie škály pre heat mapu ako aj podklad pre vytvorenie samotnej heat mapy. Kľúče s hodnotami s~najväčšou pravdepodobnosťou používajú teplé farby a~na~druhú stranu kľúče s~hodnotami s~najmenšou pravdepodobnosťou používajú studené farby. Hodnoty pravdepodobností neboli prevzaté a ani neboli získané experimentálne, pretože pri väčšom počte rôznorodých hodnôt pravdepodobností by to viedlo k tomu, že by sa musela s každou hodnotou pridať nová vrstva heat mapy. Keďže vrstvy danej mapy sa ukladajú na klientskej strane aplikácie, vytvorenie vrstiev heat mapy pri väčšom počte hodnôt pravdepodobností by viedlo zníženiu výkonu danej aplikácie.
 
 \section{Experimenty}
 \label{sec:Experimenty}
 Experimenty sú vykonávané na rôznych častiach mapy, najčastejšie však na území Českej republiky. Aplikácia umožňuje vytvoriť mapu z plochy, ktoré je dané dvomi súradnicami zemepisnej dĺžky, severná a~južná, a~dvomi súradnicami zemepisnej dĺžky \--- východná a~západná.
 
+Na obrázku~\ref{fig:Medlanky} je možné vidieť ako vyzerá heat mapa pre oblasť, v ktorej sa nachádzajú iba chaty (klúč: \texttt{building}, hodnota: \texttt{cabin}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/brno-medlanky-heatmap.png}
+    \caption{Heat mapa časti Brno-Medlánky.}
+    \label{fig:Medlanky}
+\end{figure}
+
 Na obrázku~\ref{fig:Zabovresky} je možné vidieť, že dolná časť mapy obsahuje svetlejšie farby, pretože sa tam nachádzajú obytné domy. V strednej časti obrázka sa nachádzajú dve chatky, preto sú tam dva body v studenejšej farbe. V okolí týchto chatiek je pravdepodobnosť 0, preto okolie týchto chatiek je bezfarebné.
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/brno-zabovresky-heatmap.png}
-	\caption{Heat mapa časti Brno-Žabovřesky}
+	\caption{Heat mapa časti Brno-Žabovřesky.}
 	\label{fig:Zabovresky}
 \end{figure}
 
+
+Obrázok~\ref{fig:Medlanky} a obrázok~\ref{fig:Zabovresky} zobrazujú heat mapu, kde majú značky rovnakú pravdepodobnosť. Preto na lepšie zobrazenie výsledkov je vhodné použiť váhy \--- pravdepodobnosti. Heat mapa s~váhami pre dané značky je zobrazená na obrázku~\ref{fig:Rebesovice}, kde je možné vidieť, že na~rozdiel od ciest, ktoré majú vrstvu so studenejšími farbami, budovy v danej obci majú vrstvu s teplejšími farbami.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/rebesovice-heatmap.png}
+    \caption{Heat mapa časti obce Rebešovice.}
+    \label{fig:Rebesovice}
+\end{figure}
 
 %--------------------------------------------------------
 %--------------------------------------------------------
