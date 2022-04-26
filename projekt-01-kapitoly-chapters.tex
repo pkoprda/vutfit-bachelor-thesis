@@ -298,7 +298,21 @@ Flask som si vybral kvôli jeho jednoduchosti a kvôli tomu, že navrhnutá apli
 Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy apod.
 
 \subsection{Rozšírenia knižnice}
-Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. Na~obrázku~\ref{fig:leafletheat} je možné vidieť ako sa dá pridať tepelná vrstva do mapy a ako daná vrstva vyzerá na mape.
+Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. 
+
+\subsubsection{Rozšírenie Leaflet.heat}
+Základom tejto knižnice je knižnica \texttt{simpleheat} z jazyka JavaScript, ktorá sa používa na kreslenie heat máp na plátno. Na vytvorenie vrstvy heat mapy sa používa funkcia \texttt{L.heatLayer(latlngs, options)}, kde:
+\begin{itemize}
+    \item \texttt{latlngs} \--- predstavuje dvojrozmerné pole, kde každé pole v tomto poli je definované dvojicou (zemepisná dĺžka, zemepisná šírka) resp. trojicou hodnôt (zemepisná dĺžka, zemepisná šírka, intenzita),
+    \item \texttt{options} \--- má viacero možnosti, ktoré sa dajú zadefinovať pre danú vrstvu, najdôležitejšie z nich pre moju aplikáciu sú:
+    \begin{itemize}
+        \item \texttt{max} \--- maximálna intenzita bodu, implicitná hodnota je 1.0
+        \item \texttt{radius} \--- rádius každého bodu na heat mape, implicitná hodnota je 25
+        \item \texttt{blur} \--- množstvo rozptýlenia, implicitná hodnota je 15
+        \item \texttt{gradient} \--- konfigurácia prechodu farieb
+    \end{itemize}
+\end{itemize}
+Na~obrázku~\ref{fig:leafletheat} je možné vidieť ako sa dá pridať tepelná vrstva do mapy a ako daná vrstva vyzerá na mape.
 
 \lstset{
     caption={},
@@ -323,10 +337,11 @@ var heat = L.heatLayer([
     \centering
     \includegraphics[width=0.7\linewidth]{obrazky-figures/heatlayer-screenshot.png}
 \end{minipage}
-\caption{\textbf{Rozšírenie Leaflet.heat}.}
+\caption{\textbf{Rozšírenie Leaflet.heat}. Vľavo sa nachádza implementácia vrstvy, zoradená vzostupne podľa hodnôt intenzít, vpravo sa nachádza zobrazenie týchto bodov na~mape.}
 \label{fig:leafletheat}
 \end{figure}
 
+\subsubsection{Rozšírenie Leaflet.draw}
 Na to, aby užívateľ mohol vybrať určitú oblasť z mapy, na ktorej sa má vykresliť vrstva heat mapy, bolo potrebné použiť rozšírenie Leaflet.draw. Ako je možné vidieť na obrázku~\ref{fig:leafletdraw}, na bočnom paneli mapy v hornom ľavom rohu sa nachádza panel nástrojov, ktorý umožňuje kresliť geometrické útvary na mapu a následne ich upravovať alebo aj vymazávať. Pre~jednoduchosť aplikácie na vybratie určitej oblasti pomocou geometrických tvarov bol použitý iba jeden geometrický tvar \--- obdĺžnik.
 
 \begin{figure}[ht]
@@ -335,6 +350,35 @@ Na to, aby užívateľ mohol vybrať určitú oblasť z mapy, na ktorej sa má v
     \caption{\textbf{Rozšírenie Leaflet.draw} pridáva možnosť kreslenia geometrických útvarov na~mapu \-- krivky, polygóny, obdĺžniky, kruhy, značky a~kruhové značky. Okrem toho je možné pomocou tohto rozšírenia upravovať, presúvať a vymazávať geometrické útvary.}
     \label{fig:leafletdraw}
 \end{figure}
+
+\section{HTML}
+Jazyk HTML\footnote{HyperText Markup Language, v preklade \emph{Hypertextový značkovací jazyk}.} je jazyk určený na vytváranie webových stránok. Ako už názov napovedá, slovo \emph{hypertextový} naznačuje možnosť odkazov jednotlivých stránok na ostatné. Slovo \emph{značkovací} v spojitosti s jazykmi predstavuje jazyky, ktoré doplňujú text o tzv. \emph{značky} resp.~\emph{tagy}. Všetky značky majú svoje atribúty, ktoré upresňujú jej parametre. Jednotlivé značky je možné do seba vnárať a~spolu tak vytvárajú hierarchickú štruktúru~\cite{kosek1998html}.
+
+
+\section{CSS}
+Štruktúru webových stránok je možné vytvoriť použitím len jazyka HTML, ale na to, aby stránky vyzerali užívateľsky prívetivo, je nutné použiť aj iné nástroje, ktoré pôsobia na~užívateľa prívetivejším dojmom. Preto vznikol mechanizmus \emph{CSS}\footnotetext{Cascading Style Sheets} na vizuálne formátovanie webových stránok. Tento mechanizmus slúži na popis kaskádových štýlov HTML dokumentu.
+
+
+\section{JQuery}
+JQuery\footnote{\url{https://jquery.com}} je rýchla a cross-browser\footnote{Cross-browser kompatibilita je schopnosť webových stránok fungovať v rôznych prehliadačoch.} knižnica z jazyka JavaScript. Zjednodušuje prechádzanie dokumentov HTML, výber DOM\footnote{Document Object Model} elementov, kontrolu udalostí alebo aj vytváranie animácií. Výhodou tejto knižnice je, že je jednoduchou knižnicou na vývoj webových aplikácií. Oproti iným knižniciam v JavaScripte nevyžaduje lepšiu skúsenosť s jazykom JavaScript. Táto knižnica umožňuje okrem už zmienených možností, jednoduchšiu obsluhu \texttt{AJAX} volaní.
+
+
+\section{AJAX}
+Technológia AJAX\footnote{Asynchronous JavaScript and XML} umožňuje meniť obsah stránok bez potreby kompletného načítania zo~servera. Keďže protokol HTTP je bezstavový, akékoľvek stavové informácie je nutné posielať pri každom požiadavku servera a opačne. AJAX nám umožňuje sa takémuto postupu vyhnúť~\cite{lacko2008ajax}. Ako je možné poznať z názvu, AJAX je kombinácia viacerých prvkov:
+\begin{itemize}
+    \item HTML a CSS na prezentovanie informácií,
+    \item DOM na zobrazenie prezentovaných informácií,
+    \item metóda na výmenu dát medzi prehliadačom a serverom (napr. XMLHttpRequest objekt),
+    \item formát dát posielaný medzi prehliadačom a serverom (napr. XML)
+\end{itemize}
+
+V mojej aplikácií som použil AJAX technológiu na aktualizáciu súradníc pri zmene veľkosti alebo presune oblasti určenej na vytvorenie heat mapy.
+
+
+\section{Bootstrap}
+Bootstrap je sada nástrojov, ktorá obsahuje rozšírenie pre jazyky HTML, CSS a JavaScript. Umožňuje vytvárať pomocou veľkého množstva rôznorodých komponentov interaktívne webové stránky. Vyžaduje určitú znalosť HTML a~CSS, pretože väčšinu komponentov je možné vkladať iba pomocou HTML a CSS~\cite{bootstrap}.
+
+V mojej aplikácií používam tzv. \emph{Alert} komponentu t.j. výstražnú správu. Ak sa nepodarila vytvoriť heat mapa z~parametrov poslaných na server, server pošle správu užívateľovi, že heat mapa sa pre zadanú oblasť nepodarila vytvoriť.
 
 
 
