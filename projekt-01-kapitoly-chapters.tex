@@ -1,16 +1,19 @@
-% Bakalarska praca
+% Bakalárska práca
 % Autor: Peter Koprda (xkoprd00@stud.fit.vutbr.cz) 
 % 2021/2022
 
 
-% \chapter{Úvod}
+\chapter{Úvod}
+\todo{TODO: Napísať úvod}
 
-% \todo{TODO: Napísať úvod}
 
-% \blindtext[3]
 
 \chapter{Mapové dáta}
 \label{map-data}
+Mapa je používaná ako nástroj na získavanie a reprezentovanie mapových dát kvôli možnosti zobrazeniu komplexných dát. Mapové dáta, ktoré sa síce dajú uložiť do tabuľky, neponúkajú vizuálny náhľad. To je možné pomocou máp, ktoré nám umožňujú zobrazovať, ako sú dáta geograficky rozložené.
+
+Táto kapitola oboznámi čitateľa s možnosťami získavania mapových dát a ich reprezentáciou. Oboznámi sa s rôznymi nástrojmi, ktoré je možné použiť pri získavaní mapových dát, ale aj v akých formátoch sú mapové dáta reprezentované.
+
 
 \section{OpenStreetMap}
 OpenStreetMap~\cite{openstreet} je projekt, ktorý vznikol za účelom vytvárania geografickej databázy celého sveta. Cieľom tohto projektu je mať časom záznam o každom geografickom prvku na~planéte. Zatiaľ čo to začalo mapovaním ulíc, postupom času tento projekt zahŕňa chodníky, budovy, vodné cesty, potrubia, lesy, pláže, poštové schránky a dokonca aj jednotlivé stromy.
@@ -24,6 +27,13 @@ V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, 
 
 Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org/}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{obrazky-figures/openstreetmap.png}
+    \caption{\textbf{OpenStreetMap}. Výsek z mapy časti Brna.}
+    \label{fig:openstreetmap}
+\end{figure}
+
 \subsection{Dátový model OpenStreetMap}
 Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu OpenStreetMap slúžiace k popisu reálneho sveta. Medzi základné prvky OpenStreetMap projektu patria uzol, cesta a relácia. Tieto prvky je možné popísať značkami.
 
@@ -35,6 +45,14 @@ Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu
 
 \textbf{Značka\footnote{\url{https://wiki.openstreetmap.org/wiki/Tags}}} (anglicky tag) sa skladá z kľúča a hodnoty. Každá značka popisuje určitú vlastnosť dátových prvkov (uzlov, ciest a relácií) alebo sadu zmien. Kľúč popisuje tému, kategóriu alebo typ mapového prvku (napr. cesta \--- \emph{highway} alebo názvy \--- \emph{name}). Hodnota konkretizuje vlastnosť, ktorú všeobecne popisuje kľúč. Napríklad značka \texttt{highway=residential} predstavuje cestu, ktorá vedie obytnou oblasťou.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.64\linewidth]{obrazky-figures/openstreetmap-datamodel.png}
+    \caption{\textbf{Dátový model OpenStreetMap}\protect\footnotemark.}
+    \label{fig:osmdatamodel}
+\end{figure}
+
+\footnotetext{Prevzaté z~\cite{jafari2022building}.}
 
 \section{GIS}
 Geografický informačný systém (GIS) je informačný systém, ktorý sa využíva na získavanie, analyzovanie, vizualizáciu a manažment dát s~priestorovým alebo mapovým vyjadrením. GIS spracováva geografické údaje v~digitálnej podobe. Časť takýchto údajov vzniká napr. pomocou satelitných údajov, meraním pomocou polohového systému GPS alebo inými meracími prístrojmi. Údaje v~papierovej podobe je nutné digitalizovať. Súčasťou GIS je hardvér (počítače, servery, zariadenia na zber dát,...), softvér (špecializované programy pre prácu s~priestorovými dátami), dáta (priestorové údaje) a~používatelia (spracovatelia dát, administrátori GIS a~prijímatelia priestorových informácií)~\cite{introductiontogis}. Používatelia systému môžu využívať rôzne metódy spracovania geografických údajov, ktoré umožňujú údaje prehľadávať, triediť, reklasifikovať, transformovať a~modelovať~\cite{hofierka2003gis}.
@@ -48,13 +66,6 @@ Vektorový model je nazývaný podľa spôsobu vyjadrenia jeho jednotlivých ča
     \item \textbf{Línia} (line) \--- reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú pospájané do línie. U~takýchto geometrických útvarov je možné vypočítať dĺžku, ale nie je možné zistiť obsah plochy (napr. cesta, rieka).
     \item \textbf{Polygón} (polygon) \--- reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú navzájom pospájané líniami do uzatvorenej plochy. U~týchto geometrických útvarov je možné vypočítať obvod a~veľkosť plochy (napr. vodná plocha, lúka).
 \end{itemize}
-
-%\begin{figure}[h]
-%    \centering
-%    \includegraphics{obrazky-figures/placeholder.pdf}
-%    \caption{Vektorový model}
-%    \label{fig:vectordata}
-%\end{figure}
 
 Existujú rôzne modely dát pomocou ktorých je možné reprezentovať geografické objekty s~využitím vektorovej grafiky:
 \begin{itemize}
@@ -88,7 +99,7 @@ Existuje veľa iných vektorových formátov dát, ktoré sa používajú v GIS 
 
 \textbf{GPX} (GPS Exchange Format) je formát údajov GPS pre ukladanie bodov, trás a ich atribútov. Ukladá informácie pomocou textu, podobne ako súbory typu KML.
 
-\textbf{GeoJSON}~\cite{rfc7946} je formát založený na formáte JSON (Javascript Object Notation\footnote{\url{https://www.json.org}}). Tento formát je navrhnutý pre reprezentáciu jednoduchých priestorových geografických dát a ich atribútov. Vo výpise~\ref{lst:geojson} je možné vidieť, ako je reprezentovaný bod vo formáte GeoJSON.
+\textbf{GeoJSON}~\cite{rfc7946} je formát založený na formáte JSON (Javascript Object Notation\footnote{\url{https://www.json.org}}). Tento formát je navrhnutý pre reprezentáciu jednoduchých priestorových geografických dát a ich atribútov. Pomocou tohto formátu je možné reprezentovať nasledujúce geometrické typy: \emph{Point}, \emph{LineString}, \emph{Polygon}, \emph{MultiPoint}, \emph{MultiLineString} a \emph{MultiPolygon}. Vo výpise~\ref{lst:geojson} je možné vidieť, ako je reprezentovaný bod (Point) vo formáte GeoJSON.
 
 \lstset{
     caption={\texttt{FeatureCollection} obsahuje vo vlastnosti \texttt{features} objekt typu \texttt{Feature}, ktorý v \texttt{properties} obsahuje informácie viazané na objekt \texttt{geometry}.},
@@ -122,7 +133,7 @@ Rastrová reprezentácia mapových dát sa na rozdiel od vektorovej zameriava na
 
 Základným princípom tohto formátu je pokrytie zemského povrchu pravidelnou alebo nepravidelnou sieťou, pričom jednotka tieto siete je \emph{bunka} (pixel, cell). Nepravidelná sieť má výhodu oproti nepravidelnej siete takú, že pomocou nepravidelnej siete je možné jednoduchšie reprezentovať rôzne prechody z roviny na terénnu hranu. Na druhú stranu použitie nepravidelnej siete je výpočtovo a aj algoritmicky náročnejšie. Keďže v tomto modeli neexistujú objekty známe z vektorového modelu GIS, bunky definujú vlastnú hodnotu sledovaného javu v konkrétnej časti priestoru. Hodnota v jednej bunke odpovedá bodu, rada spojených buniek s rovnakou hodnotou odpovedá línii a skupina navzájom susediacich buniek odpovedá ploche.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\linewidth]{obrazky-figures/vector-and-raster-data.png}
     \caption{\textbf{Vektorový a rastrový dátový model}\protect\footnotemark.}
@@ -145,7 +156,7 @@ Dáta sú uchovávané iba v GIS formátoch firmy ESRI a to vo formáte súborov
 Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy súborovej databázy \texttt{ArcCR500\_v33.gdb} ako aj ich popis a typ prvkov je možné vidieť v tabuľke~\ref{tab:arccr500}.
 
 \begin{table}[H]
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|p{0.5\linewidth}|l|}
     \hline
     \textbf{vrstva}        & \textbf{popis}                                 & \textbf{typ prvku} \\ \hline
     Letiste                & Letisko                                        & bod                \\
@@ -164,7 +175,7 @@ Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy s
     ChranenaUzemi          & Národné parky a chránené krajinné oblasti      & polygón            \\
     KladyZakladnichMap     & Klady základných máp ČR                        & polygón            \\
     KladyTopografickychMap & Klady vojenských topografických máp            & polygón            \\
-    SouradnicovaSitJTSK    & Súradnicová sieť systému JTSK v intervale 1 km & línia              \\
+    SouradnicovaSitJTSK    & Súradnicová sieť systému JTSK v intervale 1~km & línia              \\
     ZemepisnaSitETRS89     & Zemepisná sieť v systéme ETR89                 & línia              \\
     ZemepisnaSitWGS84      & Zemepisná sieť v systéme WGS84                 & línia              \\
     DigitalniModelReliefu  & Raster digitálneho modelu reliéfu              & raster             \\
@@ -225,6 +236,7 @@ Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát 
     \label{tab:administrativne-clenenie}
 \end{table}
 
+
 \section{Kataster}
 Kataster predstavuje register resp. zoznam a používa sa vo viacerých významoch:
 \begin{itemize}
@@ -238,15 +250,93 @@ Súčasný kataster nehnuteľností~\cite{baudys-katastranemovitosti} na území
 
 Dnešný kataster nehnuteľností plní úlohu pozemkovej knihy aj pozemkového katastru a slúži aj ako podklad pre geografické informačné systémy. Kataster nehnuteľností je definovaný ako súbor údajov o nehnuteľností v Českej republike. Okrem súpisu a popisu nehnuteľností zahŕňa ich geometrické a polohové určenie pre jednu katastrálnu obec alebo katastrálne územie. Aj keď v českom katastri sú zapísané všetky pozemky, zo stavieb sú zapísané v katastri len tie budovy, ktoré stanovuje katastrálny zákon. Ide o budovy s popisným či evidenčným číslom alebo hlavnú budovu v rámci areálu nehnuteľností. Na obrázku~\ref{fig:katastrmapa} je možné vidieť ako vyzerá katastrálna mapa mestskej časti Brno-Královo Pole. Obrázok je exportovaný zo stránky Českého katastru nemovitostí\footnote{\url{https://nahlizenidokn.cuzk.cz/VyberKatastrMapa.aspx}}, ktorý okrem faktických a právnych informácií o nehnuteľnostiach obsahuje katastrálne mapy a informácie o vlastníkoch nehnuteľností.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{obrazky-figures/katastr-ortofo-kralovopole.jpg}
-    \caption{Katastrálna mapa s ortofotomapou mestskej časti Brno-Královo Pole. Ružová farba predstavuje budovy, budovy so zelenou farbou sú nehnuteľnosti s~cenovými údajmi k~jednotke (byty alebo nebytové priestory), vyšrafované budovy sú nehnuteľnosti s~cenovými údajmi k~parcele.}
+    \caption{\textbf{Katastrálna mapa s ortofotomapou mestskej časti Brno-Královo Pole}. Ružová farba predstavuje budovy, budovy so zelenou farbou sú nehnuteľnosti s~cenovými údajmi k~jednotke (byty alebo nebytové priestory), vyšrafované budovy sú nehnuteľnosti s~cenovými údajmi k~parcele.}
     \label{fig:katastrmapa}
 \end{figure}
 
 \subsection{Územný plán}
 Vlastníci katastrov nehnuteľností si musia byť istý, že na danom území existuje poriadok, ktorý by mal zaručovať, že ich práva nebudú ohrozované náhodnými a~meniacimi sa rozhodnutiami. Územným plánovaním sa predchádza nekoncepčnému a zložitému rozvoja obce. Zaoberá sa všetkými aspektmi nášho prostredia. Ide prevažne o~stavbu sídiel, dopravnú a~ technickú infraštruktúru, ale aj o prvky, ktoré vytvárajú prírodné zložky životného prostredia~\cite{uzemnyplan}.
+
+
+
+\chapter{Využité technológie}
+\label{technology}
+V tejto kapitole sú preberané všetky technológie, ktoré boli použité pri vytváraní užívateľského rozhrania. Ku každej technológií sú napísané dôvody, prečo bola zvolená technológia vhodná na použitie. Aplikácia bola navrhnutá ako klient-server aplikácia, t.j. na strane klienta bolo použité technológie na vizualizáciu výstupov a~na~strane serveru technológie na~spracovávanie dát poslaných od klienta.
+
+
+\section{GeoPandas}
+GeoPandas\footnote{\url{https://geopandas.org/en/stable}} je open-source projekt, ktorý umožňuje jednoduchú manipuláciu geografických dát v jazyku Python. Tento projekt je pokročilejší nástroj umožňujúci načítavanie GIS dát (.geojson, .gdb, .shp, \ldots), manipuláciu s GIS dátami, manipuláciu s~geometrickými útvarmi, prevádzanie súradnicových systémov a vykresľovanie máp. Základnými dátovými štruktúrami projektu GeoPandas sú \texttt{GeoDataFrame} a \texttt{GeoSeries}. Tieto dve dátové štruktúry sú nadstavbou knižnice \emph{Pandas}\footnote{\url{https://pandas.pydata.org}}, pretože rozširujú možnosti dátových štruktúr \texttt{Series} a \texttt{DataFrame} z tejto knižnice. Táto aplikácia je esenciálnou súčasťou celej aplikácie, pretože ju používajú aj iné knižnice.
+
+\texttt{GeoDataFrame} je dvojrozmerná dátová štruktúra, podobná tabuľke s riadkami a~stĺpcami a~je podtriedou \emph{pandas.DataFrame} s pridaným stĺpcom \texttt{geometry} (obrázok~\ref{fig:dataframes}).
+
+\texttt{GeoSeries} je jednorozmerná dátová štruktúra, ktorá je podtriedou \emph{pandas.Series} a~umožňuje ukladať geometrické objekty \--- body, čiary, polygóny, prípadne ich násobné varianty. Predstavuje stĺpec geometry v dátovej štruktúre GeoDataFrame.
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[\centering \textbf{DataFrame}]{{\includegraphics[width=0.25\linewidth]{obrazky-figures/dataframe.pdf}}}
+    \qquad
+    \subfloat[\centering \textbf{GeoDataFrame}]{{\includegraphics[width=0.31\linewidth]{obrazky-figures/geodataframe.pdf}}}
+    \caption{Rozdiel medzi dátovými štruktúrami DataFrame a GeoDataFrame.}
+    \label{fig:dataframes}
+\end{figure}
+
+
+\section{OSMnx}
+Aby bolo možné pracovať s geografickými dátami, je potrebné ich stiahnuť z určitého zdroja. V~jazyku Python existuje balíček OSMnx\footnote{\url{https://osmnx.readthedocs.io/en/stable}}, ktorý umožňuje sťahovať geopriestorové dáta z~OpenStreetMap. Okrem sťahovania umožňuje tento balíček modelovať, projektovať, zobrazovať a analyzovať pouličné siete reálneho sveta. Balíček OSMnx obsahuje viacero modulov, na túto prácu bol potrebný iba jeden modul \--- modul \texttt{geometries}, ktorý  umožňuje sťahovanie geopriestorových atribútov a entít z OpenStreetMap. Modul sťahuje dáta z OpenStreetMap Nominatim API\footnote{\url{https://nominatim.org}} a vracia dátovú štruktúru GeoDataFrame.
+
+
+\section{Flask}
+Flask\footnote{\url{https://flask.palletsprojects.com/en/2.1.x}} je mikro webový framework napísaný v programovacom jazyku Python. Flask nevyžaduje konkrétne nástroje ani ďalšie vnútorné knižnice. Aj keď sa tento framework považuje za mikro framework, neznamená to, že nie je možné ho rozširovať o rôzne služby~\cite{Oreilly2014Flask}.
+
+Flask som si vybral kvôli jeho jednoduchosti a kvôli tomu, že navrhnutá aplikácia nevyžaduje na prevádzku integráciu s databázovou schémou, ktorú treba integrovať u iných webových frameworkoch. Navyše navrhnutá aplikácia je iba jednostránková aplikácia, takže využívanie robustných webových frameworkov by bolo nepraktické.
+
+
+\section{Leaflet}
+Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy apod.
+
+\subsection{Rozšírenia knižnice}
+Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. Na~obrázku~\ref{fig:leafletheat} je možné vidieť ako sa dá pridať tepelná vrstva do mapy a ako daná vrstva vyzerá na mape.
+
+\lstset{
+    caption={},
+    label={},
+    basicstyle=\ttfamily\footnotesize\bfseries
+}
+\begin{figure}[ht]
+\begin{minipage}{.5\textwidth}
+\begin{lstlisting}
+var heat = L.heatLayer([
+     // lat, lng, intensity
+    [49.1784, 16.7772, 0.2],
+    [49.1784, 16.7774, 0.4],
+    [49.1784, 16.7776, 0.6],
+    [49.1784, 16.7778, 0.8],
+    [49.1784, 16.7780, 1.0]
+], {radius: 30}).addTo(map);
+\end{lstlisting}
+\end{minipage}
+\hfill
+\begin{minipage}{.5\linewidth}
+    \centering
+    \includegraphics[width=0.7\linewidth]{obrazky-figures/heatlayer-screenshot.png}
+\end{minipage}
+\caption{\textbf{Rozšírenie Leaflet.heat}.}
+\label{fig:leafletheat}
+\end{figure}
+
+Na to, aby užívateľ mohol vybrať určitú oblasť z mapy, na ktorej sa má vykresliť vrstva heat mapy, bolo potrebné použiť rozšírenie Leaflet.draw. Ako je možné vidieť na obrázku~\ref{fig:leafletdraw}, na bočnom paneli mapy v hornom ľavom rohu sa nachádza panel nástrojov, ktorý umožňuje kresliť geometrické útvary na mapu a následne ich upravovať alebo aj vymazávať. Pre~jednoduchosť aplikácie na vybratie určitej oblasti pomocou geometrických tvarov bol použitý iba jeden geometrický tvar \--- obdĺžnik.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{obrazky-figures/leaflet-draw-screenshot.png}
+    \caption{\textbf{Rozšírenie Leaflet.draw} pridáva možnosť kreslenia geometrických útvarov na~mapu \-- krivky, polygóny, obdĺžniky, kruhy, značky a~kruhové značky. Okrem toho je možné pomocou tohto rozšírenia upravovať, presúvať a vymazávať geometrické útvary.}
+    \label{fig:leafletdraw}
+\end{figure}
+
+
 
 % \chapter{Návrh}
 % \label{navrh}
