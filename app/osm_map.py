@@ -3,9 +3,10 @@ from json import load as json_load
 from itertools import chain
 from numpy import linspace
 from pandas import DataFrame
-from shapely.ops import unary_union
+import pyproj
+from shapely.ops import unary_union, transform
+from shapely.geometry import MultiPoint
 from osmnx.geometries import geometries_from_bbox
-from folium.plugins import HeatMap
 from app import app
 
 # FOR DEBUG: pd.options.display.max_colwidth = 300
@@ -30,13 +31,21 @@ def get_geodataframe(north, south, east, west, tags):
 
 def get_coords(gdf):
     coords = []
+    source_proj = pyproj.CRS('EPSG:4326')
+    dst_proj = pyproj.CRS('EPSG:3857')
+    project = pyproj.Transformer.from_crs(source_proj, dst_proj, always_xy=True).transform
 
     if 'way' in gdf.index:
         for geom_obj in gdf.loc[['way']].geometry:
             if geom_obj.geom_type == 'LineString':
-                distances = linspace(0, geom_obj.length, 30)
+                line_transformed = transform(project, geom_obj)
+                num_vert = int(round(line_transformed.length / 20))
+                distances = linspace(0, geom_obj.length, num_vert)
                 points = [geom_obj.interpolate(distance) for distance in distances]
                 center_points = unary_union(points)
+                if center_points.is_empty: continue
+                if center_points.geom_type == 'Point':
+                    center_points = MultiPoint([center_points])
             else:
                 center_points = gdf.to_crs(epsg=3857).loc[['way']].geometry.centroid.to_crs(epsg=4326)
 
@@ -65,8 +74,7 @@ def create_dataframe(gdf, probability):
 
 def create_heatmap_layer(df):
     gradient = {"0.0": "#00008b", "0.05": "#0000a8", "0.1": "#0000c5", "0.15": "#0000e2", "0.2": "#0000ff", "0.25": "#003fff", "0.3": "#007fff", "0.35": "#00bfff", "0.4": "#00ffff", "0.45": "#3fffbf", "0.5": "#7fff7f", "0.55": "#bfff3f", "0.6": "#ffff00", "0.65": "#ffe900", "0.7": "#ffd200", "0.75": "#ffbc00", "0.8": "#ffa500", "0.85": "#ff7c00", "0.9": "#ff5200", "0.95": "#ff2900"}
-    heatmap_data = HeatMap(df, name="HeatMap", min_opacity=0.2, radius=30, blur=50, max_zoom=1).data
-    heatmap_layer = f"""L.heatLayer({heatmap_data}, {{'blur': 50, 'gradient': {gradient}, 'maxZoom': 1, 'minOpacity': 0.2, 'radius': 30}}).addTo(folium_map)\n"""
+    heatmap_layer = f"""L.heatLayer({df.to_numpy().tolist()}, {{'blur': 50, 'gradient': {gradient}, 'maxZoom': 1, 'minOpacity': 0.2, 'radius': 30}}).addTo(folium_map)\n"""
     with open('app/templates/heatlayers.html', 'a') as file_heatlayers:
         file_heatlayers.write(heatmap_layer)
 
