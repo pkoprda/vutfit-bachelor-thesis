@@ -1,5 +1,12 @@
 app/static/js/config_map.js
 app/templates/heatlayers.html
+app/data/static/*.zip
+app/data/static/README
+*.cpg
+*.shp
+*.shx
+*.dbf
+*.prj
 cache/
 tmp/
 __pycache__/

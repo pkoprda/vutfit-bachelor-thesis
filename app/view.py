@@ -25,11 +25,7 @@ def index():
         if 'submit' in request.form:
             app.logger.info("Creating a Map...")
             create_map(center_lat, center_long, zoom_start=15, clean_map=False)
-
-            error_message = create_heatlayers(borders)
-
-            if not len(error_message):
-                return render_template('index.html', borders=borders, error_statement=error_message)
+            create_heatlayers(borders)
 
             return render_template('index.html', borders=borders)
         else:
