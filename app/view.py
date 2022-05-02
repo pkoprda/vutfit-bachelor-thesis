@@ -1,6 +1,13 @@
-from flask import redirect, render_template, request, jsonify
+from flask import redirect
+from flask import render_template
+from flask import request
+from flask import jsonify
+
 from app import app
-from app.osm_map import create_map, invalid_coords, create_heatlayers
+from app import log
+from app.osm_map import create_map
+from app.osm_map import invalid_coords
+from app.osm_map import create_heatlayers
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -23,15 +30,14 @@ def index():
             return render_template('index.html', border=borders, error_statement="East coordinate must be larger than west coordinate")
 
         if 'submit' in request.form:
-            app.logger.info("Creating a Map...")
+            log.info("Creating a Map...")
             create_map(center_lat, center_long, zoom_start=15, clean_map=False)
             create_heatlayers(borders)
-
             return render_template('index.html', borders=borders)
-        else:
-            return jsonify(borders=borders)
 
-    create_map(0.0, 0.0)
+        return jsonify(borders=borders)
+
+    create_map()
     return render_template('index.html')
 
 @app.errorhandler(404)
