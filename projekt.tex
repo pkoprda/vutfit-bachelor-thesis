@@ -49,11 +49,15 @@
 \usepackage{blindtext}
 \usepackage{lipsum}
 
-% medzery vo vacsich cislach
+% medzery vo väčších číslach
 \usepackage{numprint}
 
-% na pomenovanie obrazkov, ktore su vedla seba
+% pomenovanie obrázkov, ktoré sú vedľa seba
 \usepackage{subfig}
+
+% vytvorenie adresárového stromu
+\usepackage{pmboxdraw}
+\usepackage{verbatim}
 
 % Kompilace po částech (rychlejší, ale v náhledu nemusí být vše aktuální)
 % Compilation piecewise (faster, but not all parts in preview will be up-to-date)
@@ -337,11 +341,11 @@ Uviedol som všetky literárne pramene, publikácie a ďalšie zdroje, z ktorýc
   \fi
   
   % Přílohy / Appendices
-%   \ifenglish
-%     \input{projekt-30-prilohy-appendices-en}
-%   \else
-%     \input{projekt-30-prilohy-appendices}
-%   \fi
+  \ifenglish
+    \input{projekt-30-prilohy-appendices-en}
+  \else
+    \input{projekt-30-prilohy-appendices}
+  \fi
   
   % Kompilace po částech (viz výše, nutno odkomentovat)
   % Compilation piecewise (see above, it is necessary to uncomment it)

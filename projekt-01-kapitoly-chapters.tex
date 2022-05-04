@@ -1,5 +1,6 @@
 % Bakalárska práca
-% Autor: Peter Koprda (xkoprd00@stud.fit.vutbr.cz) 
+% Text práce
+% Autor: Peter Koprda
 % 2021/2022
 
 
@@ -7,52 +8,67 @@
 \todo{TODO: Napísať úvod}
 
 
-
 \chapter{Mapové dáta}
 \label{map-data}
 Mapa je používaná ako nástroj na získavanie a reprezentovanie mapových dát kvôli možnosti zobrazeniu komplexných dát. Mapové dáta, ktoré sa síce dajú uložiť do tabuľky, neponúkajú vizuálny náhľad. To je možné pomocou máp, ktoré nám umožňujú zobrazovať, ako sú dáta geograficky rozložené.
 
-Táto kapitola oboznámi čitateľa s možnosťami získavania mapových dát a ich reprezentáciou. Oboznámi sa s rôznymi nástrojmi, ktoré je možné použiť pri získavaní mapových dát, ale aj v akých formátoch sú mapové dáta reprezentované.
+V tejto kapitole sa čitateľ stručne oboznámi s pojmom dáta, čo sú to mapové dáta, aké sú rozdiely medzi klasickými dátami a mapovými dátami, ako je možné ukladať mapové dáta, ako môžme s nimi pracovať a aké nástroje je možné použiť pri práci s takýmito dátami.
+ 
+
+\section{Dáta}
+Na to, aby bolo možné lepšie pochopiť, o čom sú mapové dáta, je potrebné vysvetliť, čo sú to dáta. Dáta sú informácie v digitálnej forme, ktoré môžu byť prenášané a~spracovávané. Aby dáta mali určitú informačnú hodnotu pre užívateľa, je potrebné poskytovať dáta užívateľovi v~dostatočnom množstve, na~obmedzenom priestore, v~obmedzenom čase a~v~zrozumiteľnej forme. Dáta je možné zoskupovať rôznymi spôsobmi ako napr. na vstupné a výstupné. Pre~vizualizáciu rozdeľujeme dáta do dvoch základných skupín~\cite{hynek2021webvisual}:
+\begin{enumerate}
+    \item \textbf{Kvantitatívne} dáta sú merateľné dáta, t.j. pomocou nich popisujeme, aká je presná hodnota meranej veličiny (teplota, tlak, \ldots). Keďže ich hodnota musí byť presná, užívateľ môže mať problém pochopiť význam takýchto dát.
+    \item \textbf{Kvalitatívne} dáta sú kategorické dáta, t.j. pomocou nich popisujeme kvalitu a vlastnosti nejakých javov (spokojnosť zákazníka, farba, \ldots). Je možné ich pozorovať alebo odvodiť z kvantitatívnych dát.
+\end{enumerate}
+
+Dáta je možné reprezentovať graficky a textovo. Obidve reprezentácie dát majú svoje výhody aj nevýhody v závislosti od toho, čo chceme z dát zistiť. Grafická reprezentácia dát dokáže zdôrazniť vzťahy medzi viacerými hodnotami a je vhodná na zdôraznenie trendov, na druhej strane textová reprezentácia kladie dôraz na~samotné hodnoty.
+
+\subsubsection{Multidimenzionálne dáta}
+Podľa~\cite{hynek2021webvisual} je dimenzia množina hodnôt určitého typu popisujúca kvantitatívne alebo kvalitatívne dáta. Danú dimenziu môže predstavovať napr. množina časov, množina miest apod. Ak dáta majú viacero dimenzií, hovoríme o \emph{multidimenzionálnych dátach}. Pomocou dimenzií je možné dáta triediť, kategorizovať a agregovať (zlučovať niekoľko hodnôt do jediného čísla). Agregačné funkcie umožňujú dáta agregovať rôznymi spôsobmi, medzi agregačné funkcie patrí napr. suma, počet, priemer, medián, minimum a maximum.
+
+\subsubsection{Mapové dáta}
+Mapové dáta sú vlastnou kategóriou dát, pretože pridávajú do klasických dát novú dimenziu s~geografickými dátami. Geografické dáta môžu buď reprezentovať geografické súradnice (dvojica hodnôt \--- zemepisná dĺžka a~šírka) alebo identifikovať geografický objekt (bod, čiara alebo polygón).
 
 
-\section{OpenStreetMap}
-OpenStreetMap~\cite{openstreet} je projekt, ktorý vznikol za účelom vytvárania geografickej databázy celého sveta. Cieľom tohto projektu je mať časom záznam o každom geografickom prvku na~planéte. Zatiaľ čo to začalo mapovaním ulíc, postupom času tento projekt zahŕňa chodníky, budovy, vodné cesty, potrubia, lesy, pláže, poštové schránky a dokonca aj jednotlivé stromy.
+\section{Geografické súradnice}
+Geografické súradnice súhrnne označujú zemepisnú šírku a zemepisnú dĺžku. Ide o~dve uhlové súradnice, ktoré sú vztiahnuté k Zemi alebo k~jej náhradnému telesu, pomocou ktorých možno určiť ľubovoľnú polohu tohto bodu na Zemi~\cite{pyramida1987}.
 
-\subsection{História projektu}
-Projekt OpenStreetMap má svoj začiatok v auguste v roku 2004, kedy britský programátor Steve Coast experimentoval s USB GPS prijímačom. Použil softvér nazývaný GPSDrive, ktorý bral mapy z Microsoft MapPoint, ale porušoval licenčné podmienky. Coast vedome nechcel porušovať autorské práva týchto máp, preto hľadal alternatívu, ktorá by neporušovala licenčné podmienky, tú ale nenašiel. Zistil, že neexistujú zdroje mapových dát, ktoré by mohol používať v otvorenom softvére bez toho, aby porušoval licenčné podmienky alebo platil obrovské sumy peňazí. Po odprezentovaní jeho nápadu o vytvorení vlastnej mapy na konferencii otvorených softvérov v Londýne zistil, že viacerí ľudia mali podobný nápad alebo ich Coastov nápad zaujal, a tak vznikla skupina OpenStreetMap.
+\textbf{Zemepisná šírka} je uhol medzi zvislicou miesta na zemský povrch a rovinou rovníka. Vyjadruje sa na mapách rovnobežkami. Je to hodnota v intervale $\langle-180$, $180\rangle$.
 
-V začiatkoch bol dátový model príliš simplistický, pretože obsahoval iba jednoduché čiary nakreslené cez informácie Landsat od NASA. V marci v roku 2006 bola vytvorená prvá editovacia aplikácia pre OpenStreetMap \--- JOSM\footnote{\url{https://josm.openstreetmap.de/}}. Po chvíli bola v tomto roku vytvorená prvá plnofarebná mapa mesta Weybridge. V máji toho roku sa usporiadala prvá spoločná akcia, na ktorej bolo úlohou zmapovať ostrov Wight. Bolo to prvýkrát, kedy sa stretlo viacero mapovačov a znamenalo to pre nich prelomový bod projektu, pretože bola vytvorená detailná mapa. Takéto akcie OpenStreetMap komunity sa začali konať častejšie a boli usporadúvané po celom svete.
+\textbf{Zemepisná dĺžka} je uhol medzi rovinou základného poludníka a rovinou poludníka daného bodu. Vyjadruje sa na mapách poludníkmi. Je to hodnota v intervale $\langle-90$, $90\rangle$.
 
-V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, ktorou úlohu je podporovať, ale nie kontrolovať OpenStreetMap projekt. Venuje sa podpore rastu, rozvoja a distribúcii voľne dostupných geografických dát a poskytovaniu geografických údajov komukoľvek na používanie a zdieľanie.
 
-Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org/}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\linewidth]{obrazky-figures/openstreetmap.png}
-    \caption{\textbf{OpenStreetMap}. Výsek z mapy časti Brna.}
-    \label{fig:openstreetmap}
-\end{figure}
-
-\subsection{Dátový model OpenStreetMap}
-Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu OpenStreetMap slúžiace k popisu reálneho sveta. Medzi základné prvky OpenStreetMap projektu patria uzol, cesta a relácia. Tieto prvky je možné popísať značkami.
-
-\textbf{Uzol\footnote{\url{https://wiki.openstreetmap.org/wiki/Node}}} (anglicky node) označuje konkrétny bod na povrchu Zeme, je určený svojou zemepisnou šírkou a dĺžkou. Skladá sa minimálne z dvojice súradníc a svojho jednoznačného identifikačného čísla (id).
-
-\textbf{Cesta\footnote{\url{https://wiki.openstreetmap.org/wiki/Way}}} (anglicky way) je usporiadaný zoznam 2 až \numprint{2000} uzlov, ktoré definujú lomenú čiaru. Cesta má aspoň jednu značku alebo je vložená do relácie.
-
-\textbf{Relácia\footnote{\url{https://wiki.openstreetmap.org/wiki/Relation}}} (anglicky relation) sa skladá z jednej alebo viacerých značiek a usporiadaného zoznamu jedného alebo viacerých uzlov alebo ciest. Každý prvok relácie je tzv. člen (anglicky member). Používa sa k popisu závislosti medzi rôznymi prvkami. Každý člen relácie môže voliteľne mať nejakú rolu, ktorá popisuje jeho význam v rámci relácie.
-
-\textbf{Značka\footnote{\url{https://wiki.openstreetmap.org/wiki/Tags}}} (anglicky tag) sa skladá z kľúča a hodnoty. Každá značka popisuje určitú vlastnosť dátových prvkov (uzlov, ciest a relácií) alebo sadu zmien. Kľúč popisuje tému, kategóriu alebo typ mapového prvku (napr. cesta \--- \emph{highway} alebo názvy \--- \emph{name}). Hodnota konkretizuje vlastnosť, ktorú všeobecne popisuje kľúč. Napríklad značka \texttt{highway=residential} predstavuje cestu, ktorá vedie obytnou oblasťou.
+\section{Geografický objekt}
+Väčšinu geografických dát je možné reprezentovať tromi typmi geografických objektov: body, čiary a polygóny~\cite{geographicobjects}. Na~obrázku~\ref{fig:geo-objects} je vidieť popis geometrických objektov a ako je možné ich využiť.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.64\linewidth]{obrazky-figures/openstreetmap-datamodel.png}
-    \caption{\textbf{Dátový model OpenStreetMap}\protect\footnotemark.}
-    \label{fig:osmdatamodel}
+    \includegraphics[width=0.8\linewidth]{obrazky-figures/geo-objects.png}
+    \caption{Geografické objekty, ich reprezentácia, príklady a možné atribúty. Prevzaté z~\cite{introductiontogis}.}
+    \label{fig:geo-objects}
 \end{figure}
 
-\footnotetext{Prevzaté z~\cite{jafari2022building}.}
+\textbf{Bod} (point) reprezentuje jednotlivý pár súradníc X, Y. Body sú bežne používané na~vizualizáciu udalostí a~javov, ktoré môžu byť identifikované špeciálnymi polohami na~mape (napr. supermarket, kostol).
+
+\textbf{Čiara} (line) reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú pospájané do~čiary. Tieto geometrické útvary majú jednoznačne zadefinovaný začiatočný a~koncový bod (napr. cesta, rieka).
+
+\textbf{Polygón} (polygon) reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú navzájom pospájané líniami do uzatvorenej plochy. Majú regionálny alebo zónový rozsah ohraničený súborom mapovateľných hraníc (napr. regióny).\\
+
+Použitím bodov, čiar a polygónov môže byť geografický priestor modelovaný priradením hodnôt k týmto objektom. Každá časť mapy môže obsahovať viacero objektov. Napríklad pri vytváraní mapovej vrstvy s krajinami sveta by bolo potrebné, aby pre krajinu USA bolo vytvorených viacero polygónov (kontinentálna časť USA, Aljaška, Havajské ostrovy,~apod.). Všetky tieto polygóny vytvárajú jeden prvok, pretože sú súčasťou jednej krajiny a budú zdielať rovnaké priradené hodnoty~\cite{introductiontogis}.
+
+Pri reprezentovaní špecifického prvku alebo javu na~mape nie je vždy jednoznačné, ktorý typ geografického objektu by sa mal použiť. Rovnaký geografický jav môže reprezentovať rôzne typy geografických objektov pri rôznych úrovniach priblíženia. Napríklad mesto môže byť reprezentované ako bod na~mape, ale takisto môže byť reprezentované polygónom~\cite{geographicobjects}.
+
+% \subsection{Spracovávanie mapových dát}
+% Mapové dáta, ako každé iné dáta, je možné upravovať do formy, v ktorej sú vhodnejšie na spracovávanie. 
+% Geografické súradnice aj geografické objekty (ktoré sú popísané geografickými súradnicami) je možné upraviť do tvaru, ktoré môžu byť využiteľné pri dátovej analýze. Z geografických objektov je najjednoduchší na spracovanie \emph{bod}, lebo je popísaný iba dvoma hodnotami \--- zemepisnou dĺžkou a zemepisnou šírkou. Preto z~ostatných objektov je potrebné vytvoriť postupnosť bodov.
+
+
+
+\chapter{Zdroje mapových dát}
+\label{source-map-data}
+Mapové dáta sa dajú získať z viacerých zdrojov. Každý takýto zdroj má svoje výhody aj nevýhody. Táto kapitola oboznámi čitateľa z akých zdrojov je možné získať mapové dáta, aké sú možné výhody a aké sú nevýhody daného zdroja, ale aj aké formáty súborov mapových dát tieto zdroje ponúkajú. 
+
 
 \section{GIS}
 Geografický informačný systém (GIS) je informačný systém, ktorý sa využíva na získavanie, analyzovanie, vizualizáciu a manažment dát s~priestorovým alebo mapovým vyjadrením. GIS spracováva geografické údaje v~digitálnej podobe. Časť takýchto údajov vzniká napr. pomocou satelitných údajov, meraním pomocou polohového systému GPS alebo inými meracími prístrojmi. Údaje v~papierovej podobe je nutné digitalizovať. Súčasťou GIS je hardvér (počítače, servery, zariadenia na zber dát,...), softvér (špecializované programy pre prácu s~priestorovými dátami), dáta (priestorové údaje) a~používatelia (spracovatelia dát, administrátori GIS a~prijímatelia priestorových informácií)~\cite{introductiontogis}. Používatelia systému môžu využívať rôzne metódy spracovania geografických údajov, ktoré umožňujú údaje prehľadávať, triediť, reklasifikovať, transformovať a~modelovať~\cite{hofierka2003gis}.
@@ -60,12 +76,7 @@ Geografický informačný systém (GIS) je informačný systém, ktorý sa využ
 Geografické dáta v GIS môžu byť organizované dvomi základnými modelmi \--- vektorovým a rastrovým modelom~\cite{holman2014priestorovedata}.
 
 \subsection{Vektorový model}
-Vektorový model je nazývaný podľa spôsobu vyjadrenia jeho jednotlivých častí \--- úseky kriviek s definovanou veľkosťou a smerom \--- \emph{vektorom}. Vektorový model pracuje s~tromi variantami objektov:
-\begin{itemize}
-    \item \textbf{Bod} (point) \--- reprezentuje jednotlivý pár súradníc X, Y. Takýto objekt má príliš malú plochu na to, aby sa dal zobraziť ako plocha (napr. vodopád, vysielač).
-    \item \textbf{Línia} (line) \--- reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú pospájané do línie. U~takýchto geometrických útvarov je možné vypočítať dĺžku, ale nie je možné zistiť obsah plochy (napr. cesta, rieka).
-    \item \textbf{Polygón} (polygon) \--- reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú navzájom pospájané líniami do uzatvorenej plochy. U~týchto geometrických útvarov je možné vypočítať obvod a~veľkosť plochy (napr. vodná plocha, lúka).
-\end{itemize}
+Vektorový model je nazývaný podľa spôsobu vyjadrenia jeho jednotlivých častí \--- úseky kriviek s definovanou veľkosťou a smerom \--- \emph{vektorom}. Vektorový model GIS pracuje s~tromi variantami geografických objektov \--- bod, čiara a polygón.
 
 Existujú rôzne modely dát pomocou ktorých je možné reprezentovať geografické objekty s~využitím vektorovej grafiky:
 \begin{itemize}
@@ -93,7 +104,7 @@ Okrem hore zmienených súboroch môže mať \emph{shapefile} aj iné súbory, k
 
 Existuje veľa iných vektorových formátov dát, ktoré sa používajú v GIS ako napr. \emph{KML}, \emph{KMZ}, \emph{GPX} a \emph{GeoJSON}
 
-\textbf{KML} (Keyhole Markup Language) je dátový formát vyvinutý pre aplikáciu Google Earth. Okrem ukladania informácii o geometrii obsahuje možnosti konfigurácie pre Google Earth mapy.
+\textbf{KML} (Keyhole Markup Language) je dátový formát vyvinutý pre aplikáciu Google Earth. Okrem ukladania informácií o geometrii obsahuje možnosti konfigurácie pre Google Earth mapy.
 
 \textbf{KMZ} (Keyhole Markup Zipped) je dátový formát, ktorý sa takisto používa v aplikáciách Google. Tento formát je rozšírením KML formátu, pretože obsahuje okrem textového popisu aj obrázky tvoriace 3D vizualizácie prvku.
 
@@ -136,11 +147,9 @@ Základným princípom tohto formátu je pokrytie zemského povrchu pravidelnou 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\linewidth]{obrazky-figures/vector-and-raster-data.png}
-    \caption{\textbf{Vektorový a rastrový dátový model}\protect\footnotemark.}
+    \caption{\textbf{Vektorový a rastrový dátový model}. Prevzaté z~\cite{jukil2017mapdata}.}
     \label{fig:vectorandraster}
 \end{figure}
-
-\footnotetext{Prevzaté z~\cite{jukil2017mapdata}}
 
 \subsection{ArcGIS}
 V súčasnosti existujú rôznorodé softvéry pre GIS. Medzi najznámejšie patrí ArcGIS od~spoločnosti ESRI, ktorý slúži na mapovanie a priestorovú analýzu navrhnutý tak, aby podporoval poslanie a obchodné ciele organizácií. Tento systém poskytuje tri úrovne licencií. Typ zvolenej licencie rozhoduje o tom, ako sú uložené dáta a ako je možné ich editovať. 
@@ -181,7 +190,7 @@ Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy s
     DigitalniModelReliefu  & Raster digitálneho modelu reliéfu              & raster             \\
     StinovanyRelief        & Raster tieňovaného modelu reliéfu              & raster             \\ \hline
 \end{tabular}
-\caption{Súborová databáza ArcCR500\_v33.gdb. Prevzaté z~\cite{arcgis} a upravené.}
+\caption{Súborová databáza ArcCR500\_v33.gdb. Prevzaté z~\cite{arcgis}.}
 \label{tab:arccr500}
 \end{table}
 
@@ -198,7 +207,7 @@ Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, kto
     \textbf{ICAO}         & Kód ICAO            & \textit{konkrétny kód}        \\
     \textbf{STATUT}       & Statut letiska      & \begin{tabular}[c]{@{}l@{}}1 - medzinárodné\\ 2 - vnútroštátne\end{tabular}                 \\ \hline
     \end{tabular}
-\caption{Vrstva Letisko (Letiste). Prevzaté z~\cite{arcgis} a upravené.}
+\caption{Vrstva Letisko (Letiste). Prevzaté z~\cite{arcgis}.}
 \label{tab:letisko}
 \end{table}
 
@@ -209,7 +218,7 @@ Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, kto
         \textbf{meno atribútu} & \textbf{popis} & \textbf{nadobúdané hodnoty}  \\ \hline
         \textbf{TYP}  & Typ hranice    & \begin{tabular}[c]{@{}l@{}}1 - štátna\\ 2 - krajská\\ 3 - okresná\end{tabular} \\ \hline
     \end{tabular}
-    \caption{Vrstva Hranica (Hranice). Prevzaté z~\cite{arcgis} a upravené.}
+    \caption{Vrstva Hranica (Hranice). Prevzaté z~\cite{arcgis}.}
     \label{tab:hranica}
 \end{table}
 
@@ -232,9 +241,47 @@ Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát 
     \textbf{KRAJE}  & Kraje                          & bod/polygón        \\
     \textbf{STAT}   & Štát                           & bod/polygón        \\ \hline
     \end{tabular}
-    \caption{Súborová databáza AdministrativniCleneni\_v13.gdb. Prevzaté z~\cite{arcgis} a upravené.}
+    \caption{Súborová databáza AdministrativniCleneni\_v13.gdb. Prevzaté z~\cite{arcgis}.}
     \label{tab:administrativne-clenenie}
 \end{table}
+
+
+\section{OpenStreetMap}
+OpenStreetMap~\cite{openstreet} je projekt, ktorý vznikol za účelom vytvárania geografickej databázy celého sveta. Cieľom tohto projektu je mať časom záznam o každom geografickom prvku na~planéte. Zatiaľ čo to začalo mapovaním ulíc, postupom času tento projekt zahŕňa chodníky, budovy, vodné cesty, potrubia, lesy, pláže, poštové schránky a dokonca aj jednotlivé stromy.
+
+\subsection{História projektu}
+Projekt OpenStreetMap má svoj začiatok v auguste v roku 2004, kedy britský programátor Steve Coast experimentoval s USB GPS prijímačom. Použil softvér nazývaný GPSDrive, ktorý bral mapy z Microsoft MapPoint, ale porušoval licenčné podmienky. Coast vedome nechcel porušovať autorské práva týchto máp, preto hľadal alternatívu, ktorá by neporušovala licenčné podmienky, tú ale nenašiel. Zistil, že neexistujú zdroje mapových dát, ktoré by mohol používať v otvorenom softvére bez toho, aby porušoval licenčné podmienky alebo platil obrovské sumy peňazí. Po odprezentovaní jeho nápadu o vytvorení vlastnej mapy na konferencii otvorených softvérov v Londýne zistil, že viacerí ľudia mali podobný nápad alebo ich Coastov nápad zaujal, a tak vznikla skupina OpenStreetMap.
+
+V začiatkoch bol dátový model príliš simplistický, pretože obsahoval iba jednoduché čiary nakreslené cez informácie Landsat od NASA. V marci v roku 2006 bola vytvorená prvá editovacia aplikácia pre OpenStreetMap \--- JOSM\footnote{\url{https://josm.openstreetmap.de/}}. Po chvíli bola v tomto roku vytvorená prvá plnofarebná mapa mesta Weybridge. V máji toho roku sa usporiadala prvá spoločná akcia, na ktorej bolo úlohou zmapovať ostrov Wight. Bolo to prvýkrát, kedy sa stretlo viacero mapovačov a znamenalo to pre nich prelomový bod projektu, pretože bola vytvorená detailná mapa. Takéto akcie OpenStreetMap komunity sa začali konať častejšie a boli usporadúvané po celom svete.
+
+V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, ktorou úlohu je podporovať, ale nie kontrolovať OpenStreetMap projekt. Venuje sa podpore rastu, rozvoja a distribúcii voľne dostupných geografických dát a poskytovaniu geografických údajov komukoľvek na používanie a zdieľanie.
+
+Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org/}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{obrazky-figures/openstreetmap.png}
+    \caption{\textbf{OpenStreetMap}. Výsek z mapy časti Brna.}
+    \label{fig:openstreetmap}
+\end{figure}
+
+\subsection{Dátový model OpenStreetMap}
+Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu OpenStreetMap slúžiace k popisu reálneho sveta. Medzi základné prvky OpenStreetMap projektu patria uzol, cesta a relácia. Tieto prvky je možné popísať značkami.
+
+\textbf{Uzol\footnote{\url{https://wiki.openstreetmap.org/wiki/Node}}} (anglicky node) označuje konkrétny bod na povrchu Zeme, je určený svojou zemepisnou šírkou a dĺžkou. Skladá sa minimálne z dvojice súradníc a svojho jednoznačného identifikačného čísla (id).
+
+\textbf{Cesta\footnote{\url{https://wiki.openstreetmap.org/wiki/Way}}} (anglicky way) je usporiadaný zoznam 2 až \numprint{2000} uzlov, ktoré definujú lomenú čiaru. Cesta má aspoň jednu značku alebo je vložená do relácie.
+
+\textbf{Relácia\footnote{\url{https://wiki.openstreetmap.org/wiki/Relation}}} (anglicky relation) sa skladá z jednej alebo viacerých značiek a usporiadaného zoznamu jedného alebo viacerých uzlov alebo ciest. Každý prvok relácie je tzv. člen (anglicky member). Používa sa k popisu závislosti medzi rôznymi prvkami. Každý člen relácie môže voliteľne mať nejakú rolu, ktorá popisuje jeho význam v rámci relácie.
+
+\textbf{Značka\footnote{\url{https://wiki.openstreetmap.org/wiki/Tags}}} (anglicky tag) sa skladá z kľúča a hodnoty. Každá značka popisuje určitú vlastnosť dátových prvkov (uzlov, ciest a relácií) alebo sadu zmien. Kľúč popisuje tému, kategóriu alebo typ mapového prvku (napr. cesta \--- \emph{highway} alebo názvy \--- \emph{name}). Hodnota konkretizuje vlastnosť, ktorú všeobecne popisuje kľúč. Napríklad značka \texttt{highway=residential} predstavuje cestu, ktorá vedie obytnou oblasťou.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.64\linewidth]{obrazky-figures/openstreetmap-datamodel.png}
+    \caption{\textbf{Dátový model OpenStreetMap}. Prevzaté z~\cite{jafari2022building}.}
+    \label{fig:osmdatamodel}
+\end{figure}
 
 
 \section{Kataster}
@@ -382,8 +429,109 @@ V mojej aplikácií používam tzv. \emph{Alert} komponentu t.j. výstražnú sp
 
 
 
-% \chapter{Návrh}
-% \label{navrh}
+\chapter{Návrh}
+\label{navrh}
+V tejto kapitole je popísaný návrh systému, na ktorom je založená celá aplikácia. Na začiatku tejto kapitoly sa analyzujú požiadavky na aplikáciu a popisujú kľúčové vlastnosti, ktoré musia byť splnené. Táto kapitola zahŕňa aj bližšie popísanie použitých technológií a~dôvody, prečo boli zvolené dané technológie pri návrhu aplikácie.
+
+
+\section{Analýza požiadavkov}
+\label{sec:analysis}
+Požiadavky sú potrebné pri akomkoľvek návrhu aplikácie. S požiadavkami sa treba zamyslieť, ako sa dajú navrhnúť a implementovať. Primárnym cieľom tejto bakalárskej práce je vytvoriť aplikáciu, ktorá na základe získaných dát vytvorí odhady pravdepodobnosti výskytu osôb. Túto aplikáciu je možné vytvoriť tak, aby ju bolo možné v budúcnosti rozšíriť o viaceré funkcionality, ale aj aby bola užívateľsky prívetivá.
+
+\subsection{Vstupné dáta}
+Prvou požiadavkou pri vytvorení aplikácie je spracovanie vstupných dát získaných od užívateľa.
+Vstupné dáta je možné rozdeliť na dva typy: súradnice a~hodnoty pravdepodobností.
+
+\subsubsection{Súradnice}
+Prvým typom vstupných dát sú súradnice, ktoré užívateľ bude môcť zadať rôznymi spôsobmi. Spôsoby získavania vstupných súradníc budú inšpirované získavaním hraničných súradníc na~stránke projektu OpenStreetMap.
+
+Jednou z možností je využitie knižnice \texttt{Leaflet.draw}. Užívateľ v navrhovanej aplikácií by mal byť schopný vykresliť na mapu plochu, z~ktorej by chcel zistiť, aká je pravdepodobnosť výskytu osôb v~danej oblasti. Z~tejto nakreslenej plochy sa dá zistiť, aké sú hranice danej plochy, t.j. aká je minimálna a~maximálna hodnota zemepisnej dĺžky a~aká je minimálna a~maximálna hodnota zemepisnej šírky nakreslenej plochy. Tento spôsob získavania vstupných dát je zobrazený na obrázku~\ref{fig:osm-export}.
+
+Druhá možnosť získavania vstupných súradníc, takisto používaná na stránke projektu OpenStreetMap, by mohla fungovať na základe získavania hraníc mapy, ktorá je na stránke zobrazená. To znamená, že horná a dolná hranica mapy predstavujú zemepisné dĺžky, ľavá a pravá hranica mapy predstavujú zemepisné šírky.
+
+Tretiu možnosť získavania vstupných súradníc je možné použiť v kombinácií s~už zmienenými možnosťami. Užívateľ by mal byť schopný zadať všetky štyri hraničné súradnice manuálne. Pri návrhu takejto možnosti je potrebné myslieť na~to, že súradnica hornej (severnej) hranice musí byť väčšia ako súradnica dolnej (južnej) hranice a súradnica pravej (východnej) hranice musí byť väčšia ako súradnica ľavej (západnej) hranice.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{obrazky-figures/openstreetmap-export.png}
+    \caption{Export dát na stránke projektu OpenStreetMap}
+    \label{fig:osm-export}
+\end{figure}
+    
+\subsubsection{Hodnoty pravdepodobností}
+Druhým typom vstupných dát od užívateľa sú hodnoty pravdepodobností resp.~intenzít pre~značky. Vo~väčšine prípadoch počet týchto vstupných hodnôt pravdepodobností môže byť aj viac ako 100, preto vhodným návrhom pre zadávanie hodnôt je použitie externého súboru. V tomto súbore by mal užívateľ mať možnosť zadefinovať, ktoré značky by sa mali použiť pri vykresľovaní heat vrstvy a aké hodnoty pravdepodobností by mali mať tieto značky.
+
+\subsection{Zobrazovanie heat vrstvy}
+Získané hodnoty pravdepodobností značiek by mali byť pre užívateľa informatívne a užívateľ by mal byť schopný vidieť z danej oblasti, aká je pravdepodobnosť výskytu osôb v danej oblasti. Vhodnou voľbou pre zobrazovanie pravdepodobností by bolo vytvorenie heat vrstvy na~mape, ktorá bude interpretovať hodnoty pravdepodobností v~danej oblasti.
+
+Hodnoty pravdepodobností je možné interpretovať základnými farebnými schémami. Celé farebné spektrum sa skladá z kombinácií troch farieb (červená, zelená a modrá). Teplé farby sa väčšinou spájajú s ohňom a slnkom, preto sem patria farby ako červená, oranžová a žltá. Keď si ale predstavíme zasnežené hory, farebná škála sa ihneď zmení na studenú, kde prevládajú farby ako modrá, zelená a fialová. V navrhovanej aplikácii by sa dali využiť tieto farebné odtiene na zobrazovanie pravdepodobností. V oblastiach s~väčšou pravdepodobnosťou výskytu osôb by aplikácia mala zobrazovať teplejšie farby a~na~druhej strane v~oblastiach s~menšou pravdepodobnosťou by aplikácia mala zobrazovať studenšie farby. V~oblastiach, kde sú hodnoty pravdepodobností pre dané značky rovné $0$ by nemala byť na~mapu vykreslená v~danej oblasti heat vrstva.
+
+
+\section{Architektúra}
+Cieľom bakalárskej práce je vytvorenie aplikácie, ktorá odhadne pravdepodobnosť výskytu osôb v~danej oblasti. Pomocou získaných požiadavkov na aplikáciu je možné vytvoriť architektúru danej aplikácie. Aplikácia bude musieť vedieť získavať hraničné súradnice z~oblasti, ktorú vyberie užívateľ. Horná a~spodná hranica  danej oblasti budú reprezentovať zemepisnú dĺžku, ľavá a~pravá hranica budú reprezentovať zemepisnú šírku. V rámci modifikácie objektov by mal byť užívateľ schopný upravovať tvar nakreslených obdĺžnikov. Pri zmenení veľkosti obdĺžnika alebo presunutia obdĺžnika na inú časť mapy by mala aplikácia zareagovať a~zobraziť tieto upravené hodnoty súradníc v~grafickom užívateľskom rozhraní. Tieto štyri súradnice by mala aplikácia použiť na~získanie dát o~geografických objektoch (bodoch, čiarach a~polygónoch). Získané geografické objekty by malo byť možné použiť pri vytváraní heat bodov na~vytvorenie heat vrstvy. 
+
+
+\section{Dátový model}
+Dátový model reprezentuje dáta, s ktorými bude aplikácia pracovať. Dáta, ktoré je možné získať pri spracovávaní mapových dát, sú geografické objekty. Informácie o získaných geografických objektoch a~ich priradenie ku značkám na mape bude aplikácia uchovávať vo~svojej pamäti vo~forme dátových rámcoch.
+
+\subsubsection{Dátový rámec}
+Dátový rámec je dvoj-dimenzionálna dátová štruktúra, podobná tabuľke s~riadkami a~stĺpcami. Každý riadok dátového rámca reprezentuje jeden geografický objekt. Definícia geometrického objektu sa bude nachádzať v~stĺpci \emph{geometry}. Okrem definície geografického objektu sa v~tomto riadku bude nachádzať aj~akú značku na~mape predstavuje daný geografický objekt. 
+
+\subsubsection{Geografický objekt}
+Geografický objekt, ktorý sa bude nachádzať v stĺpci \emph{geometry} dátového rámca, môže byť jedným z~hodnôt: \emph{Point}, \emph{LineString} alebo \emph{Polygon}. Tieto typy predstavujú základné geometrické objekty. Typy, ktoré rozširujú tieto základné typy, sú rozšírenými geometrickými objektami. Sú od nich rozlíšené predponou \textbf{Multi}, t.j. \emph{MultiPoint}, \emph{MultiLineString} a~\emph{MultiPolygon}. Formát súradníc závisí od typu geografického objektu.
+
+\begin{itemize}
+\item \textbf{Point} predstavuje pole dvoch číselných hodnôt, ktoré reprezentujú x-ovú a y-ovú súradnicu (viď.~\ref{lst:point}).
+
+\lstset{
+    caption={Príklad súradníc typu \emph{Point}.},
+    label={lst:point},
+    basicstyle=\ttfamily\normalsize\bfseries,
+    xleftmargin=.28\textwidth, xrightmargin=.28\textwidth
+}
+\begin{lstlisting}
+coordinates: [40.3, 29.8]
+\end{lstlisting}
+
+\item \textbf{LineString} predstavuje pole bodov, kde prvý bod je začiatočným bodom a~posledný bod je koncovým bodom čiary (viď.~\ref{lst:linestring}).
+
+\lstset{
+    caption={Príklad súradníc typu \emph{LineString}.},
+    label={lst:linestring},
+    basicstyle=\ttfamily\normalsize\bfseries,
+    xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
+}
+\begin{lstlisting}
+coordinates: [[20.5, 30.1], [21.8, 31.0]]
+\end{lstlisting}
+
+\item \textbf{Polygon} predstavuje pole bodov, ako u~typu \emph{LineString} s~tým rozdielom, že body sú pospájané do~mnohouholníka. Prvý bod tohto objektu musí byť aj koncovým bodom. Vo~výpise~\ref{lst:polygon} je možné vidieť, ako je potrebné zadefinovať trojuholník.
+
+\lstset{
+    caption={Príklad súradníc typu \emph{Polygon}.},
+    label={lst:polygon},
+    basicstyle=\ttfamily\normalsize\bfseries,
+    xleftmargin=.02\textwidth, xrightmargin=.05\textwidth
+}
+\begin{lstlisting}
+coordinates: [[20.0, 20.0], [21.9, 21.9], [20.0, 22.8], [20.0, 20.0]]
+\end{lstlisting}
+\end{itemize}
+
+
+\section{Štruktúra systému}
+Pri tvorbe návrhu sa vychádzalo z~analýzy požiadavkov v sekcii~\ref{sec:analysis}. Pri zadávaní vstupných súradníc sa bude môcť užívateľ rozhodnúť, či chce na mapu nakresliť obdĺžnik, z ktorého bude vytvorená heat vrstva na mape alebo či zadá hraničné súradnice textového poľa. Ak užívateľ nakreslí na mapu obdĺžnik (resp. zobrazí si na mape určitú časť), systém spracuje tento nakreslený objekt na mape a použitím asynchrónnej správy zobrazí tieto súradnice vo~formulári, kde ich bude môcť užívateľ prípadne upraviť. Takúto úpravu by mal užívateľ byť schopný vykonať veľakrát. Takisto by mohol užívateľ upravovať veľkosť aj~pozíciu nakresleného obdĺžnika. Okrem toho by mohol užívateľ odstraňovať nakreslenú plochu. Ak budú zadané súradnice od užívateľa, tak potom by bolo možné vytvoriť heat vrstvu. Užívateľ jednoducho bude môcť poslať požiadavok na server, kde sa spracuje tento požiadavok a~server pošle užívateľovi po určitej dobe trvania mapu s vytvorenou heat vrstvou. Všeobecnejší návrh, ako by mohla aplikácia fungovať, je zobrazený na obrázku~\ref{fig:navrh-diagram}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{obrazky-figures/seq-diagram.pdf}
+    \caption{Sekvenčný diagram, ktorý zobrazuje, v akom poradí budú vykonávané jednotlivé operácie.}
+    \label{fig:navrh-diagram}
+\end{figure}
+
+Aby systém fungoval správne, bude potrebné brať vstupné údaje o pravdepodobnostiach. Tieto pravdepodobnosti ale užívateľ nebude môcť zadať v užívateľskom grafickom rozhraní. Keďže každá značka má definované, aké môže mať kľúče s~hodnotami (\texttt{key=value}), bude potrebné pre~každú takúto dvojicu hodnôt priradiť hodnoty, ktoré budú vytvárať heat vrstvu. 
+
+
 % \todo{TODO}
 % \blindtext[2]
 
