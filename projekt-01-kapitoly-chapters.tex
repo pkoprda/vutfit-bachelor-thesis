@@ -8,6 +8,7 @@
 \todo{TODO: Napísať úvod}
 
 
+
 \chapter{Mapové dáta}
 \label{map-data}
 Mapa je používaná ako nástroj na získavanie a reprezentovanie mapových dát kvôli možnosti zobrazeniu komplexných dát. Mapové dáta, ktoré sa síce dajú uložiť do tabuľky, neponúkajú vizuálny náhľad. To je možné pomocou máp, ktoré nám umožňujú zobrazovať, ako sú dáta geograficky rozložené.
@@ -25,22 +26,107 @@ Na to, aby bolo možné lepšie pochopiť, o čom sú mapové dáta, je potrebn�
 Dáta je možné reprezentovať graficky a textovo. Obidve reprezentácie dát majú svoje výhody aj nevýhody v závislosti od toho, čo chceme z dát zistiť. Grafická reprezentácia dát dokáže zdôrazniť vzťahy medzi viacerými hodnotami a je vhodná na zdôraznenie trendov, na druhej strane textová reprezentácia kladie dôraz na~samotné hodnoty.
 
 \subsubsection{Multidimenzionálne dáta}
-Podľa~\cite{hynek2021webvisual} je dimenzia množina hodnôt určitého typu popisujúca kvantitatívne alebo kvalitatívne dáta. Danú dimenziu môže predstavovať napr. množina časov, množina miest apod. Ak dáta majú viacero dimenzií, hovoríme o \emph{multidimenzionálnych dátach}. Pomocou dimenzií je možné dáta triediť, kategorizovať a agregovať (zlučovať niekoľko hodnôt do jediného čísla). Agregačné funkcie umožňujú dáta agregovať rôznymi spôsobmi, medzi agregačné funkcie patrí napr. suma, počet, priemer, medián, minimum a maximum.
+Podľa~\cite{hynek2021webvisual} je dimenzia množina hodnôt určitého typu popisujúca kvantitatívne alebo kvalitatívne dáta. Danú dimenziu môže predstavovať napr. množina časov, množina miest a~pod. Ak dáta majú viacero dimenzií, hovoríme o \emph{multidimenzionálnych dátach}. Pomocou dimenzií je možné dáta triediť, kategorizovať a agregovať (zlučovať niekoľko hodnôt do jediného čísla). Agregačné funkcie umožňujú dáta agregovať rôznymi spôsobmi, medzi agregačné funkcie patrí napr. suma, počet, priemer, medián, minimum a maximum.
 
 \subsubsection{Mapové dáta}
-Mapové dáta sú vlastnou kategóriou dát, pretože pridávajú do klasických dát novú dimenziu s~geografickými dátami. Geografické dáta môžu buď reprezentovať geografické súradnice (dvojica hodnôt \--- zemepisná dĺžka a~šírka) alebo identifikovať geografický objekt (bod, čiara alebo polygón).
+Mapové dáta sú vlastnou kategóriou dát, pretože pridávajú do klasických dát novú dimenziu s~geografickými dátami. Geografické dáta môžu buď reprezentovať geografické súradnice (dvojica hodnôt \--- zemepisná dĺžka a~šírka) alebo identifikovať geografický objekt (bod, čiara alebo polygón). V podstate geografické dáta sú buď v~rastrovom formáte alebo vo~vektorom formáte. Väčšinou sú tieto dva formáty kombinované, napríklad keď sú vektorové dáta prekryté rastrovými dátami získaných zo~satelitných snímkov.
+
+\subsection{Rastrové dáta}
+Rastrové dáta sú dáta, ktoré sú uložené v mriežke, kde každý bod \--- \emph{pixel} \--- tejto mriežky má určenú svoju presnú polohu, farbu a iné parametre (napr.~priehľadnosť). Pri určitom priblížení obrázka je vidno samotné pixely, takže obrázok vyzerá rozpixelovane. 
+
+\subsubsection{Rastrové pásma}
+Rastrové dáta sa používajú nielen pri fotení zemského povrchu pomocou satelitov. Pixely v~rastrových dátach nemusia byť iba vyplnené farbou. Ako sú vyplnené jednotlivé pixely v~rastrovom modeli definuje \emph{rastrové pásmo}. Obyčajná fotografia má tri pásma: červené, zelené a~modré. Na obrázku~\ref{fig:raster-bands} je možné vidieť ako vyzerajú takéto tri základné rastrové pásma a~ako spoločne vytvárajú obrázok. Niektoré rastrové dáta môžu mať menej rastrových pásiem (napr.~iba jedna použitá na nadmorskú výšku) alebo aj viac (napr.~na vlnové dĺžky, ktoré nevidíme)~\cite{bolstad2019GIS}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{obrazky-figures/raster-bands.png}
+    \caption{\textbf{Rastrové pásma}. Prevzaté z~\cite{arcgis-desktop}.}
+    \label{fig:raster-bands}
+\end{figure}
+
+\subsubsection{Rastrové formáty}
+Pri analýze a~zobrazovaní rastrových dát je potrebné tieto dáta upraviť do~kompaktnejšej formy. To umožňujú rôzne rastrové formáty, ktoré sa starajú o dve úlohy \--- zbaľovanie dát do~pixelov, následné ukladanie vzťahov medzi týmito pixelmi a~ich umiestňovanie na~zemeguľu. Medzi najznámejšie rastrové formáty mapových dát patrí \emph{GeoTIFF}, \emph{JPEG2000} a~\emph{IMG}~\cite{gis-formats}.
+
+\textbf{GeoTIFF}\footnote{\url{https://trac.osgeo.org/geotiff}} je štandardom pre metadáta, ktorý umožňuje vkladanie informácií o georeferenciách do obrázkového súboru. Tieto informácie obsahujú metadáta ako napr. použitá mapová projekcia, použitý súradnicový systém, dátumy, priestorové rozlíšenie a i.
+
+\textbf{JPEG2000}\footnote{\url{https://jpeg.org/jpeg2000}} je systém obrázkového kódovania, ktorý používa kompresné techniky založené na diskrétnej waveletovej transformácii (DWT). Ponúka rýchlejšiu a~kvalitnejšiu kompresiu oproti klasickej JPEG kompresii. Tento formát je vhodný na spracovanie satelitných obrázkov.
+
+\textbf{IMG} súbory používajú hierarchický formát, ktorý môže ukladať informácie napr. o~súbore, o~pozemných kontrolných bodoch a o~type senzora. Každá vrstva rastrového obrázka je súčasťou súbora formátu IMG, ktorý obsahuje informácie o projekcii, štatistikách, atribútoch a~pod.
+
+\subsection{Vektorové dáta}
+Vektorové dáta na rozdiel od rastrových dát obsahujú základné geometrické útvary. Výhodu oproti rastrovým dátam majú takú, že pri hocijakom priblížení nie je možné vidieť pixely. Je to tým, že vektorové dáta sú zložené z geometrických bodov a čiar, ktoré môžu byť v~prípade potreby prevedené na~obrázok.
+
+Vektorové dáta môžu obsahovať viac informácií ako rastrové dáta. Zatiaľ čo rastrové dáta mohli obsahovať iba atribúty o farbe, nepriehľadnosti alebo výške, vektorové dáta môžu obsahovať informácie o tvare. Tvary vektorových dát obsahujú informácie o~vlastnostiach alebo atribútoch, ako napr. počet ľudí, ktorí žijú v danej oblasti, názov mesta reprezentovaného polygónom a pod.
+
+\subsubsection{Vektorové formáty}
+Medzi najznámejšie vektorové formáty dát patrí formát \emph{shapefile} vytvorený spoločnosťou ESRI. Tento formát sa ukladá do zariadenia ako skupina aspoň troch súborov, ktoré síce majú rovnaký názov, ale majú rôznu príponu:
+\begin{itemize}
+    \item hlavný súbor \texttt{*.shp} \--- obsahuje popis geometrie každého záznamu
+    \item indexový súbor \texttt{*.shx} \--- prepája prvok v hlavnom súbore so záznamom v atribútovej tabuľke
+    \item databázový súbor \texttt{*.dbf} \--- databázový súbor, obsahuje dáta atribútov pre každý záznam
+\end{itemize}
+
+Okrem hore zmienených súboroch môže mať \emph{shapefile} aj iné súbory, ktoré obsahujú ďalšie informácie o dátach:
+\begin{itemize}
+    \item projekčný súbor \texttt{*.prj} \--- ukladá informácie o súradnicovom systéme
+    \item priestorové indexy \texttt{*.gix}, \texttt{*.sbn}, \texttt{*.sbx} \--- umožňujú rýchlejšie vyhľadávanie prvkov
+    \item atribútové indexy \texttt{*.atx} \--- urýchľujú vyhľadávanie v atribútovej tabuľke
+    \item metadátový súbor \texttt{*.shp.xml} \--- metadáta o zvolenom prvku
+    \item kódovací súbor \texttt{*.cpg} \--- súbor pre správnu identifikáciu znakov
+\end{itemize}
+
+Existuje veľa iných vektorových formátov dát, ktoré sa používajú v~GIS\footnote{Geografický informačný systém} ako napr.~\emph{KML}, \emph{KMZ}, \emph{GPX}, \emph{OSM XML}, \emph{PBF} a~\emph{GeoJSON}~\cite{gis-formats}.
+
+\textbf{KML} (Keyhole Markup Language) je dátový formát vyvinutý pre aplikáciu Google Earth. Okrem ukladania informácií o geometrii obsahuje možnosti konfigurácie pre Google Earth mapy.
+
+\textbf{KMZ} (Keyhole Markup Zipped) je dátový formát, ktorý sa takisto používa v aplikáciách Google. Tento formát je rozšírením KML formátu, pretože obsahuje okrem textového popisu aj obrázky tvoriace 3D vizualizácie prvku.
+
+\textbf{GPX} (GPS Exchange Format) je formát údajov GPS pre ukladanie bodov, trás a ich atribútov. Ukladá informácie pomocou textu, podobne ako súbory typu KML.
+
+\textbf{OSM XML} (OpenStreetMap XML) je dátový formát založený na jazyku XML\footnote{eXtensible Markup Language}. Súbory tohto formátu sú zbierkou vektorových funkcií získaných od~open-source komunity.
+
+\textbf{PBF} (Protocolbuffer Binary Format) je efektívnejší formát OSM XML formátu. Jedná sa o~binárny dátový formát, pretože veľkosť súboru vo~formáte PBF je mnohonásobne menšia ako veľkosť súboru vo~formáte OSM XML.
+
+\textbf{GeoJSON} je formát založený na formáte JSON\footnote{Javascript Object Notation}. Tento formát je navrhnutý pre reprezentáciu jednoduchých priestorových geografických dát a ich atribútov. Pomocou tohto formátu je možné reprezentovať nasledujúce geometrické typy: \emph{Point}, \emph{LineString}, \emph{Polygon}, \emph{MultiPoint}, \emph{MultiLineString} a \emph{MultiPolygon}~\cite{rfc7946}. Vo výpise~\ref{lst:geojson} je možné vidieť, ako je reprezentovaný bod (Point) vo formáte GeoJSON.
+
+\lstset{
+    caption={\texttt{FeatureCollection} obsahuje vo vlastnosti \texttt{features} objekt typu \texttt{Feature}, ktorý v \texttt{properties} obsahuje informácie viazané na objekt \texttt{geometry}.},
+    label={lst:geojson},
+    basicstyle=\ttfamily\footnotesize\bfseries,
+    xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
+}   
+\begin{lstlisting}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "kraj": "Moravsko-sliezsky",
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.60100156068802,
+          49.196293610455584
+        ]
+      }
+    }
+  ]
+}
+\end{lstlisting}
 
 
 \section{Geografické súradnice}
-Geografické súradnice súhrnne označujú zemepisnú šírku a zemepisnú dĺžku. Ide o~dve uhlové súradnice, ktoré sú vztiahnuté k Zemi alebo k~jej náhradnému telesu, pomocou ktorých možno určiť ľubovoľnú polohu tohto bodu na Zemi~\cite{pyramida1987}.
+Najbežnejším spôsobom ako je možné ukladať miesta na Zemi je pomocou geografických súradníc. Geografické súradnice súhrnne označujú zemepisnú šírku a zemepisnú dĺžku. Ide o~dve uhlové súradnice, ktoré sú vztiahnuté k Zemi alebo k~jej náhradnému telesu, pomocou ktorých možno určiť ľubovoľnú polohu tohto bodu na Zemi~\cite{pyramida1987}. Môžu byť reprezentované v~šesťdesiatkovej sústave ako napr.~$31$\textdegree\, $42$\textquotesingle, ale nový štandard umožňuje reprezentovať tieto čísla ako reálne čísla t.j.~$31,7$.
 
-\textbf{Zemepisná šírka} je uhol medzi zvislicou miesta na zemský povrch a rovinou rovníka. Vyjadruje sa na mapách rovnobežkami. Je to hodnota v intervale $\langle-180$, $180\rangle$.
+\textbf{Zemepisná šírka} je uhol medzi zvislicou miesta na zemský povrch a rovinou rovníka. Vyjadruje sa na mapách rovnobežkami. Je to hodnota v intervale $\langle-180$; $180\rangle$.
 
-\textbf{Zemepisná dĺžka} je uhol medzi rovinou základného poludníka a rovinou poludníka daného bodu. Vyjadruje sa na mapách poludníkmi. Je to hodnota v intervale $\langle-90$, $90\rangle$.
+\textbf{Zemepisná dĺžka} je uhol medzi rovinou základného poludníka a rovinou poludníka daného bodu. Vyjadruje sa na mapách poludníkmi. Je to hodnota v intervale $\langle-90$; $90\rangle$.
 
 
 \section{Geografický objekt}
-Väčšinu geografických dát je možné reprezentovať tromi typmi geografických objektov: body, čiary a polygóny~\cite{geographicobjects}. Na~obrázku~\ref{fig:geo-objects} je vidieť popis geometrických objektov a ako je možné ich využiť.
+Väčšinu geografických dát je možné reprezentovať tromi typmi geografických objektov: body, čiary a~polygóny~\cite{geographicobjects}. Na~obrázku~\ref{fig:geo-objects} je vidieť popis geometrických objektov a~ako je možné ich využiť.
 
 \begin{figure}[ht]
     \centering
@@ -55,13 +141,9 @@ Väčšinu geografických dát je možné reprezentovať tromi typmi geografick�
 
 \textbf{Polygón} (polygon) reprezentuje množinu usporiadaných bodov \--- uzlov, ktoré sú navzájom pospájané líniami do uzatvorenej plochy. Majú regionálny alebo zónový rozsah ohraničený súborom mapovateľných hraníc (napr. regióny).\\
 
-Použitím bodov, čiar a polygónov môže byť geografický priestor modelovaný priradením hodnôt k týmto objektom. Každá časť mapy môže obsahovať viacero objektov. Napríklad pri vytváraní mapovej vrstvy s krajinami sveta by bolo potrebné, aby pre krajinu USA bolo vytvorených viacero polygónov (kontinentálna časť USA, Aljaška, Havajské ostrovy,~apod.). Všetky tieto polygóny vytvárajú jeden prvok, pretože sú súčasťou jednej krajiny a budú zdielať rovnaké priradené hodnoty~\cite{introductiontogis}.
+Použitím bodov, čiar a polygónov môže byť geografický priestor modelovaný priradením hodnôt k týmto objektom. Každá časť mapy môže obsahovať viacero objektov. Napríklad pri vytváraní mapovej vrstvy s krajinami sveta by bolo potrebné, aby pre krajinu USA bolo vytvorených viacero polygónov (kontinentálna časť USA, Aljaška, Havajské ostrovy,~a~pod.). Všetky tieto polygóny vytvárajú jeden prvok, pretože sú súčasťou jednej krajiny a budú zdielať rovnaké priradené hodnoty~\cite{introductiontogis}.
 
 Pri reprezentovaní špecifického prvku alebo javu na~mape nie je vždy jednoznačné, ktorý typ geografického objektu by sa mal použiť. Rovnaký geografický jav môže reprezentovať rôzne typy geografických objektov pri rôznych úrovniach priblíženia. Napríklad mesto môže byť reprezentované ako bod na~mape, ale takisto môže byť reprezentované polygónom~\cite{geographicobjects}.
-
-% \subsection{Spracovávanie mapových dát}
-% Mapové dáta, ako každé iné dáta, je možné upravovať do formy, v ktorej sú vhodnejšie na spracovávanie. 
-% Geografické súradnice aj geografické objekty (ktoré sú popísané geografickými súradnicami) je možné upraviť do tvaru, ktoré môžu byť využiteľné pri dátovej analýze. Z geografických objektov je najjednoduchší na spracovanie \emph{bod}, lebo je popísaný iba dvoma hodnotami \--- zemepisnou dĺžkou a zemepisnou šírkou. Preto z~ostatných objektov je potrebné vytvoriť postupnosť bodov.
 
 
 
@@ -84,60 +166,6 @@ Existujú rôzne modely dát pomocou ktorých je možné reprezentovať geografi
     \item \textbf{Topologický model} \--- každá línia tohto modelu začína a končí v uzlu. Všetky informácie tohto modelu sú ukladané do tzv. \emph{topologických tabuliek} \--- tabuľka spojov, súradníc a polygónov. Model vďaka tomu uchováva priestorové vzťahy medzi objektami.
     \item \textbf{Hierarchický model} \--- ukladá zvlášť informáciu o bodoch, líniách a plochách v~hierarchickej štruktúre pre jednoduchšie vyhľadávanie v dátach. V modeli sú takisto zahrnuté aj odkazy medzi jednotlivými druhmi objektov a obsahuje topologickú informáciu. Tento model je pre manipuláciu a vyhľadávanie v dátach najvhodnejší.
 \end{itemize}
-
-\subsubsection{Vektorové formáty dát}
-Medzi najznámejšie vektorové formáty dát patrí formát \emph{shapefile} vytvorený spoločnosťou ESRI. Tento formát sa ukladá do zariadenia ako skupina aspoň troch súborov, ktoré síce majú rovnaký názov, ale majú rôznu príponu:
-\begin{itemize}
-    \item hlavný súbor \texttt{*.shp} \--- obsahuje popis geometrie každého záznamu
-    \item indexový súbor \texttt{*.shx} \--- prepája prvok v hlavnom súbore so záznamom v atribútovej tabuľke
-    \item databázový súbor \texttt{*.dbf} \--- databázový súbor, obsahuje dáta atribútov pre každý záznam
-\end{itemize}
-
-Okrem hore zmienených súboroch môže mať \emph{shapefile} aj iné súbory, ktoré obsahujú ďalšie informácie o dátach:
-\begin{itemize}
-    \item projekčný súbor \texttt{*.prj} \--- ukladá informácie o súradnicovom systéme
-    \item priestorové indexy \texttt{*.gix}, \texttt{*.sbn}, \texttt{*.sbx} \--- umožňujú rýchlejšie vyhľadávanie prvkov
-    \item atribútové indexy \texttt{*.atx} \--- urýchľujú vyhľadávanie v atribútovej tabuľke
-    \item metadátový súbor \texttt{*.shp.xml} \--- metadáta o zvolenom prvku
-    \item kódovací súbor \texttt{*.cpg} \--- súbor pre správnu identifikáciu znakov
-\end{itemize}
-
-Existuje veľa iných vektorových formátov dát, ktoré sa používajú v GIS ako napr. \emph{KML}, \emph{KMZ}, \emph{GPX} a \emph{GeoJSON}
-
-\textbf{KML} (Keyhole Markup Language) je dátový formát vyvinutý pre aplikáciu Google Earth. Okrem ukladania informácií o geometrii obsahuje možnosti konfigurácie pre Google Earth mapy.
-
-\textbf{KMZ} (Keyhole Markup Zipped) je dátový formát, ktorý sa takisto používa v aplikáciách Google. Tento formát je rozšírením KML formátu, pretože obsahuje okrem textového popisu aj obrázky tvoriace 3D vizualizácie prvku.
-
-\textbf{GPX} (GPS Exchange Format) je formát údajov GPS pre ukladanie bodov, trás a ich atribútov. Ukladá informácie pomocou textu, podobne ako súbory typu KML.
-
-\textbf{GeoJSON}~\cite{rfc7946} je formát založený na formáte JSON (Javascript Object Notation\footnote{\url{https://www.json.org}}). Tento formát je navrhnutý pre reprezentáciu jednoduchých priestorových geografických dát a ich atribútov. Pomocou tohto formátu je možné reprezentovať nasledujúce geometrické typy: \emph{Point}, \emph{LineString}, \emph{Polygon}, \emph{MultiPoint}, \emph{MultiLineString} a \emph{MultiPolygon}. Vo výpise~\ref{lst:geojson} je možné vidieť, ako je reprezentovaný bod (Point) vo formáte GeoJSON.
-
-\lstset{
-    caption={\texttt{FeatureCollection} obsahuje vo vlastnosti \texttt{features} objekt typu \texttt{Feature}, ktorý v \texttt{properties} obsahuje informácie viazané na objekt \texttt{geometry}.},
-    label={lst:geojson},
-    basicstyle=\ttfamily\footnotesize\bfseries,
-    xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
-}
-\begin{lstlisting}
-{
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {
-        "kraj": "Moravsko-sliezsky",
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          17.60100156068802,
-          49.196293610455584
-        ]
-      }
-    }
-  ]
-}
-\end{lstlisting}
 
 \subsection{Rastrový model}
 Rastrová reprezentácia mapových dát sa na rozdiel od vektorovej zameriava na zemský povrch. Používa sa skôr na javy ako je napr. úhrn zrážok či nadmorská výška.
@@ -165,6 +193,9 @@ Dáta sú uchovávané iba v GIS formátoch firmy ESRI a to vo formáte súborov
 Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy súborovej databázy \texttt{ArcCR500\_v33.gdb} ako aj ich popis a typ prvkov je možné vidieť v tabuľke~\ref{tab:arccr500}.
 
 \begin{table}[H]
+\caption{Súborová databáza ArcCR500\_v33.gdb. Prevzaté z~\cite{arcgis}.}
+\label{tab:arccr500}
+\centering
 \begin{tabular}{|l|p{0.5\linewidth}|l|}
     \hline
     \textbf{vrstva}        & \textbf{popis}                                 & \textbf{typ prvku} \\ \hline
@@ -190,15 +221,15 @@ Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy s
     DigitalniModelReliefu  & Raster digitálneho modelu reliéfu              & raster             \\
     StinovanyRelief        & Raster tieňovaného modelu reliéfu              & raster             \\ \hline
 \end{tabular}
-\caption{Súborová databáza ArcCR500\_v33.gdb. Prevzaté z~\cite{arcgis}.}
-\label{tab:arccr500}
 \end{table}
 
 Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, ktoré sú pre danú vrstvu zadefinované. V tejto práci sú uvedené pre ilustráciu iba vrstvy Letisko (tabuľka~\ref{tab:letisko}) a Hranica (tabuľka~\ref{tab:hranica}). V tabuľke \ref{tab:letisko} je možné vidieť, že atribút \texttt{TYP} môže nadobúdať tri hodnoty \--- t.j.~letisko je buď civilné alebo vojenské, alebo civilné a vojenské. Táto vrstva je zobrazená na mape ako bod. Na druhú stranu vrstva \emph{Hranica}, ktorá sa zobrazuje na mape ako línia, nemá takú variabilitu atribútov ako vrstva \emph{Letisko}. V tabuľke~\ref{tab:hranica} je možné vidieť, že daná vrstva má iba jeden zadefinovaný atribút, ktorý ale môže nadobúdať 3 hodnoty \--- t.j. hranica môže byť štátna, krajská alebo okresná.
 
 \begin{table}[H]
-    \centering
-    \begin{tabular}{|l|l|l|}
+\caption{Vrstva Letisko (Letiste). Prevzaté z~\cite{arcgis}.}
+\label{tab:letisko}
+\centering
+\begin{tabular}{|l|l|l|}
     \hline
     \textbf{meno atribútu}         & \textbf{popis}      & \textbf{nadobúdané hodnoty}   \\ \hline
     \textbf{TYP}          & Typ letiska         & \begin{tabular}[c]{@{}l@{}}1 - civilné\\ 2 - vojenské\\ 3 - civilné a vojenské\end{tabular} \\
@@ -207,26 +238,26 @@ Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, kto
     \textbf{ICAO}         & Kód ICAO            & \textit{konkrétny kód}        \\
     \textbf{STATUT}       & Statut letiska      & \begin{tabular}[c]{@{}l@{}}1 - medzinárodné\\ 2 - vnútroštátne\end{tabular}                 \\ \hline
     \end{tabular}
-\caption{Vrstva Letisko (Letiste). Prevzaté z~\cite{arcgis}.}
-\label{tab:letisko}
 \end{table}
 
 \begin{table}[H]
-    \centering
-    \begin{tabular}{|l|l|l|}
-        \hline
-        \textbf{meno atribútu} & \textbf{popis} & \textbf{nadobúdané hodnoty}  \\ \hline
-        \textbf{TYP}  & Typ hranice    & \begin{tabular}[c]{@{}l@{}}1 - štátna\\ 2 - krajská\\ 3 - okresná\end{tabular} \\ \hline
-    \end{tabular}
-    \caption{Vrstva Hranica (Hranice). Prevzaté z~\cite{arcgis}.}
-    \label{tab:hranica}
+\caption{Vrstva Hranica (Hranice). Prevzaté z~\cite{arcgis}.}
+\label{tab:hranica}
+\centering
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{meno atribútu} & \textbf{popis} & \textbf{nadobúdané hodnoty}  \\ \hline
+    \textbf{TYP}  & Typ hranice    & \begin{tabular}[c]{@{}l@{}}1 - štátna\\ 2 - krajská\\ 3 - okresná\end{tabular} \\ \hline
+\end{tabular}
 \end{table}
 
 \subsubsection*{Administratívne členenie}
 Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát administratívneho členenia. Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj ich popis sa nachádza v tabuľke~\ref{tab:administrativne-clenenie}.
 \begin{table}[H]
-    \centering
-    \begin{tabular}{|lll|}
+\caption{Súborová databáza AdministrativniCleneni\_v13.gdb. Prevzaté z~\cite{arcgis}.}
+\label{tab:administrativne-clenenie}
+\centering
+\begin{tabular}{|lll|}
     \hline
     \textbf{názov}  & \textbf{popis}                 & \textbf{typ prvku} \\ \hline
     \textbf{ZSJ}    & Základné sídelné jednotky      & bod/polygón        \\
@@ -240,23 +271,12 @@ Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát 
     \textbf{OKRESY} & Okresy                         & bod/polygón        \\
     \textbf{KRAJE}  & Kraje                          & bod/polygón        \\
     \textbf{STAT}   & Štát                           & bod/polygón        \\ \hline
-    \end{tabular}
-    \caption{Súborová databáza AdministrativniCleneni\_v13.gdb. Prevzaté z~\cite{arcgis}.}
-    \label{tab:administrativne-clenenie}
+\end{tabular}
 \end{table}
 
 
 \section{OpenStreetMap}
 OpenStreetMap~\cite{openstreet} je projekt, ktorý vznikol za účelom vytvárania geografickej databázy celého sveta. Cieľom tohto projektu je mať časom záznam o každom geografickom prvku na~planéte. Zatiaľ čo to začalo mapovaním ulíc, postupom času tento projekt zahŕňa chodníky, budovy, vodné cesty, potrubia, lesy, pláže, poštové schránky a dokonca aj jednotlivé stromy.
-
-\subsection{História projektu}
-Projekt OpenStreetMap má svoj začiatok v auguste v roku 2004, kedy britský programátor Steve Coast experimentoval s USB GPS prijímačom. Použil softvér nazývaný GPSDrive, ktorý bral mapy z Microsoft MapPoint, ale porušoval licenčné podmienky. Coast vedome nechcel porušovať autorské práva týchto máp, preto hľadal alternatívu, ktorá by neporušovala licenčné podmienky, tú ale nenašiel. Zistil, že neexistujú zdroje mapových dát, ktoré by mohol používať v otvorenom softvére bez toho, aby porušoval licenčné podmienky alebo platil obrovské sumy peňazí. Po odprezentovaní jeho nápadu o vytvorení vlastnej mapy na konferencii otvorených softvérov v Londýne zistil, že viacerí ľudia mali podobný nápad alebo ich Coastov nápad zaujal, a tak vznikla skupina OpenStreetMap.
-
-V začiatkoch bol dátový model príliš simplistický, pretože obsahoval iba jednoduché čiary nakreslené cez informácie Landsat od NASA. V marci v roku 2006 bola vytvorená prvá editovacia aplikácia pre OpenStreetMap \--- JOSM\footnote{\url{https://josm.openstreetmap.de/}}. Po chvíli bola v tomto roku vytvorená prvá plnofarebná mapa mesta Weybridge. V máji toho roku sa usporiadala prvá spoločná akcia, na ktorej bolo úlohou zmapovať ostrov Wight. Bolo to prvýkrát, kedy sa stretlo viacero mapovačov a znamenalo to pre nich prelomový bod projektu, pretože bola vytvorená detailná mapa. Takéto akcie OpenStreetMap komunity sa začali konať častejšie a boli usporadúvané po celom svete.
-
-V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, ktorou úlohu je podporovať, ale nie kontrolovať OpenStreetMap projekt. Venuje sa podpore rastu, rozvoja a distribúcii voľne dostupných geografických dát a poskytovaniu geografických údajov komukoľvek na používanie a zdieľanie.
-
-Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org/}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
 
 \begin{figure}[ht]
     \centering
@@ -264,6 +284,15 @@ Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~m
     \caption{\textbf{OpenStreetMap}. Výsek z mapy časti Brna.}
     \label{fig:openstreetmap}
 \end{figure}
+
+\subsection{História projektu}
+Projekt OpenStreetMap má svoj začiatok v auguste v roku 2004, kedy britský programátor Steve Coast experimentoval s USB GPS prijímačom. Použil softvér nazývaný GPSDrive, ktorý bral mapy z Microsoft MapPoint, ale porušoval licenčné podmienky. Coast vedome nechcel porušovať autorské práva týchto máp, preto hľadal alternatívu, ktorá by neporušovala licenčné podmienky, tú ale nenašiel. Zistil, že neexistujú zdroje mapových dát, ktoré by mohol používať v otvorenom softvére bez toho, aby porušoval licenčné podmienky alebo platil obrovské sumy peňazí. Po odprezentovaní jeho nápadu o vytvorení vlastnej mapy na konferencii otvorených softvérov v Londýne zistil, že viacerí ľudia mali podobný nápad alebo ich Coastov nápad zaujal, a tak vznikla skupina OpenStreetMap.
+
+V začiatkoch bol dátový model príliš simplistický, pretože obsahoval iba jednoduché čiary nakreslené cez informácie Landsat od NASA. V marci v roku 2006 bola vytvorená prvá editovacia aplikácia pre OpenStreetMap \--- JOSM\footnote{\url{https://josm.openstreetmap.de}}. Po chvíli bola v tomto roku vytvorená prvá plnofarebná mapa mesta Weybridge. V máji toho roku sa usporiadala prvá spoločná akcia, na ktorej bolo úlohou zmapovať ostrov Wight. Bolo to prvýkrát, kedy sa stretlo viacero mapovačov a znamenalo to pre nich prelomový bod projektu, pretože bola vytvorená detailná mapa. Takéto akcie OpenStreetMap komunity sa začali konať častejšie a boli usporadúvané po celom svete.
+
+V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, ktorou úlohu je podporovať, ale nie kontrolovať OpenStreetMap projekt. Venuje sa podpore rastu, rozvoja a distribúcii voľne dostupných geografických dát a poskytovaniu geografických údajov komukoľvek na používanie a zdieľanie.
+
+Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
 
 \subsection{Dátový model OpenStreetMap}
 Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu OpenStreetMap slúžiace k popisu reálneho sveta. Medzi základné prvky OpenStreetMap projektu patria uzol, cesta a relácia. Tieto prvky je možné popísať značkami.
@@ -278,11 +307,29 @@ Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.64\linewidth]{obrazky-figures/openstreetmap-datamodel.png}
+    \includegraphics[width=0.7\linewidth]{obrazky-figures/openstreetmap-datamodel.png}
     \caption{\textbf{Dátový model OpenStreetMap}. Prevzaté z~\cite{jafari2022building}.}
     \label{fig:osmdatamodel}
 \end{figure}
 
+\subsection{Sťahovanie dát}
+Sťahovať mapové dáta z~databázy OpenStreetMap je možné viacerými spôsobmi. Vhodná voľba sťahovania dát závisí od toho, aké veľké množstvo dát sa rozhodneme sťahovať.
+
+Pre veľké oblasti je vhodnou voľbou si stiahnuť dáta lokálne. Stiahnuť databázu celého sveta je možné na stránke Planet.osm\footnote{\url{https://planet.openstreetmap.org}}. Z tejto stránky je možné stiahnuť databázu celého sveta vo formáte OSM XML alebo PBF. Táto databáza je aktualizovaná každý týždeň a~aktuálne (1. 5. 2022) veľkosť súboru vo~formáte OSM XML má $115$~GB a vo~formáte PBF má veľkosť $63$~GB.
+
+Pre menšie oblasti je tiež možné použiť hore zmienené nástroje, avšak okrem toho je možné vybrať oblasť pomocou ohraničeného boxu, ktorý je zložený z~minimálnej a~maximálnej zemepisnej dĺžky a~zemepisnej šírky. Pomocou týchto hodnôt je možné vytvoriť URL s~HTTP API požiadavkom. Ohraničený box v~URL je vyjadrený ako štyri hodnoty za sebou, oddelené čiarkami. Vo~výpise~\ref{lst:osm-api} je možné vidieť príklad URL s~HTTP API požiadavkom. Hodnoty v~parametri \texttt{bbox} sú zoradené v~poradí: minimálna zemepisná šírka, minimálna zemepisná dĺžka, maximálna zemepisná šírka, maximálna zemepisná dĺžka.
+
+\lstset{
+    caption={Príklad HTTP API požiadavku.},
+    label={lst:osm-api},
+    basicstyle=\ttfamily\normalsize\bfseries,
+    xleftmargin=.04\textwidth, xrightmargin=.4\textwidth
+}
+\begin{lstlisting}
+https://api.openstreetmap.org/api/0.6/map?bbox=16.61,49.22,16.63,49.23
+\end{lstlisting}
+
+Ďalšou možnosťou je použiť stránku Geofabrik\footnote{\url{https://download.geofabrik.de}}, ktorá umožňuje sťahovať väčšie aj~menšie oblasti podľa kontinentov, štátov, provincií alebo miest. Stiahnuté súbory z~tejto stránky môžu byť vo~formáte \texttt{osm.pbf}, \texttt{shp.zip} alebo \texttt{osm.bz2}.
 
 \section{Kataster}
 Kataster predstavuje register resp. zoznam a používa sa vo viacerých významoch:
@@ -342,7 +389,7 @@ Flask som si vybral kvôli jeho jednoduchosti a kvôli tomu, že navrhnutá apli
 
 
 \section{Leaflet}
-Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy apod.
+Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy a~pod.
 
 \subsection{Rozšírenia knižnice}
 Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. 
@@ -531,11 +578,6 @@ Pri tvorbe návrhu sa vychádzalo z~analýzy požiadavkov v sekcii~\ref{sec:anal
 
 Aby systém fungoval správne, bude potrebné brať vstupné údaje o pravdepodobnostiach. Tieto pravdepodobnosti ale užívateľ nebude môcť zadať v užívateľskom grafickom rozhraní. Keďže každá značka má definované, aké môže mať kľúče s~hodnotami (\texttt{key=value}), bude potrebné pre~každú takúto dvojicu hodnôt priradiť hodnoty, ktoré budú vytvárať heat vrstvu. 
 
-
-% \todo{TODO}
-% \blindtext[2]
-
-% \Blindtext
 
 
 % \chapter{Implementácia}
