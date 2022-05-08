@@ -356,126 +356,6 @@ Vlastníci katastrov nehnuteľností si musia byť istý, že na danom území e
 
 
 
-\chapter{Využité technológie}
-\label{technology}
-V tejto kapitole sú preberané všetky technológie, ktoré boli použité pri vytváraní užívateľského rozhrania. Ku každej technológií sú napísané dôvody, prečo bola zvolená technológia vhodná na použitie. Aplikácia bola navrhnutá ako klient-server aplikácia, t.j. na strane klienta bolo použité technológie na vizualizáciu výstupov a~na~strane serveru technológie na~spracovávanie dát poslaných od klienta.
-
-
-\section{GeoPandas}
-GeoPandas\footnote{\url{https://geopandas.org/en/stable}} je open-source projekt, ktorý umožňuje jednoduchú manipuláciu geografických dát v jazyku Python. Tento projekt je pokročilejší nástroj umožňujúci načítavanie GIS dát (.geojson, .gdb, .shp, \ldots), manipuláciu s GIS dátami, manipuláciu s~geometrickými útvarmi, prevádzanie súradnicových systémov a vykresľovanie máp. Základnými dátovými štruktúrami projektu GeoPandas sú \texttt{GeoDataFrame} a \texttt{GeoSeries}. Tieto dve dátové štruktúry sú nadstavbou knižnice \emph{Pandas}\footnote{\url{https://pandas.pydata.org}}, pretože rozširujú možnosti dátových štruktúr \texttt{Series} a \texttt{DataFrame} z tejto knižnice. Táto aplikácia je esenciálnou súčasťou celej aplikácie, pretože ju používajú aj iné knižnice.
-
-\texttt{GeoDataFrame} je dvojrozmerná dátová štruktúra, podobná tabuľke s riadkami a~stĺpcami a~je podtriedou \emph{pandas.DataFrame} s pridaným stĺpcom \texttt{geometry} (obrázok~\ref{fig:dataframes}).
-
-\texttt{GeoSeries} je jednorozmerná dátová štruktúra, ktorá je podtriedou \emph{pandas.Series} a~umožňuje ukladať geometrické objekty \--- body, čiary, polygóny, prípadne ich násobné varianty. Predstavuje stĺpec geometry v dátovej štruktúre GeoDataFrame.
-
-\begin{figure}[ht]
-    \centering
-    \subfloat[\centering \textbf{DataFrame}]{{\includegraphics[width=0.25\linewidth]{obrazky-figures/dataframe.pdf}}}
-    \qquad
-    \subfloat[\centering \textbf{GeoDataFrame}]{{\includegraphics[width=0.31\linewidth]{obrazky-figures/geodataframe.pdf}}}
-    \caption{Rozdiel medzi dátovými štruktúrami DataFrame a GeoDataFrame.}
-    \label{fig:dataframes}
-\end{figure}
-
-
-\section{OSMnx}
-Aby bolo možné pracovať s geografickými dátami, je potrebné ich stiahnuť z určitého zdroja. V~jazyku Python existuje balíček OSMnx\footnote{\url{https://osmnx.readthedocs.io/en/stable}}, ktorý umožňuje sťahovať geopriestorové dáta z~OpenStreetMap. Okrem sťahovania umožňuje tento balíček modelovať, projektovať, zobrazovať a analyzovať pouličné siete reálneho sveta. Balíček OSMnx obsahuje viacero modulov, na túto prácu bol potrebný iba jeden modul \--- modul \texttt{geometries}, ktorý  umožňuje sťahovanie geopriestorových atribútov a entít z OpenStreetMap. Modul sťahuje dáta z OpenStreetMap Nominatim API\footnote{\url{https://nominatim.org}} a vracia dátovú štruktúru GeoDataFrame.
-
-
-\section{Flask}
-Flask\footnote{\url{https://flask.palletsprojects.com/en/2.1.x}} je mikro webový framework napísaný v programovacom jazyku Python. Flask nevyžaduje konkrétne nástroje ani ďalšie vnútorné knižnice. Aj keď sa tento framework považuje za mikro framework, neznamená to, že nie je možné ho rozširovať o rôzne služby~\cite{Oreilly2014Flask}.
-
-Flask som si vybral kvôli jeho jednoduchosti a kvôli tomu, že navrhnutá aplikácia nevyžaduje na prevádzku integráciu s databázovou schémou, ktorú treba integrovať u iných webových frameworkoch. Navyše navrhnutá aplikácia je iba jednostránková aplikácia, takže využívanie robustných webových frameworkov by bolo nepraktické.
-
-
-\section{Leaflet}
-Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy a~pod.
-
-\subsection{Rozšírenia knižnice}
-Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. 
-
-\subsubsection{Rozšírenie Leaflet.heat}
-Základom tejto knižnice je knižnica \texttt{simpleheat} z jazyka JavaScript, ktorá sa používa na kreslenie heat máp na plátno. Na vytvorenie vrstvy heat mapy sa používa funkcia \texttt{L.heatLayer(latlngs, options)}, kde:
-\begin{itemize}
-    \item \texttt{latlngs} \--- predstavuje dvojrozmerné pole, kde každé pole v tomto poli je definované dvojicou (zemepisná dĺžka, zemepisná šírka) resp. trojicou hodnôt (zemepisná dĺžka, zemepisná šírka, intenzita),
-    \item \texttt{options} \--- má viacero možnosti, ktoré sa dajú zadefinovať pre danú vrstvu, najdôležitejšie z nich pre moju aplikáciu sú:
-    \begin{itemize}
-        \item \texttt{max} \--- maximálna intenzita bodu, implicitná hodnota je 1.0
-        \item \texttt{radius} \--- rádius každého bodu na heat mape, implicitná hodnota je 25
-        \item \texttt{blur} \--- množstvo rozptýlenia, implicitná hodnota je 15
-        \item \texttt{gradient} \--- konfigurácia prechodu farieb
-    \end{itemize}
-\end{itemize}
-Na~obrázku~\ref{fig:leafletheat} je možné vidieť ako sa dá pridať tepelná vrstva do mapy a ako daná vrstva vyzerá na mape.
-
-\lstset{
-    caption={},
-    label={},
-    basicstyle=\ttfamily\footnotesize\bfseries
-}
-\begin{figure}[ht]
-\begin{minipage}{.5\textwidth}
-\begin{lstlisting}
-var heat = L.heatLayer([
-     // lat, lng, intensity
-    [49.1784, 16.7772, 0.2],
-    [49.1784, 16.7774, 0.4],
-    [49.1784, 16.7776, 0.6],
-    [49.1784, 16.7778, 0.8],
-    [49.1784, 16.7780, 1.0]
-], {radius: 30}).addTo(map);
-\end{lstlisting}
-\end{minipage}
-\hfill
-\begin{minipage}{.5\linewidth}
-    \centering
-    \includegraphics[width=0.7\linewidth]{obrazky-figures/heatlayer-screenshot.png}
-\end{minipage}
-\caption{\textbf{Rozšírenie Leaflet.heat}. Vľavo sa nachádza implementácia vrstvy, zoradená vzostupne podľa hodnôt intenzít, vpravo sa nachádza zobrazenie týchto bodov na~mape.}
-\label{fig:leafletheat}
-\end{figure}
-
-\subsubsection{Rozšírenie Leaflet.draw}
-Na to, aby užívateľ mohol vybrať určitú oblasť z mapy, na ktorej sa má vykresliť vrstva heat mapy, bolo potrebné použiť rozšírenie Leaflet.draw. Ako je možné vidieť na obrázku~\ref{fig:leafletdraw}, na bočnom paneli mapy v hornom ľavom rohu sa nachádza panel nástrojov, ktorý umožňuje kresliť geometrické útvary na mapu a následne ich upravovať alebo aj vymazávať. Pre~jednoduchosť aplikácie na vybratie určitej oblasti pomocou geometrických tvarov bol použitý iba jeden geometrický tvar \--- obdĺžnik.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{obrazky-figures/leaflet-draw-screenshot.png}
-    \caption{\textbf{Rozšírenie Leaflet.draw} pridáva možnosť kreslenia geometrických útvarov na~mapu \-- krivky, polygóny, obdĺžniky, kruhy, značky a~kruhové značky. Okrem toho je možné pomocou tohto rozšírenia upravovať, presúvať a vymazávať geometrické útvary.}
-    \label{fig:leafletdraw}
-\end{figure}
-
-\section{HTML}
-Jazyk HTML\footnote{HyperText Markup Language, v preklade \emph{Hypertextový značkovací jazyk}.} je jazyk určený na vytváranie webových stránok. Ako už názov napovedá, slovo \emph{hypertextový} naznačuje možnosť odkazov jednotlivých stránok na ostatné. Slovo \emph{značkovací} v spojitosti s jazykmi predstavuje jazyky, ktoré doplňujú text o tzv. \emph{značky} resp.~\emph{tagy}. Všetky značky majú svoje atribúty, ktoré upresňujú jej parametre. Jednotlivé značky je možné do seba vnárať a~spolu tak vytvárajú hierarchickú štruktúru~\cite{kosek1998html}.
-
-
-\section{CSS}
-Štruktúru webových stránok je možné vytvoriť použitím len jazyka HTML, ale na to, aby stránky vyzerali užívateľsky prívetivo, je nutné použiť aj iné nástroje, ktoré pôsobia na~užívateľa prívetivejším dojmom. Preto vznikol mechanizmus \emph{CSS}\footnotetext{Cascading Style Sheets} na vizuálne formátovanie webových stránok. Tento mechanizmus slúži na popis kaskádových štýlov HTML dokumentu.
-
-
-\section{JQuery}
-JQuery\footnote{\url{https://jquery.com}} je rýchla a cross-browser\footnote{Cross-browser kompatibilita je schopnosť webových stránok fungovať v rôznych prehliadačoch.} knižnica z jazyka JavaScript. Zjednodušuje prechádzanie dokumentov HTML, výber DOM\footnote{Document Object Model} elementov, kontrolu udalostí alebo aj vytváranie animácií. Výhodou tejto knižnice je, že je jednoduchou knižnicou na vývoj webových aplikácií. Oproti iným knižniciam v JavaScripte nevyžaduje lepšiu skúsenosť s jazykom JavaScript. Táto knižnica umožňuje okrem už zmienených možností, jednoduchšiu obsluhu \texttt{AJAX} volaní.
-
-
-\section{AJAX}
-Technológia AJAX\footnote{Asynchronous JavaScript and XML} umožňuje meniť obsah stránok bez potreby kompletného načítania zo~servera. Keďže protokol HTTP je bezstavový, akékoľvek stavové informácie je nutné posielať pri každom požiadavku servera a opačne. AJAX nám umožňuje sa takémuto postupu vyhnúť~\cite{lacko2008ajax}. Ako je možné poznať z názvu, AJAX je kombinácia viacerých prvkov:
-\begin{itemize}
-    \item HTML a CSS na prezentovanie informácií,
-    \item DOM na zobrazenie prezentovaných informácií,
-    \item metóda na výmenu dát medzi prehliadačom a serverom (napr. XMLHttpRequest objekt),
-    \item formát dát posielaný medzi prehliadačom a serverom (napr. XML)
-\end{itemize}
-
-V mojej aplikácií som použil AJAX technológiu na aktualizáciu súradníc pri zmene veľkosti alebo presune oblasti určenej na vytvorenie heat mapy.
-
-
-\section{Bootstrap}
-Bootstrap je sada nástrojov, ktorá obsahuje rozšírenie pre jazyky HTML, CSS a JavaScript. Umožňuje vytvárať pomocou veľkého množstva rôznorodých komponentov interaktívne webové stránky. Vyžaduje určitú znalosť HTML a~CSS, pretože väčšinu komponentov je možné vkladať iba pomocou HTML a CSS~\cite{bootstrap}.
-
-V mojej aplikácií používam tzv. \emph{Alert} komponentu t.j. výstražnú správu. Ak sa nepodarila vytvoriť heat mapa z~parametrov poslaných na server, server pošle správu užívateľovi, že heat mapa sa pre zadanú oblasť nepodarila vytvoriť.
-
-
-
 \chapter{Návrh}
 \label{navrh}
 V tejto kapitole je popísaný návrh systému, na ktorom je založená celá aplikácia. Na začiatku tejto kapitoly sa analyzujú požiadavky na aplikáciu a popisujú kľúčové vlastnosti, ktoré musia byť splnené. Táto kapitola zahŕňa aj bližšie popísanie použitých technológií a~dôvody, prečo boli zvolené dané technológie pri návrhu aplikácie.
@@ -579,12 +459,261 @@ Pri tvorbe návrhu sa vychádzalo z~analýzy požiadavkov v sekcii~\ref{sec:anal
 Aby systém fungoval správne, bude potrebné brať vstupné údaje o pravdepodobnostiach. Tieto pravdepodobnosti ale užívateľ nebude môcť zadať v užívateľskom grafickom rozhraní. Keďže každá značka má definované, aké môže mať kľúče s~hodnotami (\texttt{key=value}), bude potrebné pre~každú takúto dvojicu hodnôt priradiť hodnoty, ktoré budú vytvárať heat vrstvu. 
 
 
+\section{Funkcionalita}
+Analýzou požiadavkov sa podarilo navrhnúť systém, ktorý bude spĺňať tieto požiadavky. Primárnym cieľom je vytvoriť systém, ktorý bude zobrazovať mapu s~vytvorenou heat vrstvou zo~získaných dát.
 
-% \chapter{Implementácia}
-% \label{implementacia}
-% \todo{TODO}
+\subsection*{Vytváranie oblasti}
+Oblasť, z~ktorej bude chcieť zistiť odhad pravdepodobnosti osôb v danej oblasti, bude možné vybrať pomocou obdĺžnika, ktorý užívateľ nakreslí na~mapu. Z~vytvorenej oblasti budú následne použité hraničné súradnice daného nakresleného obdĺžnika na~vytvorenie dátového rámca s~geografickými objektami. 
 
-% \blindtext[13]
+\subsection*{Sťahovanie dát}
+Získané hraničné súradnice sa použijú pri vytváraní heat vrstvy. Predtým by si systém mal stiahnuť dáta do~svojej pamäte. V~týchto dátach by mali byť uložené informácie o~geometrických objektoch, ktoré sa nachádzajú v~danej oblasti. Tieto informácie by mal systém získať pomocou požiadavku na~server alebo ich by mal mať uložené lokálne. Podľa~\cite{openstreet-stats} existuje vyše 86 tisíc rôznych kľúčov a~vyše 132 miliónov rôznych značiek na~celej mape sveta. Keďže na~vytvorenie heat vrstvy potrebujeme väčšinu značiek, pri takom veľkom množstve rôznych kľúčov by nebolo príliš efektívne sťahovať dáta z~webového rozhrania API. Preto je vhodnejšou alternatívou použitie lokálnych súborov, ktoré si bude užívateľ môcť stiahnuť a~vytvárať požiadavky na~tieto lokálne súbory.
+
+\subsection*{Vytváranie heat vrstvy}
+Vytvorená heat vrstva by mala byť súvislá u~všetkých geometrických objektoch. Nemala by nastať situácia, kedy časť geometrického objektu je pokrytá iba z~časti vrstvou heat mapy a~zvyšná časť je bez tejto vrstvy. Keďže geometrické objekty môžu byť jedným z~troch typov (bod, čiara alebo polygón), bude potrebné vyriešiť, ako sa bude zobrazovať heat vrstva pre jednotlivé geometrické objekty.
+
+\textbf{Bod} môže na~mape predstavovať napríklad autobusovú zastávku. U~tohto typu je vykreslenie heat vrstvy najjednoduchšie zo~všetkých geometrických objektov, pretože budú stačiť dve hodnoty na~vykreslenie \--- zemepisná dĺžka a~zemepisná šírka daného bodu. Na~obrázku~\ref{fig:heat-point} je možné vidieť, ako by sa mala vykresliť heat vrstva pre určitý bod.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.3\linewidth]{obrazky-figures/heat-point.pdf}
+    \caption{Heat vrstva na~geometrickom objekte typu bod.}
+    \label{fig:heat-point}
+\end{figure}
+
+\textbf{Čiara} môže na~mape predstavovať napríklad cestu. Tento typ bude potrebné upraviť tak, aby heat vrstva na~danom geometrickom objekte bola súvislá. Na~obrázku~\ref{fig:heat-line} je možné vidieť, ako by mala vyzerať súvislá vykreslená heat vrstva pre čiaru.
+ 
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[width=0.8\linewidth]{obrazky-figures/heat-line.pdf}
+     \caption{Heat vrstva na~geometrickom objekte typu čiara.}
+     \label{fig:heat-line}
+ \end{figure}
+ 
+ \textbf{Polygón} môže na~mape predstavovať rôzne budovy, napríklad školu. Vnútro polygónu a~najbližšia oblasť okolo polygónu by mala byť v~červenej farbe. V~tejto oblasti by mala byť pravdepodobnosť výskytu osôb najvyššia. Postupne sa farba mení na studenšie farby a~vzniká tým súvislý prechod farieb ako u~bodu a~čiary. Na~obrázku~\ref{fig:heat-polygon} je možné vidieť, ako by mohla vyzerať heat vrstva pre polygón.
+ 
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[width=0.5\linewidth]{obrazky-figures/heat-polygon.pdf}
+     \caption{Heat vrstva na~geometrickom objekte typu polygón. Prechod vrstiev sa vyvíja od~stredového bodu polygónu, ktorý je vyznačený na~obrázku značkou \texttt{$\times$}.}
+     \label{fig:heat-polygon}
+ \end{figure}
+ 
+
+\section{Návrh užívateľského rozhrania}
+Hlavným cieľom užívateľského rozhrania bude umožnenie užívateľovi vytvoriť plochu, na~ktorej sa má vykresliť heat vrstva. Časť užívateľského rozhrania bude inšpirovaná užívateľským rozhraním stránky OpenStreetMap\footnote{\url{https://www.openstreetmap.org}}, a to získavanie vstupných súradníc. Na~obrázku~\ref{fig:ui-mockup} je zobrazený návrh užívateľského rozhrania. Na ľavom paneli bude užívateľ môcť zadávať vstupné súradnice, vytvárať plochu, na ktorej chce vykresliť heat vrstvu, upravovať veľkosť plochy pomocou vstupného formulára. Na ľavom paneli sa bude nachádzať aj tlačítko na~vytvorenie mapy s~heat vrstvou. Napravo od ľavého panela sa bude nachádzať mapa, na ktorej sa bude zobrazovať heat vrstva. Aké hodnoty pravdepodobností dané farby predstavujú, bude zobrazené na~škále v~pravom hornom rohu mapy.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.98\linewidth]{obrazky-figures/ui-mockup.pdf}
+    \caption{Návrh užívateľského rozhrania.}
+    \label{fig:ui-mockup}
+\end{figure}
+
+
+
+\chapter{Implementácia}
+\label{implementacia}
+V tejto kapitole je popísaná architektúra navrhnutej aplikácie, taktiež sú v tejto kapitole popísané použité technológie a~ako boli použité. Okrem toho je v~tejto kapitole popis implementácie funkcionality a~popis implementácie grafického užívateľského rozhrania.
+
+
+\section{Architektúra}
+Navrhnutá aplikácia rozširuje funkcionalitu projektu OpenStreetMap. Aplikácia pridáva do~projektu OpenStreetMap možnosť pridávania teplotnej vrstvy do zobrazenej mapy. Užívateľ si bude môcť vybrať oblasť mapy, pre ktorú by chcel zobraziť mapu s teplotnou vrstvou. Aplikácia teda nezobrazí vygenerovanú mapu s~teplotnou vrstvou pre celý svet naraz, ale iba pre časť mapy. Architektúra systému je založená na architektúre klient-server. Takýto typ architektúry umožňuje vytvoriť moduly, ktoré síce vykonávajú odlišné akcie, ale spoločne vytvárajú funkčný systém. Na~obrázku~\ref{fig:architecture} je možné vidieť, aké akcie vykonáva webový server a~aké akcie vykonáva klientská časť aplikácie.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\linewidth]{obrazky-figures/architecture.pdf}
+    \caption{Architektúra navrhovanej aplikácie.}
+    \label{fig:architecture}
+\end{figure}
+
+Implementácia webového serveru je napísaná v~jazyku Python. Klientská časť aplikácie sa ukladá do~prehliadača užívateľa a~zobrazuje sa užívateľovi v~prehliadači, takže je zložená z~jazykov, ktoré slúžia pri vývoji webových aplikácií (Javascript, HTML a CSS). Obidve časti aplikácie si vzájomne vymieňajú informácie pomocou zvoleného webového frameworku. Okrem toho server má uložené informácie o~značkách a~ich pravdepodobnostiach, ktoré sa nachádzajú na~mape.
+
+
+\section{Použité technológie}
+Keďže aplikácia je navrhnutá ako klient-server aplikácia, je potrebné využiť vhodné technológie na~webovom serveri aj na~klientskej strane aplikácie. Funkcionalita danej aplikácie rozširuje pridávanie heat vrstvy do~mapy z~OpenStreetMap. Na strane servera je nutné spracovať priestorové dáta a~na~klientskej strane aplikácie zvoliť technológiu, ktorá by umožňovala zobrazovanie heat vrstvy na mape. Vytváranie aj takejto vrstvy na mapu umožňuje technológia \emph{Leaflet} a~jej rozšírenia vytvorené open-source komunitou. Aby si vedel užívateľ zobraziť danú vrstvu na mape, je potrebné zvoliť vhodnú technológiu, ktorá dokáže komunikovať s~klientskou stranou aplikácie. 
+
+
+\section{Webový server}
+Na webovom serveri prebieha spracovávanie priestorových dát a~ich spracovávanie na výstup. Okrem knižnice \emph{GeoPandas} v~programovacom jazyku Python neexistuje veľa technológií, ktoré by zjednodušovali spracovávanie priestorových dát. Keďže na~zobrazovanie dát na klientskej strane aplikácie je použitá knižnica Leaflet z jazyka Javascript, ktorý je používaný najmä pri tvorbe webových stránok, použitie webového frameworku je vhodnou voľbou. Okrem toho webové frameworky uľahčujú vytváranie webových aplikácií a~zobrazovanie spracovaných dát na~výstup.
+
+\subsection{Flask}
+Flask\footnote{\url{https://flask.palletsprojects.com/en/2.1.x}} je mikro webový framework napísaný v programovacom jazyku Python. Flask nevyžaduje konkrétne nástroje ani ďalšie vnútorné knižnice. Aj keď sa tento framework považuje za mikro framework, neznamená to, že nie je možné ho rozširovať o rôzne služby~\cite{Oreilly2014Flask}.
+
+Zobrazovať dáta vo webových aplikáciách je možné pomocou rôznych webových frameworkoch. Aplikácia je navrhnutá ako jednostránková aplikácia a~nevyžaduje vytváranie databázovej schémy. Na základe týchto vlastností som sa rozhodol nepoužiť webové frameworky, ktoré by boli príliš robustné na~použitie v~tejto aplikácii. Preto som sa rozhodol použiť webový framework Flask.
+
+\subsection{GeoPandas}
+GeoPandas\footnote{\url{https://geopandas.org/en/stable}} je open-source projekt, ktorý umožňuje jednoduchú manipuláciu geografických dát v jazyku Python. Tento projekt je pokročilejší nástroj umožňujúci načítavanie GIS dát (.geojson, .gdb, .shp, \ldots), manipuláciu s GIS dátami, manipuláciu s~geometrickými útvarmi, prevádzanie súradnicových systémov a vykresľovanie máp. Základnými dátovými štruktúrami projektu GeoPandas sú \texttt{GeoDataFrame} a \texttt{GeoSeries}. Tieto dve dátové štruktúry sú nadstavbou knižnice \emph{Pandas}\footnote{\url{https://pandas.pydata.org}}, pretože rozširujú možnosti dátových štruktúr \texttt{Series} a \texttt{DataFrame} z tejto knižnice.
+
+\texttt{GeoDataFrame} je dvojrozmerná dátová štruktúra, podobná tabuľke s riadkami a~stĺpcami a~je podtriedou \emph{pandas.DataFrame} s pridaným stĺpcom \texttt{geometry} (obrázok~\ref{fig:dataframes}).
+
+\texttt{GeoSeries} je jednorozmerná dátová štruktúra, ktorá je podtriedou \emph{pandas.Series} a~umožňuje ukladať geometrické objekty \--- body, čiary, polygóny, prípadne ich násobné varianty. Predstavuje stĺpec geometry v dátovej štruktúre GeoDataFrame.
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[\centering \textbf{DataFrame}]{{\includegraphics[width=0.25\linewidth]{obrazky-figures/dataframe.pdf}}}
+    \qquad
+    \subfloat[\centering \textbf{GeoDataFrame}]{{\includegraphics[width=0.31\linewidth]{obrazky-figures/geodataframe.pdf}}}
+    \caption{Rozdiel medzi dátovými štruktúrami DataFrame a GeoDataFrame.}
+    \label{fig:dataframes}
+\end{figure}
+
+Priestorové dáta bolo potrebné spracovať efektívnym spôsobom. V~programovacích jazykoch neexistuje veľa overených technológií, ktoré by podporovali prácu s~priestorovými dátami. Možnou alternatívou je použitie GIS softvérov, ktoré ale nie všetky sú zadarmo. Preto som sa na základe tohto rozhodol použiť programovací jazyk Python s~importovanou knižnicou GeoPandas, ktorá umožňuje spracovávanie priestorových dát.
+
+\subsection{Ostatné nástroje}
+Okrem ukladania dát do dátových rámcov je potrebné ich aj~upraviť do~formy, v~ktorej by sa dali použiť pri zobrazovaní heat vrstvy na~strane klienta. Medzi vhodné nástroje, ktoré umožňujú takúto úpravu dát v~jazyku Python, patria balíky nástrojov \emph{PyProj} a \emph{Shapely}.
+
+\textbf{PyProj}\footnote{\url{https://pyproj4.github.io/pyproj/stable}} je rozhranie v~jazyku Python na PROJ\footnote{\url{https://proj.org}}. PROJ je softvér, ktorý sa používa na~transformovanie geografických súradníc z~jedného súradnicového systému do~iného súradnicového systému.
+
+\textbf{Shapely}\footnote{\url{https://shapely.readthedocs.io/en/stable}} je balík nástrojov v~jazyku Python na~manipuláciu a analýzu rovinných geometrických objektov. Tento balík je vhodné použiť s~už zmieneným nástrojom PyProj, pretože Shapely sa nezaoberá tým, v~akom súradnicovom systéme je upravovaný geometrický objekt. 
+
+Možnosť transformácie súradnicového systému na iný súradnicový systém bol využitý aj~pri implementácii aplikácie. U~niektorých geometrických útvaroch (konkrétne u čiar) bolo potrebné zistiť, aké sú hodnoty daného geografického objektu v inom súradnicovom systéme. Implicitne sú dátové rámce s~dátami o~geografických objektoch v~geografickom súradnicovom systéme (EPSG:4326), ktorý využíva uhlové jednotky. Takáto projekcia neumožňuje rôzne úpravy takýchto geometrických objektov. Transformovaním na~projektovaný súradnicový systém (EPSG:3857) je možné dostať vzdialenosti bodov na~mape v~metroch.
+
+
+\section{Klientská časť}
+Na klientskej časti aplikácie vyberá užívateľ oblasť, na~ktorej sa má vytvoriť heat vrstva. Keď užívateľ vyberie oblasť, pošle sa požiadavok na server, na~ktorom sa spracujú zadané vstupné hodnoty a~odošlú sa dáta na~tvorbu heat vrstvy späť klientovi.
+
+Existuje veľa knižníc, ktoré umožňujú vytvárať heat grafy resp. heat vrstvy. Vytváranie heat vrstiev je možné aj v~jazyku Python pomocou knižnice \emph{Seaborn}\footnote{\url{https://seaborn.pydata.org/generated/seaborn.heatmap.html}}, ale táto knižnica neumožňuje zobrazovanie heat vrstvy spoločne už so~zobrazenou mapou. Takisto prechod medzi jednotlivými farbami nie je plynulý. Keďže heat vrstvy sa majú vytvárať na klientskej časti aplikácie, je potrebné použiť nástroje jazykov, ktoré sa používajú na strane klienta. Preto som sa rozhodol použiť knižnicu \emph{Leaflet} implementovanú v jazyku Javascript.
+
+\subsection{Leaflet}
+Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získavať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy a~pod.
+
+\subsection{Rozšírenia knižnice Leaflet}
+Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. 
+
+\subsubsection{Rozšírenie Leaflet.heat}
+Základom tejto knižnice je knižnica \texttt{simpleheat} z jazyka JavaScript, ktorá sa používa na~kreslenie heat máp na plátno. Na vytvorenie vrstvy heat vrstvy na~mapu sa používa funkcia \texttt{L.heatLayer(latlngs, options)}, kde:
+\begin{itemize}
+    \item \texttt{latlngs} \--- predstavuje dvojrozmerné pole, kde každé pole v tomto poli je definované dvojicou (zemepisná dĺžka, zemepisná šírka) resp. trojicou hodnôt (zemepisná dĺžka, zemepisná šírka, intenzita),
+    \item \texttt{options} \--- má viacero možnosti, ktoré sa dajú zadefinovať pre danú vrstvu, najdôležitejšie z nich pre moju aplikáciu sú:
+    \begin{itemize}
+        \item \texttt{max} \--- maximálna intenzita bodu, implicitná hodnota je 1.0,
+        \item \texttt{radius} \--- rádius každého bodu na heat mape, implicitná hodnota je 25,
+        \item \texttt{blur} \--- množstvo rozptýlenia, implicitná hodnota je 15,
+        \item \texttt{gradient} \--- konfigurácia prechodu farieb.
+    \end{itemize}
+\end{itemize}
+
+Na~obrázku~\ref{fig:leafletheat} je možné vidieť ako sa dá pridať heat vrstva do~mapy a~ako daná vrstva vyzerá na~mape. Hodnoty intenzít, ktoré sú treťou hodnotou každého vykresleného bodu, udávajú hodnotu pravdepodobnosti pre danú značku na~mape. To znamená, že ak ide napríklad o~školu, na~mape sa vykreslí bod pre danú značku s~intenzitou~$1.0$. Na druhú stranu, ak by išlo o~značku, ktorá by značila lesnú cestu, intenzita farby pre danú značku by bola nižšia.
+
+\lstset{
+    caption={},
+    label={},
+    basicstyle=\ttfamily\footnotesize\bfseries
+}
+\begin{figure}[ht]
+\begin{minipage}{.5\textwidth}
+\begin{lstlisting}
+var heat = L.heatLayer([
+     // lat, lng, intensity
+    [49.1784, 16.7772, 0.2],
+    [49.1784, 16.7774, 0.4],
+    [49.1784, 16.7776, 0.6],
+    [49.1784, 16.7778, 0.8],
+    [49.1784, 16.7780, 1.0]
+], {radius: 30}).addTo(map);
+\end{lstlisting}
+\end{minipage}
+\hfill
+\begin{minipage}{.5\linewidth}
+    \centering
+    \includegraphics[width=0.7\linewidth]{obrazky-figures/heatlayer-screenshot.png}
+\end{minipage}
+\caption{\textbf{Rozšírenie Leaflet.heat}. Vľavo sa nachádza implementácia vrstvy, zoradená vzostupne podľa hodnôt intenzít, vpravo sa nachádza zobrazenie týchto bodov na~mape.}
+\label{fig:leafletheat}
+\end{figure}
+
+\subsubsection{Rozšírenie Leaflet.draw}
+Na to, aby užívateľ mohol vybrať určitú oblasť z mapy, na ktorej sa má vykresliť heat vrstva, bolo potrebné použiť rozšírenie Leaflet.draw. Ako je možné vidieť na~obrázku~\ref{fig:leafletdraw}, na bočnom paneli mapy v hornom ľavom rohu sa nachádza panel nástrojov, ktorý umožňuje kresliť geometrické útvary na mapu a následne ich upravovať alebo aj vymazávať. Pre~jednoduchosť aplikácie na vybratie určitej oblasti pomocou geometrických tvarov bol použitý iba jeden geometrický tvar \--- obdĺžnik.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{obrazky-figures/leaflet-draw-screenshot.png}
+    \caption{\textbf{Rozšírenie Leaflet.draw} pridáva možnosť kreslenia geometrických útvarov na~mapu \-- krivky, polygóny, obdĺžniky, kruhy, značky a~kruhové značky. Okrem toho je možné pomocou tohto rozšírenia upravovať, presúvať a vymazávať geometrické útvary.}
+    \label{fig:leafletdraw}
+\end{figure}
+
+\subsection{HTML}
+Jazyk HTML\footnote{HyperText Markup Language, v preklade \emph{Hypertextový značkovací jazyk}.} je jazyk určený na vytváranie webových stránok. Ako už názov napovedá, slovo \emph{hypertextový} naznačuje možnosť odkazov jednotlivých stránok na ostatné. Slovo \emph{značkovací} v spojitosti s jazykmi predstavuje jazyky, ktoré doplňujú text o tzv. \emph{značky} resp.~\emph{tagy}. Všetky značky majú svoje atribúty, ktoré upresňujú jej parametre. Jednotlivé značky je možné do seba vnárať a~spolu tak vytvárajú hierarchickú štruktúru~\cite{kosek1998html}.
+
+\subsection{CSS}
+Štruktúru webových stránok je možné vytvoriť použitím len jazyka HTML, ale na to, aby stránky vyzerali užívateľsky prívetivo, je nutné použiť aj iné nástroje, ktoré pôsobia na~užívateľa prívetivejším dojmom. Preto vznikol mechanizmus \emph{CSS}\footnotetext{Cascading Style Sheets} na vizuálne formátovanie webových stránok. Tento mechanizmus slúži na popis kaskádových štýlov HTML dokumentu.
+
+\subsection{JQuery}
+JQuery\footnote{\url{https://jquery.com}} je rýchla a cross-browser\footnote{Cross-browser kompatibilita je schopnosť webových stránok fungovať v rôznych prehliadačoch.} knižnica z jazyka JavaScript. Zjednodušuje prechádzanie dokumentov HTML, výber DOM\footnote{Document Object Model} elementov, kontrolu udalostí alebo aj vytváranie animácií. Výhodou tejto knižnice je, že je jednoduchou knižnicou na vývoj webových aplikácií. Oproti iným knižniciam v JavaScripte nevyžaduje lepšiu skúsenosť s jazykom JavaScript. Táto knižnica umožňuje okrem už zmienených možností, jednoduchšiu obsluhu \texttt{AJAX} volaní.
+
+\subsection{AJAX}
+Technológia AJAX\footnote{Asynchronous JavaScript and XML} umožňuje meniť obsah stránok bez potreby kompletného načítania zo~servera. Keďže protokol HTTP je bezstavový, akékoľvek stavové informácie je nutné posielať pri každom požiadavku servera a~opačne. AJAX nám umožňuje sa takémuto postupu vyhnúť~\cite{lacko2008ajax}. Ako je možné poznať z názvu, AJAX je kombinácia viacerých prvkov:
+\begin{itemize}
+    \item HTML a CSS na prezentovanie informácií,
+    \item DOM na zobrazenie prezentovaných informácií,
+    \item metóda na výmenu dát medzi prehliadačom a serverom (napr. XMLHttpRequest objekt),
+    \item formát dát posielaný medzi prehliadačom a serverom (napr. XML)
+\end{itemize}
+
+V mojej aplikácií som použil AJAX technológiu na aktualizáciu súradníc pri zmene veľkosti alebo presune oblasti určenej na vytvorenie heat mapy.
+
+\subsection{Bootstrap}
+Bootstrap je sada nástrojov, ktorá obsahuje rozšírenie pre jazyky HTML, CSS a JavaScript. Umožňuje vytvárať pomocou veľkého množstva rôznorodých komponentov interaktívne webové stránky. Vyžaduje určitú znalosť HTML a~CSS, pretože väčšinu komponentov je možné vkladať iba pomocou HTML a CSS~\cite{bootstrap}.
+
+V mojej aplikácií používam tzv. \emph{Alert} komponentu t.j. výstražnú správu. Ak sa nepodarila vytvoriť heat mapa z~parametrov poslaných na server, server pošle správu užívateľovi, že heat mapa sa pre zadanú oblasť nepodarila vytvoriť.
+
+
+\section{Implementácia funkcionality}
+Implementácia funkcionality vychádza z~návrhu, ktorá bola popísaná v~kapitole~\ref{navrh}. Ako implementačný programovací jazyk bol vybratý Python spolu s~knižnicami, ktoré boli popísané v~tejto kapitole. Pri vytváraní heat vrstvy je potrebné urobiť viacero úprav dát, aby sa v~aplikácii zobrazovali relevantné dáta na~mape.
+
+\subsection*{Spracovanie hodnôt pravdepodobností}
+Prvou potrebnou vecou, ktorú systém spracováva, sú dáta pravdepodobností pre jednotlivé značky. Dáta o~značkách sú uložené v~súbore, ktorý je vo~formáte JSON. Tieto dáta sú prednastavené s~tým, že tieto hodnoty užívateľ môže pozmeniť v~tomto súbore, prípadne pridať alebo odstrániť niektoré hodnoty. Súbor sa v~systéme spracuje a~uloží sa ako asociatívne pole do~pamäte, s~ktorým bude systém pracovať pri úprave dátového rámca.
+
+\subsection*{Vytvorenie dátového rámca}
+Keďže pri vyššom počte hodnôt pravdepodobností pre jednotlivé značky by počet požiadavkov na webové rozhranie API bol vysoký, systém spracováva požiadavky z~lokálnych súborov. Tieto súbory sú vo~formáte \emph{shapefile} a~sú získané zo~stránky Geofabrik\footnote{\url{https://download.geofabrik.de}}. Súbory sú pomenované podľa názvu kľúča, ktorý sa nachádza v~danom súbore. Keďže súbory tohto formátu sú naviazané medzi sebou, pri spracovávaní týchto súborov nám stačí súbor vo~formáte \texttt{*.shp}, z~ktorého je možné vytvoriť dátový rámec so~stĺpcom o~geografických objektoch.
+
+Vytvorený dátový rámec má viacero stĺpcov, ale využiteľné pre tento systém je iba stĺpec s~typom značky a~stĺpec s~geometrickými objektami. Každý riadok v~tomto rámci predstavuje jeden geometrický objekt na~mape. Ak sa daná značka pre daný geometrický objekt nenachádza vo~vytvorenom asociatívnom poli s~pravdepodobnosťami pre značky, riadok s~touto značkou sa preskočí.
+
+\subsection*{Úprava geometrických objektov}
+Každý riadok v~dátovom rámci sa spracuje podľa toho, aký predstavuje geometrický objekt. Jednotlivé riadky v~dátovom rámci je potrebné upraviť do~zoznamu bodov, ktorý sa použije pri vytváraní heat vrstvy pomocou knižnice \texttt{Leaflet.heat}. Vytvorením zoznamu bodov vznikne iba jedna súvislá heat vrstva, ktorá je vhodnejšia pri zobrazovaní na~mape.
+
+\textbf{Bod} predstavuje jednoduchý geometrický objekt na~mape, pretože je reprezentovaný iba dvoma hodnotami \--- zemepisnou dĺžkou a~zemepisnou šírkou. K~týmto dvom hodnotám sa pridá tretia hodnota, ktorá pridáva intenzitu k~danému bodu.
+
+\textbf{Čiara} je geometrický objekt na~mape, ktorý slúži na~zobrazovanie ciest. Heat vrstva pre cesty bez zákrut by sa bez dodatočnej úpravy vykreslili iba s~dvoma bodmi \--- počiatočným bodom a~koncovým bodom cesty. Takéto riešenie nie je vhodné, preto je vhodným riešením takéhoto problému použiť interpoláciu úsečky. Na interpoláciu úsečky je použitá rovnica~\ref{eq:interpolate} odvodená z~obrázka~\ref{fig:interpolate}:
+
+\begin{equation}
+    y = y_1 + \frac{(x - x_1)(y_2 - y_1)}{x_2 - x_1},
+    \label{eq:interpolate}
+\end{equation}
+kde $x_1$ a $y_1$ sú prvé súradnice, $x_2$ a $y_2$ sú druhé súradnice, $x$ je stredná hodnota hodnôt $x_1$ a $x_2$, a $y$ je hľadaná interpolovaná hodnota. Koľkokrát interpolujeme danú úsečku závisí od~toho, aká dlhá je daná úsečka.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.4\linewidth]{obrazky-figures/linear-interpolation.pdf}
+    \caption{Interpolácia úsečky.}
+    \label{fig:interpolate}
+\end{figure}
+
+\textbf{Polygón} je geometrický objekt na~mape, ktorý slúži na zobrazovanie budov. Z~polygónov sa dajú získať iba okrajové body, body vo~vnútrajšku polygónov je potrebné zistiť pomocou vhodnej metódy. Najjednoduchším spôsobom, ktorý som použil aj~pri implementácii, je získanie stredového bodu polygónu.
+
+
+\section{Implementácia užívateľského rozhrania}
+Užívateľské rozhranie sa skladá z~viacerých komponentov, ktoré vytvárajú jednotný celok. V~ľavom paneli sa nachádza panel, v~ktorom môže užívateľ zadávať vstupné súradnice a~upravovať ich. V hlavnej časti obrazovky sa nachádza zobrazená mapa, na~ktorú sa vykresľuje heat vrstva. Na~zobrazenej mape sa nachádza aj~škála pre vytvorenú heat vrstvu. 
+
+\subsection*{Získavanie vstupných súradníc}
+Vstupné súradnice, ktoré zadal užívateľ, je potrebné aktualizovať pri každom zmenšení alebo zväčšení mapy resp.~oblasti vytvorenej pomocou nástroja \texttt{Leaflet.draw}. Na~obrázku~\ref{fig:ui-screen} je možné vidieť, ako vyzerá výber oblasti, ktorú si užívateľ sám zvolil. Pri nakreslení takejto oblasti sa pomocou nástroja AJAX, ktorý bez potreby kompletného načítania stránky zo~servera, upravia súradnice vo~formulári na~ľavom paneli aplikácie. AJAX správa sa pošle po vytvorení oblasti na~mape pomocou udalosti \texttt{L.Draw.Event.CREATED} a~spustí sa udalosť \texttt{L.Draw.Event.EDITSTART}. Táto udalosť umožní užívateľovi meniť veľkosť aj~polohu nakreslenej oblasti. Odkaz na~vytvorenie oblasti (\texttt{Create custom area}) sa po tejto udalosti zmení na odkaz na~vymazanie vytvorenej oblasti (\texttt{Delete custom area}).
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.98\linewidth]{obrazky-figures/ui-screen.png}
+    \caption{Výber oblasti na~mape.}
+    \label{fig:ui-screen}
+\end{figure}
+
+\subsection*{Škála pravdepodobností}
+Zo~získaných hodnôt pravdepodobností pre každú značku je možné vytvoriť škálu, ktorá ukazuje, aká je odhad pravdepodobnosti osôb v~danej oblasti. Na~vytvorenie tejto škály bol použitý nástroj \emph{D3.js\footnote{\url{https://d3js.org}}}. Keďže funkcia \texttt{Leaflet.heatLayer()} umožňuje pridávať vlastne vytvorenú konfiguráciu prechodu farieb, táto škála je prepojená s~vytvorenou heat vrstvou. Aby sa zjednodušilo vytváranie takejto škály, na vytvorenie tejto farebnej škály bol použitý nástroj \emph{branca\footnote{\url{https://python-visualization.github.io/branca}}}, konkrétne modul pre prácu s~farebnými mapami. Vo~výslednej implementácii tejto aplikácie sa tento nástroj nepoužíva.
+
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.9\linewidth]{obrazky-figures/app-screen.png}
+%     \caption{Snímok obrazovky výsledného užívateľského rozhrania pri počiatočnom načítaní stránky.}
+%     \label{fig:app-screen}
+% \end{figure}
 
 
 % \chapter{Testovanie}
