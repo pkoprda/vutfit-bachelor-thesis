@@ -674,13 +674,13 @@ Každý riadok v~dátovom rámci sa spracuje podľa toho, aký predstavuje geome
 
 \textbf{Bod} predstavuje jednoduchý geometrický objekt na~mape, pretože je reprezentovaný iba dvoma hodnotami \--- zemepisnou dĺžkou a~zemepisnou šírkou. K~týmto dvom hodnotám sa pridá tretia hodnota, ktorá pridáva intenzitu k~danému bodu.
 
-\textbf{Čiara} je geometrický objekt na~mape, ktorý slúži na~zobrazovanie ciest. Heat vrstva pre cesty bez zákrut by sa bez dodatočnej úpravy vykreslili iba s~dvoma bodmi \--- počiatočným bodom a~koncovým bodom cesty. Takéto riešenie nie je vhodné, preto je vhodným riešením takéhoto problému použiť interpoláciu úsečky. Na interpoláciu úsečky je použitá rovnica~\ref{eq:interpolate} odvodená z~obrázka~\ref{fig:interpolate}:
+\textbf{Čiara} je geometrický objekt na~mape, ktorý slúži na~zobrazovanie ciest. Heat vrstva pre cesty bez zákrut by sa bez dodatočnej úpravy vykreslili iba s~dvoma bodmi \--- počiatočným bodom a~koncovým bodom cesty. Takéto riešenie nie je vhodné, preto je lepším riešením takéhoto problému použiť interpoláciu úsečky. Na interpoláciu úsečky je použitá rovnica~\ref{eq:interpolate} odvodená z~obrázka~\ref{fig:interpolate}:
 
 \begin{equation}
     y = y_1 + \frac{(x - x_1)(y_2 - y_1)}{x_2 - x_1},
     \label{eq:interpolate}
 \end{equation}
-kde $x_1$ a $y_1$ sú prvé súradnice, $x_2$ a $y_2$ sú druhé súradnice, $x$ je stredná hodnota hodnôt $x_1$ a $x_2$, a $y$ je hľadaná interpolovaná hodnota. Koľkokrát interpolujeme danú úsečku závisí od~toho, aká dlhá je daná úsečka.
+kde $x_1$ a $y_1$ sú prvé súradnice, $x_2$ a $y_2$ sú druhé súradnice, $x$ je stredná hodnota hodnôt $x_1$ a $x_2$, a $y$ je hľadaná interpolovaná hodnota. Koľkokrát interpolujeme danú úsečku závisí od~dĺžky danej úsečky.
 
 \begin{figure}[ht]
     \centering
@@ -689,45 +689,97 @@ kde $x_1$ a $y_1$ sú prvé súradnice, $x_2$ a $y_2$ sú druhé súradnice, $x$
     \label{fig:interpolate}
 \end{figure}
 
-\textbf{Polygón} je geometrický objekt na~mape, ktorý slúži na zobrazovanie budov. Z~polygónov sa dajú získať iba okrajové body, body vo~vnútrajšku polygónov je potrebné zistiť pomocou vhodnej metódy. Najjednoduchším spôsobom, ktorý som použil aj~pri implementácii, je získanie stredového bodu polygónu.
+\textbf{Polygón} je geometrický objekt na~mape, ktorý slúži na zobrazovanie budov. Z~polygónov sa dajú získať iba okrajové body, body vo~vnútrajšku polygónov je potrebné zistiť pomocou vhodnej metódy. Najjednoduchším spôsobom, ktorý som použil aj~pri implementácii, je získanie stredového bodu polygónu. Na~obrázku~\ref{fig:polygon-center} je zobrazený zistený stredový bod pre rôzne typy obdĺžnikov. Na~zistenie stredového bodu polygónu bola použitá funkcia \texttt{centroid} z~knižnice GeoPandas.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{obrazky-figures/polygon-center.pdf}
+    \caption{Zistenie stredového bodu pre rôzne typy polygónov.}
+    \label{fig:polygon-center}
+\end{figure}
+
+\subsection*{Vytvorenie heat vrstvy}
+Po upráve geometrických objektov na~body a~následné vytvorenie zoznamu z~týchto bodov je možné vytvoriť heat vrstvu na~mape. Pri vytváraní heat vrstva sa zapisuje vytvorený list bodov do~súboru HTML. Tento súbor je poslaný klientovi do~prehliadača po~dokončení požiadavky.
 
 
 \section{Implementácia užívateľského rozhrania}
 Užívateľské rozhranie sa skladá z~viacerých komponentov, ktoré vytvárajú jednotný celok. V~ľavom paneli sa nachádza panel, v~ktorom môže užívateľ zadávať vstupné súradnice a~upravovať ich. V hlavnej časti obrazovky sa nachádza zobrazená mapa, na~ktorú sa vykresľuje heat vrstva. Na~zobrazenej mape sa nachádza aj~škála pre vytvorenú heat vrstvu. 
 
 \subsection*{Získavanie vstupných súradníc}
-Vstupné súradnice, ktoré zadal užívateľ, je potrebné aktualizovať pri každom zmenšení alebo zväčšení mapy resp.~oblasti vytvorenej pomocou nástroja \texttt{Leaflet.draw}. Na~obrázku~\ref{fig:ui-screen} je možné vidieť, ako vyzerá výber oblasti, ktorú si užívateľ sám zvolil. Pri nakreslení takejto oblasti sa pomocou nástroja AJAX, ktorý bez potreby kompletného načítania stránky zo~servera, upravia súradnice vo~formulári na~ľavom paneli aplikácie. AJAX správa sa pošle po vytvorení oblasti na~mape pomocou udalosti \texttt{L.Draw.Event.CREATED} a~spustí sa udalosť \texttt{L.Draw.Event.EDITSTART}. Táto udalosť umožní užívateľovi meniť veľkosť aj~polohu nakreslenej oblasti. Odkaz na~vytvorenie oblasti (\texttt{Create custom area}) sa po tejto udalosti zmení na odkaz na~vymazanie vytvorenej oblasti (\texttt{Delete custom area}).
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.98\linewidth]{obrazky-figures/ui-screen.png}
-    \caption{Výber oblasti na~mape.}
-    \label{fig:ui-screen}
-\end{figure}
+Vstupné súradnice, ktoré zadal užívateľ, je potrebné aktualizovať pri každom zmenšení alebo zväčšení mapy resp.~oblasti vytvorenej pomocou nástroja \texttt{Leaflet.draw}. Pri nakreslení oblasti sa pomocou nástroja AJAX, ktorý bez potreby kompletného načítania stránky zo~servera, upravia súradnice vo~formulári na~ľavom paneli aplikácie. AJAX správa sa pošle po vytvorení oblasti na~mape pomocou udalosti \texttt{L.Draw.Event.CREATED} a~spustí sa udalosť \texttt{L.Draw.Event.EDITSTART}. Táto udalosť umožní užívateľovi meniť veľkosť aj~polohu nakreslenej oblasti. Odkaz na~vytvorenie oblasti (\texttt{Create custom area}) sa po tejto udalosti zmení na odkaz na~vymazanie vytvorenej oblasti (\texttt{Delete custom area}).
 
 \subsection*{Škála pravdepodobností}
 Zo~získaných hodnôt pravdepodobností pre každú značku je možné vytvoriť škálu, ktorá ukazuje, aká je odhad pravdepodobnosti osôb v~danej oblasti. Na~vytvorenie tejto škály bol použitý nástroj \emph{D3.js\footnote{\url{https://d3js.org}}}. Keďže funkcia \texttt{Leaflet.heatLayer()} umožňuje pridávať vlastne vytvorenú konfiguráciu prechodu farieb, táto škála je prepojená s~vytvorenou heat vrstvou. Aby sa zjednodušilo vytváranie takejto škály, na vytvorenie tejto farebnej škály bol použitý nástroj \emph{branca\footnote{\url{https://python-visualization.github.io/branca}}}, konkrétne modul pre prácu s~farebnými mapami. Vo~výslednej implementácii tejto aplikácie sa tento nástroj nepoužíva.
 
-% \begin{figure}[ht]
-%     \centering
-%     \includegraphics[width=0.9\linewidth]{obrazky-figures/app-screen.png}
-%     \caption{Snímok obrazovky výsledného užívateľského rozhrania pri počiatočnom načítaní stránky.}
-%     \label{fig:app-screen}
-% \end{figure}
 
 
-% \chapter{Testovanie}
-% \label{testovanie}
-% \todo{TODO}
-
-% \blindtext[1]
-
-% \blindtext[10]
+\chapter{Vyhodnotenie výsledkov}
+\label{vyhodnotenie}
+Táto kapitola sa zaoberá ovládaním, testovaním a~vyhodnotením výsledkov z~vytvorenej aplikácie. V~tejto kapitole sa nachádza aj~popis možných chyby a~nevýhody implementovaného systému. Okrem toho, táto kapitola popisuje ako by sa dali vylepšiť získané dáta.
 
 
+\section{Ovládanie}
+Keďže aplikácia má slúžiť primárne pri výstavbe elektroenergetických zariadení na~území Českej republiky, pri ovládaní aplikácie je potrebné vybrať oblasť, ktorá sa nachádza na území Českej republiky. Užívateľ si prípadne môže stiahnuť mapové dáta aj~pre iné krajiny na~svete. Z~užívateľského hľadiska je aplikáciu jednoduché ovládať, pretože neobsahuje veľa možností, ktoré užívateľ môže vykonať. Na~obrázku~\ref{fig:bosovice-map} je snímok obrazovky časti mapy s~nakresleným obdĺžnikom, kde sa nachádza obec Bošovice. Hraničné body tohto obdĺžnika sa použijú pri získavaní geografických dát. Veľkosť aj~polohu tohto obdĺžnika môže užívateľ ľubovoľne meniť.
 
-% \chapter{Záver}
-% \label{zaver}
-% \todo{TODO}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\linewidth]{obrazky-figures/bosovice-map.png}
+    \caption{Výber oblasti na~mape.}
+    \label{fig:bosovice-map}
+\end{figure}
 
-% \blindtext[3]
+Po stlačení tlačítka \texttt{Create HeatMap} sa vytvoria zo~vstupných súborov dátové rámce. Následne sa k~nim pripoja hodnoty pravdepodobností a~vytvorí sa z~týchto bodov výstupná heat vrstva, ktorá sa zobrazí na mape. Na~obrázku~\ref{fig:bosovice-heatmap} je možné vidieť, ako vyzerá vytvorená heat vrstva na~mape. Táto vrstva sa zobrazí aj~mimo vybranej oblasti. Je to z~dôvodu, že geografické objekty typu cesta a~polygón sú tvorené viacerými bodmi. Niektoré z~týchto geografických objektov môžu sčasti presahovať vybranú oblasť. Aby sa zbytočne nevytvárali náročné výpočty v~aplikácii, berie sa celá plocha geometrických objektov, ktoré sa nachádzajú aspoň sčasti vo~vybranej oblasti.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\linewidth]{obrazky-figures/bosovice-heatmap.png}
+    \caption{Heat vrstva pre vybranú oblasť.}
+    \label{fig:bosovice-heatmap}
+\end{figure}
+
+
+\section{Testovanie aplikácie}
+Pri prvotnej implementácii sa brali mapové dáta pomocou API požiadavkov na~server. Takáto implementácia vytvorila veľa požiadavkov na~daný server a~viedlo to k~tomu, že by sa pri väčšom počte značiek v~danej oblasti muselo sťahovať veľké množstvo dát. To viedlo k~spomaleniu aplikácie. Preto vhodnejšou alternatívou, ktorá bola použitá, bolo stiahnutie dát z~webového serveru pred spustením aplikácie. Získanie lokálnych dát viedlo k~výraznému zrýchleniu aplikácie a~vylepšeniu samotnej implementácie aplikácie.
+
+Hlavným výstupom aplikácie je mapa s~vytvorenými heat vrstvami. Na obrázku~\ref{fig:output-heat} je možné vidieť dva rôzne výstupy aplikácie. Ľavý obrázok predstavuje oblasť v~časti Brno-Medlánky, v ktorej sa nachádzajú chaty. V~tejto oblasti je heat vrstva zobrazená iba nad chatami, okolité oblasti sú bez takejto vrstvy. Pravý obrázok predstavuje zastavanú oblasť, konkrétne o~obec Nuzířov resp. ide o~časť obce Malhostovice v~okrese Brno-venkov v~Juhomoravskom kraji. Tento obrázok ukazuje, že najväčšia pravdepodobnosť odhadu výskytu osôb v~tejto obci je v~strednej časti obce.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\linewidth]{obrazky-figures/brno-medlanky.png}\hfill
+    \includegraphics[width=0.48\linewidth]{obrazky-figures/nuzirov.png}
+    \caption{Heat vrstva dvoch rôznych oblastí mapy.}
+    \label{fig:output-heat}
+\end{figure}
+
+
+\section{Obmedzenia aplikácie}
+Odhad pravdepodobnosti v~danej oblasti je iba teoretický, pretože aplikácia zatiaľ neberie do~úvahy viacero aspektov. Všetky aspekty nie je možné implementovať triviálne, pretože nie všetky sa dajú vyriešiť nástrojmi, ktoré existujú v~programovacích jazykoch.
+
+\textbf{Zastavané oblasti v~obciach} by mali byť tiež pokryté heat vrstvou. Na~obrázku~\ref{fig:brno-zastavana-oblast} je možné vidieť, že časti zastavaných oblastí sú bez vytvorenej heat vrstvy. Možným riešením daného problému by bolo použitie rastrovej siete v~danej oblasti, v~ktorej by sa zistili body vo vnútri tejto zastavanej plochy. Týmto by sa vytvorili body v~danej oblasti a~bolo by možné vytvoriť pomocou toho súvislú heat vrstvu na~danej mape.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\linewidth]{obrazky-figures/brno-zastavana-oblast.png}
+    \caption{Heat vrstva zastavanej časti Brna.}
+    \label{fig:brno-zastavana-oblast}
+\end{figure}
+
+\textbf{Heat vrstva pre polygóny} by mala mať väčší rádius. Nestačí, keď sa pre polygón vytvorí vrstva iba vo~vnútornej časti budovy, vrstva by mala mať takú istú hodnotu aj~v~najbližšej oblasti budovy. Na obrázku~\ref{fig:nechov-bad-heatmap} je vidieť, že časť polygónov je bez vytvorenej heat vrstvy a~takisto aj~najbližšie okolie polygónov je bez tejto vrstvy.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.3\linewidth]{obrazky-figures/nechov-zle-vykreslenie.png}
+    \caption{Heat vrstva by sa mala vykresliť aj vo~vonkajšej časti polygónov.}
+    \label{fig:nechov-bad-heatmap}
+\end{figure}
+
+\textbf{Cesta medzi dvoma významnými objektami} by mala mať vyššiu hodnotu pravdepodobnosti. Napríklad ak si predstavíme cestu medzi školou a~autobusovou stanicou (obidva objekty majú pravdepodobnosť 1.0), tak vieme, že na~takejto ceste by mala byť pre danú cestu vyššia pravdepodobnosť výskytu osôb. Možným riešením by bolo použiť pri vytváraní vrstvy kataster nehnuteľností alebo územný plán obce.
+
+\textbf{Nepresnosti v~získaných mapových dátach} vytvára na~mape body heat vrstvy, ktoré by sa nemali s~vytvorenou vrstvou zobrazovať. Aj~keď väčšina mapových dát zo~stráky Geofabrik býva aktualizovaná  
+každý deň, aj tak sa v~týchto mapových dátach vyskytujú chyby. Takéto potenciálne chyby by sa dali odstrániť pridaním možnosti užívateľovi upravovať vytvorenú heat vrstvu. Funkcionalita takejto vlastnosti by sa dala implementovať pomocou vytvárania heat vrstvy myšou alebo pridávaním a~odstraňovaním bodov heat vrstvy z~mapy pomocou vstupného formulára.
+
+
+
+\chapter{Záver}
+\label{zaver}
+\todo{TODO}

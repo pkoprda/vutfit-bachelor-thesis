@@ -45,10 +45,6 @@
 % Basic packages are at the bottom of template file fitthesis.cls
 % zde můžeme vložit vlastní balíčky / you can place own packages here
 
-% generovanie dummy textu na testovanie
-\usepackage{blindtext}
-\usepackage{lipsum}
-
 % medzery vo väčších číslach
 \usepackage{numprint}
 
@@ -152,25 +148,22 @@
   supervisor.title.p={Ing.},   %titul před jménem (nepovinné) / title before the name (optional)
   supervisor.title.a={Ph.D.},    %titul za jménem (nepovinné) / title after the name (optional)
   % Klíčová slova / keywords
-  keywords.cs={\todo{TODO}{} Sem budou zapsána jednotlivá klíčová slova v českém (slovenském) jazyce, oddělená čárkami.}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
-  keywords.en={\todo{TODO}{} Sem budou zapsána jednotlivá klíčová slova v anglickém jazyce, oddělená čárkami.}, % klíčová slova v anglickém jazyce / keywords in english
+  keywords.cs={heat mapa, odhad pravdepodobnosti, pravdepodobnosť výskytu osôb, geografický objekt, OpenStreetMap, Leaflet, GeoPandas}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
+  keywords.en={heat map, estimation of probability, probability of occurence of persons, geographical object, OpenStreetMap, Leaflet, GeoPandas}, % klíčová slova v anglickém jazyce / keywords in english
   %keywords.en={Here, individual keywords separated by commas will be written in English.},
   % Abstrakt / Abstract
-  abstract.cs={\todo{TODO}{} Do tohoto odstavce bude zapsán výtah (abstrakt) práce v českém (slovenském) jazyce.}, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
-  abstract.en={\todo{TODO}{} Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}, % abstrakt v anglickém jazyce / abstract in english
+  abstract.cs={Cieľom tejto bakalárskej práce je vytvoriť aplikáciu, ktorá na základe získaných mapových dát vytvorí odhady pravdepodobnosti výskytu osôb v~určitej oblasti. Odhad pravdepodobnosti výskytu osôb je zobrazený pomocou tzv. heat mapy. Heat mapa je vytvorená pomocou definovaných značiek, ktoré určujú, aký počet ľudí sa nachádza v~danej oblasti. Pri implementácii boli použité dáta z~projektu OpenStreetMap. Vytvorená aplikácia môže slúžiť ako nástroj pri plánovaní výstavby elektroenergetických zariadení, u~ktorých môže dochádzať pri poruche k~ohrozeniu života, ak sa v~ich blízkosti nachádzajú osoby.}, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
+  abstract.en={The main goal of this bachelor thesis is to implement application that creates estimation of the probability of occurrence of persons in an area from given map data. The estimation of the probability is displayed by using a heat map. Heat map is created by using defined tags which determine how many people are in the area. During the implementation map data from OpenStreetMap were used. The created application can be used during the planning of the electricity equipment conctruction, which can be life-threating if people are close to the area of this equipment.}, % abstrakt v anglickém jazyce / abstract in english
   %abstract.en={An abstract of the work in English will be written in this paragraph.},
   % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
   declaration={Prehlasujem, že som túto bakalársku prácu vypracoval samostatne pod vedením pána Ing. Vojtěcha Mrázeka, Ph.D.
-Ďalšie informácie mi poskytli pán doc. Ing. David Topolánek, Ph.D. a pán Ing. Václav Vyčítal, Ph.D.
+Ďalšie informácie mi poskytli pán doc. Ing. David Topolánek, Ph.D., a pán Ing. Václav Vyčítal, Ph.D.
 Uviedol som všetky literárne pramene, publikácie a ďalšie zdroje, z ktorých som čerpal.},
   %declaration={I hereby declare that this Bachelor's thesis was prepared as an original work by the author under the supervision of Mr. X
 % The supplementary information was provided by Mr. Y
 % I have listed all the literary sources, publications and other sources, which were used during the preparation of this thesis.},
   % Poděkování (nepovinné, nejlépe v jazyce práce) / Acknowledgement (optional, ideally in the language of the thesis)
-  acknowledgment={\todo{TODO}{} V této sekci je možno uvést poděkování vedoucímu práce a těm, kteří poskytli odbornou pomoc
-(externí zadavatel, konzultant apod.).},
-  %acknowledgment={Here it is possible to express thanks to the supervisor and to the people which provided professional help
-%(external submitter, consultant, etc.).},
+  acknowledgment={Predovšetkým by som sa rád poďakoval pánovi Ing. Vojtěch Mrázekovi, Ph.D., za~vedenie tejto bakalárskej práce, cenné rady a~trpezlivosť. Takisto by som sa rád poďakoval pánovi doc. Ing. Davidovi Topolánkovi, Ph.D., a~pánovi Ing. Václavovi Vyčítalovi, Ph.D., za~poskytnutie cenných informácií.},
   % Rozšířený abstrakt (cca 3 normostrany) - lze definovat zde nebo níže / Extended abstract (approximately 3 standard pages) - can be defined here or below
   %extendedabstract={Do tohoto odstavce bude zapsán rozšířený výtah (abstrakt) práce v českém (slovenském) jazyce.},
   %extabstract.odd={true}, % Začít rozšířený abstrakt na liché stránce? / Should extended abstract start on the odd page?
