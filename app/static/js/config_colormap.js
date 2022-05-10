@@ -1,3 +1,9 @@
+/**
+ * Configuration file for scale bar
+ * @author Peter Koprda
+ */
+
+
 var color_map = {};
 
 color_map.color = d3.scale.threshold()

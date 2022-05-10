@@ -1,3 +1,14 @@
+/**
+ * Configuration file for heatmap
+ * @author Peter Koprda
+ */
+
+
+/**
+ * Update coordinates
+ * @param {_latlngs} points - geographical points
+ * @param {boolean} custom_area - get coords from custom area
+ */
 function updateCoords(points, custom_area = false){
     let borders = {};
 
@@ -33,6 +44,20 @@ function updateCoords(points, custom_area = false){
     });
 }
 
+
+/**
+ * Removes drawn layer
+ */
+function remove_layer(){
+    let layer = Object.values(drawnItems._layers)[0];
+    folium_map.removeLayer(layer);
+    $('.custom-area-create-tag').show();
+    $('.custom-area-delete-tag').hide();
+    drawnItems._layers = {};
+    updateCoords(folium_map.getBounds());
+};
+
+
 folium_map.on(L.Draw.Event.CREATED, function (e){
     drawnItems.addLayer(e.layer);
     let points = Object.values(drawnItems._layers)[0]._latlngs;
@@ -42,16 +67,19 @@ folium_map.on(L.Draw.Event.CREATED, function (e){
     $('.custom-area-delete-tag').show();
 });
 
+
 folium_map.on(L.Draw.Event.EDITSTART, function(){
     let layer = Object.values(drawnItems._layers)[0];
     layer.editing.enable();
 });
+
 
 folium_map.on(`${L.Draw.Event.EDITMOVE} ${L.Draw.Event.EDITRESIZE}`, function(){
     let points = Object.values(drawnItems._layers)[0]._latlngs;
     updateCoords(points, true);
     folium_map.fire(L.Draw.Event.EDITSTOP);
 });
+
 
 folium_map.on('moveend zoom', function(){
     let layer = Object.values(drawnItems._layers)[0];
@@ -61,12 +89,3 @@ folium_map.on('moveend zoom', function(){
         updateCoords(folium_map.getBounds());
     }
 });
-
-function remove_layer(){
-    let layer = Object.values(drawnItems._layers)[0];
-    folium_map.removeLayer(layer);
-    $('.custom-area-create-tag').show();
-    $('.custom-area-delete-tag').hide();
-    drawnItems._layers = {};
-    updateCoords(folium_map.getBounds());
-};

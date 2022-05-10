@@ -4,10 +4,12 @@
 
 **Author:** Peter Koprda <xkoprd00@stud.fit.vutbr.cz>
 
+**Supervisor:** Ing. Vojtěch Mrázek, Ph.D. (UPSY FIT VUT) <mrazek@fit.vut.cz>
 
 # Requirements
 
-* Python 3.10
+* Python3
+* `pip` package installer
 * `wget` command
 
 

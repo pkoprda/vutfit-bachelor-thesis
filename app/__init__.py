@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+# Copyright (c) 2022 Peter Koprda
+
+# Libs
 from flask import Flask
 from flask.logging import create_logger
 

@@ -1,9 +1,14 @@
-import math
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+# Copyright (c) 2022 Peter Koprda
+
+# Flask module
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import jsonify
 
+# Own modules
 from app import app
 from app import log
 from app.osm_map import create_map
