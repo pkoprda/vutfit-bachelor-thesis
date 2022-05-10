@@ -1,3 +1,4 @@
+import math
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -7,7 +8,7 @@ from app import app
 from app import log
 from app.osm_map import create_map
 from app.osm_map import invalid_coords
-from app.osm_map import create_heatlayers
+from app.osm_map import create_heatlayer
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,7 +33,7 @@ def index():
         if 'submit' in request.form:
             log.info("Creating a Map...")
             create_map(center_lat, center_long, zoom_start=15, clean_map=False)
-            create_heatlayers(borders)
+            create_heatlayer(borders)
             return render_template('index.html', borders=borders)
 
         return jsonify(borders=borders)

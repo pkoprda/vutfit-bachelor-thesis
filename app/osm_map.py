@@ -61,7 +61,7 @@ def get_coords(gdf, tags):
                     xcoords, ycoords = list(zip(*[(p.x, p.y) for p in center_points]))
                     coords.append(list(zip(xcoords, ycoords, repeat(probability))))
             elif geom_obj.geom_type == 'Point':
-                coords.append([(x, y, probability) for x,y in zip(gdf.geometry.x , gdf.geometry.y)])
+                coords.append([(row.geometry.x, row.geometry.y, probability)])
             else:
                 center_points = gdf.to_crs(epsg=3857).geometry.centroid.to_crs(epsg=4326)
                 xcoords, ycoords = list(zip(*[(p.x, p.y) for p in center_points]))
@@ -99,7 +99,7 @@ def append_heat_layer(df_heatpoints):
         file_heatlayers.write(heatmap_layer)
 
 
-def added_options():
+def add_options():
     gradient = {"0.0": "#00008b", "0.05": "#0000a8", "0.1": "#0000c5", "0.15": "#0000e2", "0.2": "#0000ff", "0.25": "#003fff", "0.3": "#007fff", "0.35": "#00bfff", "0.4": "#00ffff", "0.45": "#3fffbf", "0.5": "#7fff7f", "0.55": "#bfff3f", "0.6": "#ffff00", "0.65": "#ffe900", "0.7": "#ffd200", "0.75": "#ffbc00", "0.8": "#ffa500", "0.85": "#ff7c00", "0.9": "#ff5200", "0.95": "#ff2900"}
     options = f"], {{'blur': 50, 'gradient': {gradient}, 'maxZoom': 1, 'minOpacity': 0.2, 'radius': 30}}).addTo(folium_map)\n</script>\n"
     with open('app/templates/heatlayers.html', mode='a', encoding='utf-8') as file_heatlayers:
@@ -117,7 +117,7 @@ def recursive_lookup(key, dict_tags):
     return None
 
 
-def create_heatlayers(borders):
+def create_heatlayer(borders):
     with open('app/data/tags.json', mode='r', encoding='utf-8') as tags_file:
         tags = json_load(tags_file)
 
@@ -132,4 +132,4 @@ def create_heatlayers(borders):
             if not df_heatpoints.empty:
                 append_heat_layer(df_heatpoints)
 
-    added_options()
+    add_options()
