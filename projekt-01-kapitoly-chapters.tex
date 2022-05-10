@@ -5,15 +5,22 @@
 
 
 \chapter{Úvod}
-\todo{TODO: Napísať úvod}
+\label{chap:uvod}
+Mapy poznáme všetci zo~základnej školy. Využívali sme ich na~geografii a učili sme sa s~nimi pracovať. Snažili sme sa z~nich získať informácie, ktoré boli pre nás dôležité. Vydolované informácie sme upravili podľa svojho uváženia a~následne sme sa ich snažili interpretovať. Pri interpretovaní takýchto dát sme vytvárali rôzne skupiny dát, ktoré spolu súviseli.
+
+Mapa teda zjednodušene zobrazuje priestor a~vyjadruje vzťahy medzi objektami v~priestore. Na~mapách sú zobrazené dáta v~priestore, ktoré môžme získať pomocou vhodného nástroja na~zbieranie dát z~mapy. Získanie mapových dát a~upravením ich do~podoby, v~ktorých ich môžme interpretovať na~mape, je silným nástrojom reprezentácie dát. Osoba, ktorá chce zistiť informácie o~oblasti, ktorú si vybral, zobrazenie dát na~mape predstavuje pre túto osobu jednoduchší nástroj. Ak by získané dáta boli zobrazené v~tabuľke, danej osobe by trvalo dlhšiu dobu, kým by zistil, čo reprezentujú jednotlivé hodnoty v~tabuľke.
+
+V~dnešnej dobe je elektrická energia nevyhnutným prostriedkom pre náš každodenný život. Kvôli tomu je potrebná aj~výstavba elektroenergetických zariadení, ktoré slúžia na~výrobu, pripojenie, prenos, výrobu, distribúciu alebo dodávku elektrickej energie. Niektoré z~týchto zariadení vytvárajú potenciálne nebezpečenstvo pre človeka, pretože môže u~nich dôjsť k~poruche. Takáto porucha môže ohroziť ľudské životy osôb, ktoré sa nachádzajú v~blízkosti takýchto zariadení počas poruchy. Vytvorením odhadu pravdepodobnosti výskytu osôb pre oblasť na~mape sa predíde takémuto zbytočnému ohrozovaniu ľudských životov. Cieľom tejto bakalárskej práce je vytvoriť odhad pravdepodobnosti výskytu osôb v~oblasti, ktorá by slúžila pri plánovaní výstavby elektroenergetických zariadení. Takýto odhad je možné vytvoriť pomocou tzv.~\emph{heat mapy}. Pomocou heat mapy je možné graficky zobrazovať dáta, v~ktorých je každá hodnota reprezentovaná farbou určitého farebného spektra. Vytvorená heat mapa tejto bakalárskej práce by mala zobrazovať odhad pravdepodobnosti v~závislosti od~danej značky na~mape.
+
+V~kapitole~\ref{chap:map-data} sa čitateľ oboznámi so~základnými pojmami spojenými s~mapovými dátami. V~tejto kapitole zistí, aký je rozdiel medzi rastrovými a~vektorovými mapovými dátami a~akými rôznymi formátmi je ich možné reprezentovať. V~kapitole~\ref{chap:source-map-data} sa dozvie, z~akých zdrojov je možné získať mapové dáta a~ako je možné ich získať z~týchto zdrojov. Kapitola~\ref{chap:navrh} obsahuje popis návrhu systému, ako by mala vyzerať štruktúra systému, návrh funkcionality a~užívateľského rozhrania. Ako vyzerá architektúra systému a~aké technológie sa použili pri implementovaní systému sa nachádza v~kapitole~\ref{chap:implementacia}. Okrem toho je v~tejto kapitole popísaná implementácia funkcionality systému a~užívateľského rozhrania. Kapitola~\ref{chap:vyhodnotenie} vyhodnocuje implementovaný systém, popisuje získané výsledky a~diskutuje o~tom, ako by sa dal vylepšiť vytvorený systém.
 
 
 
 \chapter{Mapové dáta}
-\label{map-data}
+\label{chap:map-data}
 Mapa je používaná ako nástroj na získavanie a reprezentovanie mapových dát kvôli možnosti zobrazeniu komplexných dát. Mapové dáta, ktoré sa síce dajú uložiť do tabuľky, neponúkajú vizuálny náhľad. To je možné pomocou máp, ktoré nám umožňujú zobrazovať, ako sú dáta geograficky rozložené.
 
-V tejto kapitole sa čitateľ stručne oboznámi s pojmom dáta, čo sú to mapové dáta, aké sú rozdiely medzi klasickými dátami a mapovými dátami, ako je možné ukladať mapové dáta, ako môžme s nimi pracovať a aké nástroje je možné použiť pri práci s takýmito dátami.
+V tejto kapitole sa čitateľ stručne oboznámi s pojmom dáta, čo sú to mapové dáta, aké sú rozdiely medzi klasickými dátami a mapovými dátami, ako je možné ukladať mapové dáta a~ako môžme s nimi pracovať.
  
 
 \section{Dáta}
@@ -31,7 +38,7 @@ Podľa~\cite{hynek2021webvisual} je dimenzia množina hodnôt určitého typu po
 \subsubsection{Mapové dáta}
 Mapové dáta sú vlastnou kategóriou dát, pretože pridávajú do klasických dát novú dimenziu s~geografickými dátami. Geografické dáta môžu buď reprezentovať geografické súradnice (dvojica hodnôt \--- zemepisná dĺžka a~šírka) alebo identifikovať geografický objekt (bod, čiara alebo polygón). V podstate geografické dáta sú buď v~rastrovom formáte alebo vo~vektorom formáte. Väčšinou sú tieto dva formáty kombinované, napríklad keď sú vektorové dáta prekryté rastrovými dátami získaných zo~satelitných snímkov.
 
-\subsection{Rastrové dáta}
+\section{Rastrové dáta}
 Rastrové dáta sú dáta, ktoré sú uložené v mriežke, kde každý bod \--- \emph{pixel} \--- tejto mriežky má určenú svoju presnú polohu, farbu a iné parametre (napr.~priehľadnosť). Pri určitom priblížení obrázka je vidno samotné pixely, takže obrázok vyzerá rozpixelovane. 
 
 \subsubsection{Rastrové pásma}
@@ -53,7 +60,7 @@ Pri analýze a~zobrazovaní rastrových dát je potrebné tieto dáta upraviť d
 
 \textbf{IMG} súbory používajú hierarchický formát, ktorý môže ukladať informácie napr. o~súbore, o~pozemných kontrolných bodoch a o~type senzora. Každá vrstva rastrového obrázka je súčasťou súbora formátu IMG, ktorý obsahuje informácie o projekcii, štatistikách, atribútoch a~pod.
 
-\subsection{Vektorové dáta}
+\section{Vektorové dáta}
 Vektorové dáta na rozdiel od rastrových dát obsahujú základné geometrické útvary. Výhodu oproti rastrovým dátam majú takú, že pri hocijakom priblížení nie je možné vidieť pixely. Je to tým, že vektorové dáta sú zložené z geometrických bodov a čiar, ktoré môžu byť v~prípade potreby prevedené na~obrázok.
 
 Vektorové dáta môžu obsahovať viac informácií ako rastrové dáta. Zatiaľ čo rastrové dáta mohli obsahovať iba atribúty o farbe, nepriehľadnosti alebo výške, vektorové dáta môžu obsahovať informácie o tvare. Tvary vektorových dát obsahujú informácie o~vlastnostiach alebo atribútoch, ako napr. počet ľudí, ktorí žijú v danej oblasti, názov mesta reprezentovaného polygónom a pod.
@@ -148,7 +155,7 @@ Pri reprezentovaní špecifického prvku alebo javu na~mape nie je vždy jednozn
 
 
 \chapter{Zdroje mapových dát}
-\label{source-map-data}
+\label{chap:source-map-data}
 Mapové dáta sa dajú získať z viacerých zdrojov. Každý takýto zdroj má svoje výhody aj nevýhody. Táto kapitola oboznámi čitateľa z akých zdrojov je možné získať mapové dáta, aké sú možné výhody a aké sú nevýhody daného zdroja, ale aj aké formáty súborov mapových dát tieto zdroje ponúkajú. 
 
 
@@ -157,20 +164,20 @@ Geografický informačný systém (GIS) je informačný systém, ktorý sa využ
 
 Geografické dáta v GIS môžu byť organizované dvomi základnými modelmi \--- vektorovým a rastrovým modelom~\cite{holman2014priestorovedata}.
 
-\subsection{Vektorový model}
+\subsection*{Vektorový model}
 Vektorový model je nazývaný podľa spôsobu vyjadrenia jeho jednotlivých častí \--- úseky kriviek s definovanou veľkosťou a smerom \--- \emph{vektorom}. Vektorový model GIS pracuje s~tromi variantami geografických objektov \--- bod, čiara a polygón.
 
 Existujú rôzne modely dát pomocou ktorých je možné reprezentovať geografické objekty s~využitím vektorovej grafiky:
 \begin{itemize}
     \item \textbf{Špagetový model} \--- vychádza z postupov využívaných pri digitalizácií máp. Každý objekt na mape je reprezentovaný jedným záznamom a je uložený ako reťazec X, Y súradníc. Z tohto modelu nie je možné získať žiadne informácie o vzťahoch medzi jednotlivými subjektami aj keď sa jedná o priestorové dáta.
-    \item \textbf{Topologický model} \--- každá línia tohto modelu začína a končí v uzlu. Všetky informácie tohto modelu sú ukladané do tzv. \emph{topologických tabuliek} \--- tabuľka spojov, súradníc a polygónov. Model vďaka tomu uchováva priestorové vzťahy medzi objektami.
+    \item \textbf{Topologický model} \--- každá línia tohto modelu začína a končí v~uzle. Všetky informácie tohto modelu sú ukladané do tzv. \emph{topologických tabuliek} \--- tabuľka spojov, súradníc a polygónov. Model vďaka tomu uchováva priestorové vzťahy medzi objektami.
     \item \textbf{Hierarchický model} \--- ukladá zvlášť informáciu o bodoch, líniách a plochách v~hierarchickej štruktúre pre jednoduchšie vyhľadávanie v dátach. V modeli sú takisto zahrnuté aj odkazy medzi jednotlivými druhmi objektov a obsahuje topologickú informáciu. Tento model je pre manipuláciu a vyhľadávanie v dátach najvhodnejší.
 \end{itemize}
 
-\subsection{Rastrový model}
+\subsection*{Rastrový model}
 Rastrová reprezentácia mapových dát sa na rozdiel od vektorovej zameriava na zemský povrch. Používa sa skôr na javy ako je napr. úhrn zrážok či nadmorská výška.
 
-Základným princípom tohto formátu je pokrytie zemského povrchu pravidelnou alebo nepravidelnou sieťou, pričom jednotka tieto siete je \emph{bunka} (pixel, cell). Nepravidelná sieť má výhodu oproti nepravidelnej siete takú, že pomocou nepravidelnej siete je možné jednoduchšie reprezentovať rôzne prechody z roviny na terénnu hranu. Na druhú stranu použitie nepravidelnej siete je výpočtovo a aj algoritmicky náročnejšie. Keďže v tomto modeli neexistujú objekty známe z vektorového modelu GIS, bunky definujú vlastnú hodnotu sledovaného javu v konkrétnej časti priestoru. Hodnota v jednej bunke odpovedá bodu, rada spojených buniek s rovnakou hodnotou odpovedá línii a skupina navzájom susediacich buniek odpovedá ploche.
+Základným princípom tohto formátu je pokrytie zemského povrchu pravidelnou alebo nepravidelnou sieťou, pričom jednotka tejto siete je \emph{bunka} (pixel, cell). Nepravidelná sieť má výhodu oproti nepravidelnej siete takú, že pomocou nepravidelnej siete je možné jednoduchšie reprezentovať rôzne prechody z roviny na terénnu hranu. Na druhú stranu použitie nepravidelnej siete je výpočtovo a aj algoritmicky náročnejšie. Keďže v tomto modeli neexistujú objekty známe z vektorového modelu GIS, bunky definujú vlastnú hodnotu sledovaného javu v konkrétnej časti priestoru. Hodnota v jednej bunke odpovedá bodu, rada spojených buniek s rovnakou hodnotou odpovedá línii a skupina navzájom susediacich buniek odpovedá ploche.
 
 \begin{figure}[ht]
     \centering
@@ -179,18 +186,17 @@ Základným princípom tohto formátu je pokrytie zemského povrchu pravidelnou 
     \label{fig:vectorandraster}
 \end{figure}
 
-\subsection{ArcGIS}
+\subsection*{ArcGIS}
 V súčasnosti existujú rôznorodé softvéry pre GIS. Medzi najznámejšie patrí ArcGIS od~spoločnosti ESRI, ktorý slúži na mapovanie a priestorovú analýzu navrhnutý tak, aby podporoval poslanie a obchodné ciele organizácií. Tento systém poskytuje tri úrovne licencií. Typ zvolenej licencie rozhoduje o tom, ako sú uložené dáta a ako je možné ich editovať. 
 
-Medzi najznámejšie aplikácie systému ArcGIS patrí ArcMap (použiteľná na priestorové analýzy, editáciu dát a tvorbu kartografických výstupov), ArcCatalog (pomáha organizovať a spravovať všetky dáta), ArcGIS Explorer (volne dostupný prehliadač priestorových dát), ArcGIS for~Server (serverové riešenie pre GIS, umožňuje jednoduchú konfiguráciu webových aplikácií a poskytuje kompletné vývojárske prostredie pre \emph{.NET} a \emph{Java}).
+Medzi najznámejšie aplikácie systému ArcGIS patrí ArcMap (použiteľná na priestorové analýzy, editáciu dát a tvorbu kartografických výstupov), ArcCatalog (pomáha organizovať a spravovať všetky dáta), ArcGIS Explorer (voľne dostupný prehliadač priestorových dát), ArcGIS for~Server (serverové riešenie pre GIS, umožňuje jednoduchú konfiguráciu webových aplikácií a poskytuje kompletné vývojárske prostredie pre \emph{.NET} a \emph{Java}).
 
-\subsection{ArcČR 500}
+\subsection*{ArcČR 500}
 ArcČR 500~\cite{arcgis} je digitálna vektorová geografická databáza Českej republiky, spracovaná na úrovni podrobnosti 1 : \numprint{500000}. Obsahom databázy sú prehľadné geografické informácie o~ČR. Zdrojom dát pre geografické dáta ArcČR 500 v 3.3 je databáza Data200, čo je národná vektorová geografická databáza Zeměměřického úřadu (ZÚ) odpovedajúca presnosťou a~stupňom generalizácie 1 : \numprint{200000}. Vstupné dáta z Data200 majú deklarovanú absolútnu presnosť do 100 m. Absolútna polohová odchýlka ArcČR 500 v 3.3 je odhadovaná do 200~m.
 
-Dáta sú uchovávané iba v GIS formátoch firmy ESRI a to vo formáte súborovej databázy. ArcČR 500 je zložená z dvoch geodatabází \--- geografické prvky a administratívne členenie.
+Dáta sú uchovávané iba v GIS formátoch firmy ESRI a to vo formáte súborovej databázy. ArcČR 500 je zložená z dvoch geodatabází \--- geografické prvky a administratívne členenie.\\
 
-\subsubsection*{Geografické prvky}
-Geografické prvky boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy súborovej databázy \texttt{ArcCR500\_v33.gdb} ako aj ich popis a typ prvkov je možné vidieť v tabuľke~\ref{tab:arccr500}.
+\textbf{Geografické prvky} ArcČR 500 boli odvodené zo 17-tich vrstiev databázy Data200. Vrstvy súborovej databázy \texttt{ArcCR500\_v33.gdb} ako aj ich popis a typ prvkov je možné vidieť v tabuľke~\ref{tab:arccr500}.
 
 \begin{table}[H]
 \caption{Súborová databáza ArcCR500\_v33.gdb. Prevzaté z~\cite{arcgis}.}
@@ -251,8 +257,7 @@ Každá vrstva tejto databázy môže nadobúdať rôzne hodnoty atribútov, kto
 \end{tabular}
 \end{table}
 
-\subsubsection*{Administratívne členenie}
-Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát administratívneho členenia. Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj ich popis sa nachádza v tabuľke~\ref{tab:administrativne-clenenie}.
+Dáta z Českého statistického úřadu (ČSÚ) boli použité pre tvorbu dát \textbf{administratívneho členenia}. Vrstvy súborovej geodatabázy \texttt{AdministrativniCleneni\_v13.gdb} ako aj ich popis sa nachádza v tabuľke~\ref{tab:administrativne-clenenie}.
 \begin{table}[H]
 \caption{Súborová databáza AdministrativniCleneni\_v13.gdb. Prevzaté z~\cite{arcgis}.}
 \label{tab:administrativne-clenenie}
@@ -285,7 +290,7 @@ OpenStreetMap~\cite{openstreet} je projekt, ktorý vznikol za účelom vytváran
     \label{fig:openstreetmap}
 \end{figure}
 
-\subsection{História projektu}
+\subsection*{História projektu}
 Projekt OpenStreetMap má svoj začiatok v auguste v roku 2004, kedy britský programátor Steve Coast experimentoval s USB GPS prijímačom. Použil softvér nazývaný GPSDrive, ktorý bral mapy z Microsoft MapPoint, ale porušoval licenčné podmienky. Coast vedome nechcel porušovať autorské práva týchto máp, preto hľadal alternatívu, ktorá by neporušovala licenčné podmienky, tú ale nenašiel. Zistil, že neexistujú zdroje mapových dát, ktoré by mohol používať v otvorenom softvére bez toho, aby porušoval licenčné podmienky alebo platil obrovské sumy peňazí. Po odprezentovaní jeho nápadu o vytvorení vlastnej mapy na konferencii otvorených softvérov v Londýne zistil, že viacerí ľudia mali podobný nápad alebo ich Coastov nápad zaujal, a tak vznikla skupina OpenStreetMap.
 
 V začiatkoch bol dátový model príliš simplistický, pretože obsahoval iba jednoduché čiary nakreslené cez informácie Landsat od NASA. V marci v roku 2006 bola vytvorená prvá editovacia aplikácia pre OpenStreetMap \--- JOSM\footnote{\url{https://josm.openstreetmap.de}}. Po chvíli bola v tomto roku vytvorená prvá plnofarebná mapa mesta Weybridge. V máji toho roku sa usporiadala prvá spoločná akcia, na ktorej bolo úlohou zmapovať ostrov Wight. Bolo to prvýkrát, kedy sa stretlo viacero mapovačov a znamenalo to pre nich prelomový bod projektu, pretože bola vytvorená detailná mapa. Takéto akcie OpenStreetMap komunity sa začali konať častejšie a boli usporadúvané po celom svete.
@@ -294,7 +299,7 @@ V auguste v roku 2006 bola vytvorená nadácia \emph{OpenStreetMap Foundation}, 
 
 Serverový softvér bol pôvodne napísaný v programovacom jazyku Java, ale v~máji v~roku 2007 bola implementácia softvéru prepísaná do platformy Ruby on Rails\footnote{\url{https://rubyonrails.org}}. Časom ako začal projekt postupne narastať, začali svojimi dátami prispievať súkromné spoločnosti, mestá, ale aj štáty~\cite{bennett2010openstreetmap}. Vo februári v roku 2008 bolo zaregistrovaných \numprint{25000} užívateľov na~stránke OpenStreetMap, v marci v roku 2009 to už bolo \numprint{100000} užívateľov. Počet užívateľov stále rastie, v čase písanie tohto textu je to už viac ako 8,3 milióna zaregistrovaných užívateľov.
 
-\subsection{Dátový model OpenStreetMap}
+\subsection*{Dátový model OpenStreetMap}
 Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu OpenStreetMap slúžiace k popisu reálneho sveta. Medzi základné prvky OpenStreetMap projektu patria uzol, cesta a relácia. Tieto prvky je možné popísať značkami.
 
 \textbf{Uzol\footnote{\url{https://wiki.openstreetmap.org/wiki/Node}}} (anglicky node) označuje konkrétny bod na povrchu Zeme, je určený svojou zemepisnou šírkou a dĺžkou. Skladá sa minimálne z dvojice súradníc a svojho jednoznačného identifikačného čísla (id).
@@ -312,12 +317,12 @@ Prvky (anglicky elements) sú základnou stavebnou súčasťou dátového modelu
     \label{fig:osmdatamodel}
 \end{figure}
 
-\subsection{Sťahovanie dát}
+\subsection*{Sťahovanie dát}
 Sťahovať mapové dáta z~databázy OpenStreetMap je možné viacerými spôsobmi. Vhodná voľba sťahovania dát závisí od toho, aké veľké množstvo dát sa rozhodneme sťahovať.
 
 Pre veľké oblasti je vhodnou voľbou si stiahnuť dáta lokálne. Stiahnuť databázu celého sveta je možné na stránke Planet.osm\footnote{\url{https://planet.openstreetmap.org}}. Z tejto stránky je možné stiahnuť databázu celého sveta vo formáte OSM XML alebo PBF. Táto databáza je aktualizovaná každý týždeň a~aktuálne (1. 5. 2022) veľkosť súboru vo~formáte OSM XML má $115$~GB a vo~formáte PBF má veľkosť $63$~GB.
 
-Pre menšie oblasti je tiež možné použiť hore zmienené nástroje, avšak okrem toho je možné vybrať oblasť pomocou ohraničeného boxu, ktorý je zložený z~minimálnej a~maximálnej zemepisnej dĺžky a~zemepisnej šírky. Pomocou týchto hodnôt je možné vytvoriť URL s~HTTP API požiadavkom. Ohraničený box v~URL je vyjadrený ako štyri hodnoty za sebou, oddelené čiarkami. Vo~výpise~\ref{lst:osm-api} je možné vidieť príklad URL s~HTTP API požiadavkom. Hodnoty v~parametri \texttt{bbox} sú zoradené v~poradí: minimálna zemepisná šírka, minimálna zemepisná dĺžka, maximálna zemepisná šírka, maximálna zemepisná dĺžka.
+Pre menšie oblasti je tiež možné použiť hore zmienené nástroje, avšak okrem toho je možné vybrať oblasť pomocou ohraničeného boxu, ktorý je zložený z~minimálnej a~maximálnej zemepisnej dĺžky a~zemepisnej šírky. Pomocou týchto hodnôt je možné vytvoriť URL s~HTTP API požiadavkou. Ohraničený box v~URL je vyjadrený ako štyri hodnoty za sebou, oddelené čiarkami. Vo~výpise~\ref{lst:osm-api} je možné vidieť príklad URL s~HTTP API požiadavkou. Hodnoty v~parametri \texttt{bbox} sú zoradené v~poradí: minimálna zemepisná šírka, minimálna zemepisná dĺžka, maximálna zemepisná šírka, maximálna zemepisná dĺžka.
 
 \lstset{
     caption={Príklad HTTP API požiadavku.},
@@ -339,7 +344,7 @@ Kataster predstavuje register resp. zoznam a používa sa vo viacerých významo
     \item katastrálne územie
 \end{itemize}
 
-\subsection{Kataster nehnuteľností}
+\subsection*{Kataster nehnuteľností}
 Súčasný kataster nehnuteľností~\cite{baudys-katastranemovitosti} na území Českej republiky mal ekvivalent medzi svojimi právnymi predchodcami \--- tzv.~pozemkovú knihu, ktorá slúžila na majetkoprávne účely. Okrem pozemkovej knihy sa používal aj pozemkový kataster, ktorý slúžil na~daňové účely. Pozemkový kataster sa používal približne do roku 1957 a zapisovanie do~pozemkovej knihy bol ukončený v~roku 1964, pretože nevypovedala o~skutočných a~aktuálnych právnych vzťahoch k~nehnuteľnostiam. Preto bola vytvorená nová pozemková evidencia nehnuteľností, ktorej hlavným účelom bolo zaistiť podklady pre plánovanie národného hospodárstva. Táto evidencia bola vedená až do roku 1992, kedy si spoločenské zmeny vyžiadali založenie dnešného katastru nehnuteľností.
 
 Dnešný kataster nehnuteľností plní úlohu pozemkovej knihy aj pozemkového katastru a slúži aj ako podklad pre geografické informačné systémy. Kataster nehnuteľností je definovaný ako súbor údajov o nehnuteľností v Českej republike. Okrem súpisu a popisu nehnuteľností zahŕňa ich geometrické a polohové určenie pre jednu katastrálnu obec alebo katastrálne územie. Aj keď v českom katastri sú zapísané všetky pozemky, zo stavieb sú zapísané v katastri len tie budovy, ktoré stanovuje katastrálny zákon. Ide o budovy s popisným či evidenčným číslom alebo hlavnú budovu v rámci areálu nehnuteľností. Na obrázku~\ref{fig:katastrmapa} je možné vidieť ako vyzerá katastrálna mapa mestskej časti Brno-Královo Pole. Obrázok je exportovaný zo stránky Českého katastru nemovitostí\footnote{\url{https://nahlizenidokn.cuzk.cz/VyberKatastrMapa.aspx}}, ktorý okrem faktických a právnych informácií o nehnuteľnostiach obsahuje katastrálne mapy a informácie o vlastníkoch nehnuteľností.
@@ -351,13 +356,13 @@ Dnešný kataster nehnuteľností plní úlohu pozemkovej knihy aj pozemkového 
     \label{fig:katastrmapa}
 \end{figure}
 
-\subsection{Územný plán}
+\subsection*{Územný plán}
 Vlastníci katastrov nehnuteľností si musia byť istý, že na danom území existuje poriadok, ktorý by mal zaručovať, že ich práva nebudú ohrozované náhodnými a~meniacimi sa rozhodnutiami. Územným plánovaním sa predchádza nekoncepčnému a zložitému rozvoja obce. Zaoberá sa všetkými aspektmi nášho prostredia. Ide prevažne o~stavbu sídiel, dopravnú a~ technickú infraštruktúru, ale aj o prvky, ktoré vytvárajú prírodné zložky životného prostredia~\cite{uzemnyplan}.
 
 
 
 \chapter{Návrh}
-\label{navrh}
+\label{chap:navrh}
 V tejto kapitole je popísaný návrh systému, na ktorom je založená celá aplikácia. Na začiatku tejto kapitoly sa analyzujú požiadavky na aplikáciu a popisujú kľúčové vlastnosti, ktoré musia byť splnené. Táto kapitola zahŕňa aj bližšie popísanie použitých technológií a~dôvody, prečo boli zvolené dané technológie pri návrhu aplikácie.
 
 
@@ -365,11 +370,9 @@ V tejto kapitole je popísaný návrh systému, na ktorom je založená celá ap
 \label{sec:analysis}
 Požiadavky sú potrebné pri akomkoľvek návrhu aplikácie. S požiadavkami sa treba zamyslieť, ako sa dajú navrhnúť a implementovať. Primárnym cieľom tejto bakalárskej práce je vytvoriť aplikáciu, ktorá na základe získaných dát vytvorí odhady pravdepodobnosti výskytu osôb. Túto aplikáciu je možné vytvoriť tak, aby ju bolo možné v budúcnosti rozšíriť o viaceré funkcionality, ale aj aby bola užívateľsky prívetivá.
 
-\subsection{Vstupné dáta}
-Prvou požiadavkou pri vytvorení aplikácie je spracovanie vstupných dát získaných od užívateľa.
-Vstupné dáta je možné rozdeliť na dva typy: súradnice a~hodnoty pravdepodobností.
+Prvou požiadavkou pri vytvorení aplikácie je spracovanie vstupných dát získaných od~užívateľa. Vstupné dáta je možné rozdeliť na dva typy: súradnice a hodnoty pravdepodobností. Druhou požiadavkou je vytváranie a~zobrazovanie heat vrstvy na~mape.
 
-\subsubsection{Súradnice}
+\subsection*{Vstupné súradnice}
 Prvým typom vstupných dát sú súradnice, ktoré užívateľ bude môcť zadať rôznymi spôsobmi. Spôsoby získavania vstupných súradníc budú inšpirované získavaním hraničných súradníc na~stránke projektu OpenStreetMap.
 
 Jednou z možností je využitie knižnice \texttt{Leaflet.draw}. Užívateľ v navrhovanej aplikácií by mal byť schopný vykresliť na mapu plochu, z~ktorej by chcel zistiť, aká je pravdepodobnosť výskytu osôb v~danej oblasti. Z~tejto nakreslenej plochy sa dá zistiť, aké sú hranice danej plochy, t.j. aká je minimálna a~maximálna hodnota zemepisnej dĺžky a~aká je minimálna a~maximálna hodnota zemepisnej šírky nakreslenej plochy. Tento spôsob získavania vstupných dát je zobrazený na obrázku~\ref{fig:osm-export}.
@@ -385,10 +388,10 @@ Tretiu možnosť získavania vstupných súradníc je možné použiť v kombin�
     \label{fig:osm-export}
 \end{figure}
     
-\subsubsection{Hodnoty pravdepodobností}
+\subsection*{Hodnoty pravdepodobností}
 Druhým typom vstupných dát od užívateľa sú hodnoty pravdepodobností resp.~intenzít pre~značky. Vo~väčšine prípadoch počet týchto vstupných hodnôt pravdepodobností môže byť aj viac ako 100, preto vhodným návrhom pre zadávanie hodnôt je použitie externého súboru. V tomto súbore by mal užívateľ mať možnosť zadefinovať, ktoré značky by sa mali použiť pri vykresľovaní heat vrstvy a aké hodnoty pravdepodobností by mali mať tieto značky.
 
-\subsection{Zobrazovanie heat vrstvy}
+\subsection*{Zobrazovanie heat vrstvy}
 Získané hodnoty pravdepodobností značiek by mali byť pre užívateľa informatívne a užívateľ by mal byť schopný vidieť z danej oblasti, aká je pravdepodobnosť výskytu osôb v danej oblasti. Vhodnou voľbou pre zobrazovanie pravdepodobností by bolo vytvorenie heat vrstvy na~mape, ktorá bude interpretovať hodnoty pravdepodobností v~danej oblasti.
 
 Hodnoty pravdepodobností je možné interpretovať základnými farebnými schémami. Celé farebné spektrum sa skladá z kombinácií troch farieb (červená, zelená a modrá). Teplé farby sa väčšinou spájajú s ohňom a slnkom, preto sem patria farby ako červená, oranžová a žltá. Keď si ale predstavíme zasnežené hory, farebná škála sa ihneď zmení na studenú, kde prevládajú farby ako modrá, zelená a fialová. V navrhovanej aplikácii by sa dali využiť tieto farebné odtiene na zobrazovanie pravdepodobností. V oblastiach s~väčšou pravdepodobnosťou výskytu osôb by aplikácia mala zobrazovať teplejšie farby a~na~druhej strane v~oblastiach s~menšou pravdepodobnosťou by aplikácia mala zobrazovať studenšie farby. V~oblastiach, kde sú hodnoty pravdepodobností pre dané značky rovné $0$ by nemala byť na~mapu vykreslená v~danej oblasti heat vrstva.
@@ -402,7 +405,7 @@ Cieľom bakalárskej práce je vytvorenie aplikácie, ktorá odhadne pravdepodob
 Dátový model reprezentuje dáta, s ktorými bude aplikácia pracovať. Dáta, ktoré je možné získať pri spracovávaní mapových dát, sú geografické objekty. Informácie o získaných geografických objektoch a~ich priradenie ku značkám na mape bude aplikácia uchovávať vo~svojej pamäti vo~forme dátových rámcoch.
 
 \subsubsection{Dátový rámec}
-Dátový rámec je dvoj-dimenzionálna dátová štruktúra, podobná tabuľke s~riadkami a~stĺpcami. Každý riadok dátového rámca reprezentuje jeden geografický objekt. Definícia geometrického objektu sa bude nachádzať v~stĺpci \emph{geometry}. Okrem definície geografického objektu sa v~tomto riadku bude nachádzať aj~akú značku na~mape predstavuje daný geografický objekt. 
+Dátový rámec je dvoj-dimenzionálna dátová štruktúra, podobná tabuľke s~riadkami a~stĺpcami. Každý riadok dátového rámca reprezentuje jeden geografický objekt. Definícia geometrického objektu sa bude nachádzať v~stĺpci \emph{geometry}. Okrem definície geografického objektu sa v~tomto riadku bude nachádzať aj~to, akú značku na~mape predstavuje daný geografický objekt. 
 
 \subsubsection{Geografický objekt}
 Geografický objekt, ktorý sa bude nachádzať v stĺpci \emph{geometry} dátového rámca, môže byť jedným z~hodnôt: \emph{Point}, \emph{LineString} alebo \emph{Polygon}. Tieto typy predstavujú základné geometrické objekty. Typy, ktoré rozširujú tieto základné typy, sú rozšírenými geometrickými objektami. Sú od nich rozlíšené predponou \textbf{Multi}, t.j. \emph{MultiPoint}, \emph{MultiLineString} a~\emph{MultiPolygon}. Formát súradníc závisí od typu geografického objektu.
@@ -447,7 +450,7 @@ coordinates: [[20.0, 20.0], [21.9, 21.9], [20.0, 22.8], [20.0, 20.0]]
 
 
 \section{Štruktúra systému}
-Pri tvorbe návrhu sa vychádzalo z~analýzy požiadavkov v sekcii~\ref{sec:analysis}. Pri zadávaní vstupných súradníc sa bude môcť užívateľ rozhodnúť, či chce na mapu nakresliť obdĺžnik, z ktorého bude vytvorená heat vrstva na mape alebo či zadá hraničné súradnice textového poľa. Ak užívateľ nakreslí na mapu obdĺžnik (resp. zobrazí si na mape určitú časť), systém spracuje tento nakreslený objekt na mape a použitím asynchrónnej správy zobrazí tieto súradnice vo~formulári, kde ich bude môcť užívateľ prípadne upraviť. Takúto úpravu by mal užívateľ byť schopný vykonať veľakrát. Takisto by mohol užívateľ upravovať veľkosť aj~pozíciu nakresleného obdĺžnika. Okrem toho by mohol užívateľ odstraňovať nakreslenú plochu. Ak budú zadané súradnice od užívateľa, tak potom by bolo možné vytvoriť heat vrstvu. Užívateľ jednoducho bude môcť poslať požiadavok na server, kde sa spracuje tento požiadavok a~server pošle užívateľovi po určitej dobe trvania mapu s vytvorenou heat vrstvou. Všeobecnejší návrh, ako by mohla aplikácia fungovať, je zobrazený na obrázku~\ref{fig:navrh-diagram}.
+Pri tvorbe návrhu sa vychádzalo z~analýzy požiadaviek v sekcii~\ref{sec:analysis}. Pri zadávaní vstupných súradníc sa bude môcť užívateľ rozhodnúť, či chce na mapu nakresliť obdĺžnik, z ktorého bude vytvorená heat vrstva na mape alebo či zadá hraničné súradnice textového poľa. Ak užívateľ nakreslí na mapu obdĺžnik (resp. zobrazí si na mape určitú časť), systém spracuje tento nakreslený objekt na mape a použitím asynchrónnej správy zobrazí tieto súradnice vo~formulári, kde ich bude môcť užívateľ prípadne upraviť. Takúto úpravu by mal užívateľ byť schopný vykonať veľakrát. Takisto by mohol užívateľ upravovať veľkosť aj~pozíciu nakresleného obdĺžnika. Okrem toho by mohol užívateľ odstraňovať nakreslenú plochu. Ak budú zadané súradnice od užívateľa, tak potom by bolo možné vytvoriť heat vrstvu. Užívateľ jednoducho bude môcť poslať požiadavka na server, kde sa spracuje táto požiadavka a~server pošle užívateľovi po určitej dobe trvania mapu s vytvorenou heat vrstvou. Všeobecnejší návrh, ako by mohla aplikácia fungovať, je zobrazený na obrázku~\ref{fig:navrh-diagram}.
 
 \begin{figure}[h]
     \centering
@@ -512,7 +515,7 @@ Hlavným cieľom užívateľského rozhrania bude umožnenie užívateľovi vytv
 
 
 \chapter{Implementácia}
-\label{implementacia}
+\label{chap:implementacia}
 V tejto kapitole je popísaná architektúra navrhnutej aplikácie, taktiež sú v tejto kapitole popísané použité technológie a~ako boli použité. Okrem toho je v~tejto kapitole popis implementácie funkcionality a~popis implementácie grafického užívateľského rozhrania.
 
 
@@ -536,12 +539,12 @@ Keďže aplikácia je navrhnutá ako klient-server aplikácia, je potrebné vyu�
 \section{Webový server}
 Na webovom serveri prebieha spracovávanie priestorových dát a~ich spracovávanie na výstup. Okrem knižnice \emph{GeoPandas} v~programovacom jazyku Python neexistuje veľa technológií, ktoré by zjednodušovali spracovávanie priestorových dát. Keďže na~zobrazovanie dát na klientskej strane aplikácie je použitá knižnica Leaflet z jazyka Javascript, ktorý je používaný najmä pri tvorbe webových stránok, použitie webového frameworku je vhodnou voľbou. Okrem toho webové frameworky uľahčujú vytváranie webových aplikácií a~zobrazovanie spracovaných dát na~výstup.
 
-\subsection{Flask}
+\subsection*{Flask}
 Flask\footnote{\url{https://flask.palletsprojects.com/en/2.1.x}} je mikro webový framework napísaný v programovacom jazyku Python. Flask nevyžaduje konkrétne nástroje ani ďalšie vnútorné knižnice. Aj keď sa tento framework považuje za mikro framework, neznamená to, že nie je možné ho rozširovať o rôzne služby~\cite{Oreilly2014Flask}.
 
 Zobrazovať dáta vo webových aplikáciách je možné pomocou rôznych webových frameworkoch. Aplikácia je navrhnutá ako jednostránková aplikácia a~nevyžaduje vytváranie databázovej schémy. Na základe týchto vlastností som sa rozhodol nepoužiť webové frameworky, ktoré by boli príliš robustné na~použitie v~tejto aplikácii. Preto som sa rozhodol použiť webový framework Flask.
 
-\subsection{GeoPandas}
+\subsection*{GeoPandas}
 GeoPandas\footnote{\url{https://geopandas.org/en/stable}} je open-source projekt, ktorý umožňuje jednoduchú manipuláciu geografických dát v jazyku Python. Tento projekt je pokročilejší nástroj umožňujúci načítavanie GIS dát (.geojson, .gdb, .shp, \ldots), manipuláciu s GIS dátami, manipuláciu s~geometrickými útvarmi, prevádzanie súradnicových systémov a vykresľovanie máp. Základnými dátovými štruktúrami projektu GeoPandas sú \texttt{GeoDataFrame} a \texttt{GeoSeries}. Tieto dve dátové štruktúry sú nadstavbou knižnice \emph{Pandas}\footnote{\url{https://pandas.pydata.org}}, pretože rozširujú možnosti dátových štruktúr \texttt{Series} a \texttt{DataFrame} z tejto knižnice.
 
 \texttt{GeoDataFrame} je dvojrozmerná dátová štruktúra, podobná tabuľke s riadkami a~stĺpcami a~je podtriedou \emph{pandas.DataFrame} s pridaným stĺpcom \texttt{geometry} (obrázok~\ref{fig:dataframes}).
@@ -559,7 +562,7 @@ GeoPandas\footnote{\url{https://geopandas.org/en/stable}} je open-source projekt
 
 Priestorové dáta bolo potrebné spracovať efektívnym spôsobom. V~programovacích jazykoch neexistuje veľa overených technológií, ktoré by podporovali prácu s~priestorovými dátami. Možnou alternatívou je použitie GIS softvérov, ktoré ale nie všetky sú zadarmo. Preto som sa na základe tohto rozhodol použiť programovací jazyk Python s~importovanou knižnicou GeoPandas, ktorá umožňuje spracovávanie priestorových dát.
 
-\subsection{Ostatné nástroje}
+\subsection*{Ostatné nástroje}
 Okrem ukladania dát do dátových rámcov je potrebné ich aj~upraviť do~formy, v~ktorej by sa dali použiť pri zobrazovaní heat vrstvy na~strane klienta. Medzi vhodné nástroje, ktoré umožňujú takúto úpravu dát v~jazyku Python, patria balíky nástrojov \emph{PyProj} a \emph{Shapely}.
 
 \textbf{PyProj}\footnote{\url{https://pyproj4.github.io/pyproj/stable}} je rozhranie v~jazyku Python na PROJ\footnote{\url{https://proj.org}}. PROJ je softvér, ktorý sa používa na~transformovanie geografických súradníc z~jedného súradnicového systému do~iného súradnicového systému.
@@ -570,15 +573,15 @@ Možnosť transformácie súradnicového systému na iný súradnicový systém 
 
 
 \section{Klientská časť}
-Na klientskej časti aplikácie vyberá užívateľ oblasť, na~ktorej sa má vytvoriť heat vrstva. Keď užívateľ vyberie oblasť, pošle sa požiadavok na server, na~ktorom sa spracujú zadané vstupné hodnoty a~odošlú sa dáta na~tvorbu heat vrstvy späť klientovi.
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+Na klientskej časti aplikácie vyberá užívateľ oblasť, na~ktorej sa má vytvoriť heat vrstva. Keď užívateľ vyberie oblasť, pošle sa požiadavka na server, na~ktorom sa spracujú zadané vstupné hodnoty a~odošlú sa dáta na~tvorbu heat vrstvy späť klientovi.
 
 Existuje veľa knižníc, ktoré umožňujú vytvárať heat grafy resp. heat vrstvy. Vytváranie heat vrstiev je možné aj v~jazyku Python pomocou knižnice \emph{Seaborn}\footnote{\url{https://seaborn.pydata.org/generated/seaborn.heatmap.html}}, ale táto knižnica neumožňuje zobrazovanie heat vrstvy spoločne už so~zobrazenou mapou. Takisto prechod medzi jednotlivými farbami nie je plynulý. Keďže heat vrstvy sa majú vytvárať na klientskej časti aplikácie, je potrebné použiť nástroje jazykov, ktoré sa používajú na strane klienta. Preto som sa rozhodol použiť knižnicu \emph{Leaflet} implementovanú v jazyku Javascript.
 
 \subsection{Leaflet}
 Leaflet\footnote{\url{https://leafletjs.com}} je open-source knižnica v programovacom jazyku JavaScript, používaná na vytváranie mapových webových aplikácii. Táto knižnica je podporovaná na väčšine mobilných a desktopových zariadeniach. Leaflet umožňuje vývojárom jednoducho zobrazovať webové mapy s dlaždicami, získavať geopriestorové dáta zo súborov typu GeoJSON, vytvárať interaktívne vrstvy a~pod.
 
-\subsection{Rozšírenia knižnice Leaflet}
-Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}. 
+Okrem základnej funkcionality existujú rôzne rozšírenia, ktoré rozširujú základnú funkcionalitu knižnice Leaflet. V mojej aplikácii sa používajú dve rozšírenia k tejto knižnici: \texttt{Leaflet.heat} a~\texttt{Leaflet.draw}.
 
 \subsubsection{Rozšírenie Leaflet.heat}
 Základom tejto knižnice je knižnica \texttt{simpleheat} z jazyka JavaScript, ktorá sa používa na~kreslenie heat máp na plátno. Na vytvorenie vrstvy heat vrstvy na~mapu sa používa funkcia \texttt{L.heatLayer(latlngs, options)}, kde:
@@ -642,7 +645,7 @@ Jazyk HTML\footnote{HyperText Markup Language, v preklade \emph{Hypertextový zn
 JQuery\footnote{\url{https://jquery.com}} je rýchla a cross-browser\footnote{Cross-browser kompatibilita je schopnosť webových stránok fungovať v rôznych prehliadačoch.} knižnica z jazyka JavaScript. Zjednodušuje prechádzanie dokumentov HTML, výber DOM\footnote{Document Object Model} elementov, kontrolu udalostí alebo aj vytváranie animácií. Výhodou tejto knižnice je, že je jednoduchou knižnicou na vývoj webových aplikácií. Oproti iným knižniciam v JavaScripte nevyžaduje lepšiu skúsenosť s jazykom JavaScript. Táto knižnica umožňuje okrem už zmienených možností, jednoduchšiu obsluhu \texttt{AJAX} volaní.
 
 \subsection{AJAX}
-Technológia AJAX\footnote{Asynchronous JavaScript and XML} umožňuje meniť obsah stránok bez potreby kompletného načítania zo~servera. Keďže protokol HTTP je bezstavový, akékoľvek stavové informácie je nutné posielať pri každom požiadavku servera a~opačne. AJAX nám umožňuje sa takémuto postupu vyhnúť~\cite{lacko2008ajax}. Ako je možné poznať z názvu, AJAX je kombinácia viacerých prvkov:
+Technológia AJAX\footnote{Asynchronous JavaScript and XML} umožňuje meniť obsah stránok bez potreby kompletného načítania zo~servera. Keďže protokol HTTP je bezstavový, akékoľvek stavové informácie je nutné posielať pri každej požiadavke servera a~opačne. AJAX nám umožňuje sa takémuto postupu vyhnúť~\cite{lacko2008ajax}. Ako je možné poznať z názvu, AJAX je kombinácia viacerých prvkov:
 \begin{itemize}
     \item HTML a CSS na prezentovanie informácií,
     \item DOM na zobrazenie prezentovaných informácií,
@@ -665,7 +668,7 @@ Implementácia funkcionality vychádza z~návrhu, ktorá bola popísaná v~kapit
 Prvou potrebnou vecou, ktorú systém spracováva, sú dáta pravdepodobností pre jednotlivé značky. Dáta o~značkách sú uložené v~súbore, ktorý je vo~formáte JSON. Tieto dáta sú prednastavené s~tým, že tieto hodnoty užívateľ môže pozmeniť v~tomto súbore, prípadne pridať alebo odstrániť niektoré hodnoty. Súbor sa v~systéme spracuje a~uloží sa ako asociatívne pole do~pamäte, s~ktorým bude systém pracovať pri úprave dátového rámca.
 
 \subsection*{Vytvorenie dátového rámca}
-Keďže pri vyššom počte hodnôt pravdepodobností pre jednotlivé značky by počet požiadavkov na webové rozhranie API bol vysoký, systém spracováva požiadavky z~lokálnych súborov. Tieto súbory sú vo~formáte \emph{shapefile} a~sú získané zo~stránky Geofabrik\footnote{\url{https://download.geofabrik.de}}. Súbory sú pomenované podľa názvu kľúča, ktorý sa nachádza v~danom súbore. Keďže súbory tohto formátu sú naviazané medzi sebou, pri spracovávaní týchto súborov nám stačí súbor vo~formáte \texttt{*.shp}, z~ktorého je možné vytvoriť dátový rámec so~stĺpcom o~geografických objektoch.
+Keďže pri vyššom počte hodnôt pravdepodobností pre jednotlivé značky by počet požiadaviek na webové rozhranie API bol vysoký, systém spracováva požiadavky z~lokálnych súborov. Tieto súbory sú vo~formáte \emph{shapefile} a~sú získané zo~stránky Geofabrik\footnote{\url{https://download.geofabrik.de}}. Súbory sú pomenované podľa názvu kľúča, ktorý sa nachádza v~danom súbore. Keďže súbory tohto formátu sú naviazané medzi sebou, pri spracovávaní týchto súborov nám stačí súbor vo~formáte \texttt{*.shp}, z~ktorého je možné vytvoriť dátový rámec so~stĺpcom o~geografických objektoch.
 
 Vytvorený dátový rámec má viacero stĺpcov, ale využiteľné pre tento systém je iba stĺpec s~typom značky a~stĺpec s~geometrickými objektami. Každý riadok v~tomto rámci predstavuje jeden geometrický objekt na~mape. Ak sa daná značka pre daný geometrický objekt nenachádza vo~vytvorenom asociatívnom poli s~pravdepodobnosťami pre značky, riadok s~touto značkou sa preskočí.
 
@@ -714,12 +717,12 @@ Zo~získaných hodnôt pravdepodobností pre každú značku je možné vytvori�
 
 
 \chapter{Vyhodnotenie výsledkov}
-\label{vyhodnotenie}
+\label{chap:vyhodnotenie}
 Táto kapitola sa zaoberá ovládaním, testovaním a~vyhodnotením výsledkov z~vytvorenej aplikácie. V~tejto kapitole sa nachádza aj~popis možných chyby a~nevýhody implementovaného systému. Okrem toho, táto kapitola popisuje ako by sa dali vylepšiť získané dáta.
 
 
 \section{Ovládanie}
-Keďže aplikácia má slúžiť primárne pri výstavbe elektroenergetických zariadení na~území Českej republiky, pri ovládaní aplikácie je potrebné vybrať oblasť, ktorá sa nachádza na území Českej republiky. Užívateľ si prípadne môže stiahnuť mapové dáta aj~pre iné krajiny na~svete. Z~užívateľského hľadiska je aplikáciu jednoduché ovládať, pretože neobsahuje veľa možností, ktoré užívateľ môže vykonať. Na~obrázku~\ref{fig:bosovice-map} je snímok obrazovky časti mapy s~nakresleným obdĺžnikom, kde sa nachádza obec Bošovice. Hraničné body tohto obdĺžnika sa použijú pri získavaní geografických dát. Veľkosť aj~polohu tohto obdĺžnika môže užívateľ ľubovoľne meniť.
+Keďže aplikácia má slúžiť primárne pri plánovaní výstavby elektroenergetických zariadení na~území Českej republiky, pri ovládaní aplikácie je potrebné vybrať oblasť, ktorá sa nachádza na~území Českej republiky. Užívateľ si prípadne môže stiahnuť mapové dáta aj~pre iné krajiny na~svete. Z~užívateľského hľadiska je aplikáciu jednoduché ovládať, pretože neobsahuje veľa možností, ktoré užívateľ môže vykonať. Na~obrázku~\ref{fig:bosovice-map} je snímok obrazovky časti mapy s~nakresleným obdĺžnikom, kde sa nachádza obec Bošovice. Hraničné body tohto obdĺžnika sa použijú pri získavaní geografických dát. Veľkosť aj~polohu tohto obdĺžnika môže užívateľ ľubovoľne meniť.
 
 \begin{figure}[ht]
     \centering
@@ -781,5 +784,11 @@ každý deň, aj tak sa v~týchto mapových dátach vyskytujú chyby. Takéto po
 
 
 \chapter{Záver}
-\label{zaver}
-\todo{TODO}
+\label{chap:zaver}
+Cieľom tejto bakalárskej práce bolo vytvoriť aplikáciu, ktorá na~základe získaných dát vytvorí heat mapu pravdepodobnosti výskytu osôb v~určitej oblasti. Aplikáciu sa podarilo úspešne vytvoriť s~miernymi nedostatkami.
+
+Pred začatím implementácie bolo potrebné sa zoznámiť s~potrebnou teóriou. Obsahom teórie boli zdroje mapových dát a~spôsoby ich reprezentácie. Zistil som, že mapové dáta môžu byť reprezentované v~rastrovom formáte alebo vo~vektorovom formáte a~tieto formáty majú rôzne formáty súborov, ktorými môžu byť reprezentované. Pri implementácii boli použité mapové dáta vo~vektorovom formáte, pretože poskytujú informácie o~jednotlivých geografických objektoch na~mape. Potom bolo nutné naštudovať, aké sú možnosti dolovania dát z~volne dostupných zdrojov. Zistil som, že najjednoduchším spôsobom je získavanie dát zo~stránok projektu OpenStreetMap.
+
+Pri implementácii boli zvolené vhodné technológie, ktoré vyšli z~návrhu aplikácie. Samotná aplikácia pozostáva z~primárnej funkcionality a~z~užívateľského rozhrania. Primárnu funkcionalitu zahŕňa získanie dát a~ich spracovanie pomocou knižnice GeoPandas do~dvojrozmernej dátovej štruktúry. Vytvorený dátový rámec obsahuje geografické objekty a~tie sa využívajú spoločne so~získanými pravdepodobnosťami na vytvorenie heat vrstvy na~mape pomocou knižnice Leaflet. Takáto vytvorená heat vrstva na~mape reprezentuje pravdepodobný odhad výskytu osôb v~určitej oblasti.
+
+Vypracovaním tejto bakalárskej práce som spoznal, ako je možné získavať mapové dáta a ako sú reprezentované na~mape. Počas testovania aplikácie som narazil na~viacero problémov. Preto by som chcel v~práci pokračovať a~vylepšiť aplikáciu o~lepšie zobrazovanie heat vrstvy u~rôznych geografických objektoch. Určite by som chcel zlepšiť vytváranie heat vrstvy u~polygónov, aby zobrazená vrstva bola aj~v~okolí zobrazeného polygónu na~mape. Ďalším možným vylepšením by bolo pridanie viacerých parametrov, ktoré by mohol užívateľ zadať. Teda okrem hodnoty pravdepodobnosti pre danú značku by mohol zadať napríklad aj~veľkosť priemeru kruhu heat bodov pre daný geografický objekt.
