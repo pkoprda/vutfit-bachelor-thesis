@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <div class="map">
+    {% include "map.html" %}
+    {% include "heatlayers.html" %}
+  </div>
+  <div id="mySidepanel" class="sidepanel">
+    <form id="borders_form" action="#" method="post">
+      <div class="coords_boxy">
+        {% if borders %}
+          <div class="latitude_input"">
+            <input type="number" id="north_id" name="north" step=0.00001 value="{{ borders['north'] }}" autocomplete="off" class="coord_bound" required>
+          </div>
+          <div class="longitude_input">
+            <input type="number" id="west_id" name="west" step=0.00001 value="{{ borders['west'] }}" autocomplete="off" class="coord_bound" required>
+            <input type="number" id="east_id" name="east" step=0.00001 value="{{ borders['east'] }}" autocomplete="off" class="coord_bound" required>
+          </div>
+          <div class="latitude_input">
+            <input type="number" id="south_id" name="south" step=0.00001 value="{{ borders['south'] }}" autocomplete="off" class="coord_bound" required>
+          </div>
+        {% else %}
+          <div class="latitude_input"">
+            <input type="number" id="north_id" name="north" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="90.0" required>
+          </div>
+          <div class="longitude_input">
+            <input type="number" id="west_id" name="west" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="-180.0" required>
+            <input type="number" id="east_id" name="east" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="180.0" required>
+          </div>
+          <div class="latitude_input">
+            <input type="number" id="south_id" name="south" step=0.00001 value="" autocomplete="off" class="coord_bound" placeholder="-90.0" required>
+          </div>
+        {% endif %}
+        {% if error_statement %}
+          <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </symbol>
+          </svg>
+          <div class="alert alert-danger d-flex align-items-center alert-message" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+              {{ error_statement }}
+            </div>
+          </div>  
+        {% endif %}
+        <div class="custom-area">
+          <div>
+            <a class="custom-area-create-tag" href="javascript:void(0);" onclick="document.querySelector('.leaflet-draw-draw-rectangle').click();">Create custom area</a>
+          </div>
+          <div>
+            <a class="custom-area-delete-tag" href="javascript:void(0);" onclick="remove_layer();">Delete custom area</a>
+          </div>
+        </div>
+        <div>
+          <input type="submit" name="submit" class="btn btn-success btn-lg btn-heatmap" value="Create HeatMap">
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
