@@ -384,7 +384,7 @@ Tretiu možnosť získavania vstupných súradníc je možné použiť v kombin�
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{obrazky-figures/openstreetmap-export.png}
-    \caption{Export dát na stránke projektu OpenStreetMap}
+    \caption{Export dát na stránke projektu OpenStreetMap.}
     \label{fig:osm-export}
 \end{figure}
     
@@ -662,7 +662,7 @@ V mojej aplikácií používam tzv. \emph{Alert} komponentu t.j. výstražnú sp
 
 
 \section{Implementácia funkcionality}
-Implementácia funkcionality vychádza z~návrhu, ktorá bola popísaná v~kapitole~\ref{navrh}. Ako implementačný programovací jazyk bol vybratý Python spolu s~knižnicami, ktoré boli popísané v~tejto kapitole. Pri vytváraní heat vrstvy je potrebné urobiť viacero úprav dát, aby sa v~aplikácii zobrazovali relevantné dáta na~mape.
+Implementácia funkcionality vychádza z~návrhu, ktorá bola popísaná v~kapitole~\ref{chap:navrh}. Ako implementačný programovací jazyk bol vybratý Python spolu s~knižnicami, ktoré boli popísané v~tejto kapitole. Pri vytváraní heat vrstvy je potrebné urobiť viacero úprav dát, aby sa v~aplikácii zobrazovali relevantné dáta na~mape.
 
 \subsection*{Spracovanie hodnôt pravdepodobností}
 Prvou potrebnou vecou, ktorú systém spracováva, sú dáta pravdepodobností pre jednotlivé značky. Dáta o~značkách sú uložené v~súbore, ktorý je vo~formáte JSON. Tieto dáta sú prednastavené s~tým, že tieto hodnoty užívateľ môže pozmeniť v~tomto súbore, prípadne pridať alebo odstrániť niektoré hodnoty. Súbor sa v~systéme spracuje a~uloží sa ako asociatívne pole do~pamäte, s~ktorým bude systém pracovať pri úprave dátového rámca.
