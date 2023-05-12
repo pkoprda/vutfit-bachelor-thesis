@@ -6,7 +6,7 @@ click-plugins==1.1.1
 cligj==0.7.2
 dill==0.3.4
 Fiona==1.8.21
-Flask==2.1.2
+Flask==2.2.5
 geopandas==0.10.2
 isort==5.10.1
 itsdangerous==2.1.2
